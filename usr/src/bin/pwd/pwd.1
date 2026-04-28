@@ -29,96 +29,93 @@
 .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 .\" SUCH DAMAGE.
 .\"
-.Dd Februrary 6, 2026
+.Dd 6 февраля 2026
 .Dt PWD 1
 .Os
-.Sh NAME
+.Sh ИМЯ
 .Nm pwd
-.Nd return working directory name
-.Sh SYNOPSIS
+.Nd возвращает имя рабочего каталога
+.Sh СИНТАКСИС
 .Nm
 .Op Fl L | P
-.Sh DESCRIPTION
-The
+.Sh ОПИСАНИЕ
+Утилита
 .Nm
-utility writes the absolute pathname of the current working directory to
-the standard output.
+записывает абсолютный путь текущего рабочего каталога в
+стандартный поток вывода.
 .Pp
-Some shells may provide a builtin
-.Nm
-command which is similar or identical to this utility.
-Consult the
-.Xr builtin 1
-manual page.
+Некоторые оболочки могут предоставлять встроенную команду
+.Nm ,
+которая аналогична или идентична данной утилите.
+Обратитесь к справочной странице
+.Xr builtin 1 .
 .Pp
-The options are as follows:
+Доступны следующие опции:
 .Bl -tag -width indent
 .It Fl L
-Display the logical current working directory.
+Отобразить логический текущий рабочий каталог.
 .It Fl P
-Display the physical current working directory (all symbolic links resolved).
+Отобразить физический текущий рабочий каталог (все символические ссылки разрешены).
 .El
 .Pp
-If no options are specified, the
-.Fl L
-option is assumed.
-.Sh ENVIRONMENT
-Environment variables used by
+Если опции не указаны, подразумевается опция
+.Fl L .
+.Sh ОКРУЖЕНИЕ
+Переменные окружения, используемые
 .Nm :
 .Bl -tag -width ".Ev PWD"
 .It Ev PWD
-Logical current working directory.
+Логический текущий рабочий каталог.
 .El
-.Sh EXIT STATUS
+.Sh СТАТУС ЗАВЕРШЕНИЯ
 .Ex -std
-.Sh EXAMPLES
-Show current working directory with symbolic links resolved:
+.Sh ПРИМЕРЫ
+Показать текущий рабочий каталог с физическим разрешением символических ссылок:
 .Bd -literal -offset indent
 $ /bin/pwd
 /usr/src/sys/kern
 .Ed
 .Pp
-Show the logical current directory.
-Then use
+Показать логический текущий каталог.
+Затем использовать
 .Xr file 1
-to inspect the
-.Pa /sys
-directory:
+для проверки каталога
+.Pa /sys :
 .Bd -literal -offset indent
 $ /bin/pwd -L
 /sys/kern
 $ file /sys
 /sys: symbolic link to usr/src/sys
 .Ed
-.Sh SEE ALSO
+.Sh СМ. ТАКЖЕ
 .Xr builtin 1 ,
 .Xr cd 1 ,
 .Xr csh 1 ,
 .Xr realpath 1 ,
 .Xr sh 1 ,
 .Xr getcwd 3
-.Sh STANDARDS
-The
+.Sh СТАНДАРТЫ
+Утилита
 .Nm
-utility conforms to
+соответствует стандарту
 .St -p1003.1-2001 .
-.Sh HISTORY
-The
+.Sh ИСТОРИЯ
+Команда
 .Nm
-command appeared in
+появилась в
 .At v5 .
-.Sh BUGS
-In
+.Sh ОШИБКИ
+В
 .Xr csh 1
-the command
+команда
 .Ic dirs
-is always faster because it is built into that shell.
-However, it can give a different answer in the rare case
-that the current directory or a containing directory was moved after
-the shell descended into it.
+всегда работает быстрее, так как она встроена в эту оболочку.
+Однако она может выдать другой ответ в редких случаях, когда текущий
+каталог или содержащий его каталог был перемещен после того, как
+оболочка вошла в него.
 .Pp
-The
+Опция
 .Fl L
-option does not work unless the
+не работает, если переменная окружения
 .Ev PWD
-environment variable is exported by the shell.
+не экспортирована оболочкой.
