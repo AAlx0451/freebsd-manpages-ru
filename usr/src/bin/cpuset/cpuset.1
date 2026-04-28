@@ -23,205 +23,201 @@
 .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 .\" SUCH DAMAGE.
 .\"
-.Dd July 3, 2018
+.Dd 3 июля 2018
 .Dt CPUSET 1
 .Os
-.Sh NAME
+.Sh ИМЯ
 .Nm cpuset
-.Nd "configure processor sets"
-.Sh SYNOPSIS
+.Nd настраивает наборы процессоров
+.Sh СИНТАКСИС
 .Nm
-.Op Fl l Ar cpu-list
-.Op Fl n Ar policy:domain-list
-.Op Fl s Ar setid
-.Ar cmd ...
+.Op Fl l Ar список-cpu
+.Op Fl n Ar политика:список-доменов
+.Op Fl s Ar id-набора
+.Ar команда ...
 .Nm
-.Op Fl l Ar cpu-list
-.Op Fl n Ar policy:domain-list
-.Op Fl s Ar setid
+.Op Fl l Ar список-cpu
+.Op Fl n Ar политика:список-доменов
+.Op Fl s Ar id-набора
 .Fl p Ar pid
 .Nm
 .Op Fl c
-.Op Fl l Ar cpu-list
-.Op Fl n Ar policy:domain-list
+.Op Fl l Ar список-cpu
+.Op Fl n Ar политика:список-доменов
 .Fl C
 .Fl p Ar pid
 .Nm
 .Op Fl c
-.Op Fl l Ar cpu-list
-.Op Fl n Ar policy:domain-list
-.Op Fl j Ar jail | Fl p Ar pid | Fl t Ar tid | Fl s Ar setid | Fl x Ar irq
+.Op Fl l Ar список-cpu
+.Op Fl n Ar политика:список-доменов
+.Op Fl j Ar jail | Fl p Ar pid | Fl t Ar tid | Fl s Ar id-набора | Fl x Ar irq
 .Nm
 .Fl g
 .Op Fl cir
-.Op Fl d Ar domain | Fl j Ar jail | Fl p Ar pid | Fl t Ar tid | Fl s Ar setid | Fl x Ar irq
-.Sh DESCRIPTION
-The
+.Op Fl d Ar домен | Fl j Ar jail | Fl p Ar pid | Fl t Ar tid | Fl s Ar id-набора | Fl x Ar irq
+.Sh ОПИСАНИЕ
+Утилита
 .Nm
-command can be used to assign processor sets to processes, run commands
-constrained to a given set or list of processors and memory domains, and query
-information about processor binding, memory binding and policy, sets, and
-available processors and memory domains in the system.
+используется для назначения наборов процессоров процессам, запуска команд,
+ограниченных заданным набором или списком процессоров и доменов памяти, а также для запроса
+информации о привязке к процессорам, привязке и политике памяти, наборах,
+доступных процессорах и доменах памяти в системе.
 .Pp
+Для изменения или запроса
 .Nm
-requires a target to modify or query.
-The target may be specified as a command, process id, thread id, a
-cpuset id, an irq, a jail, or a NUMA domain.
-Using
+требует указания цели.
+Цель может быть указана как команда, идентификатор процесса (pid), идентификатор потока (tid),
+идентификатор набора cpuset, irq, jail или домен NUMA.
+С помощью опции
 .Fl g
-the target's set id or mask may be queried.
-Using
+запрашивается идентификатор набора или маска цели.
+С помощью опций
 .Fl l
-or
+или
 .Fl s
-the target's CPU mask or set id may be set.
-If no target is specified,
+устанавливается маска CPU или идентификатор набора цели.
+Если цель не указана,
 .Nm
-operates on itself.
-Not all combinations of operations and targets are supported.
-For example,
-you may not set the id of an existing set or query and launch a command
-at the same time.
+применяется к самой себе.
+Поддерживаются не все комбинации операций и целей.
+Например,
+невозможно одновременно установить идентификатор существующего набора или выполнить запрос и запустить команду.
 .Pp
-There are two sets applicable to each process and one private mask per thread.
-Every process in the system belongs to a cpuset.
-By default processes are started in set 1.
-The mask or id may be queried using
+К каждому процессу применимы два набора, а к каждому потоку — одна приватная маска.
+Каждый процесс в системе принадлежит к набору cpuset.
+По умолчанию процессы запускаются в наборе 1.
+Маска или идентификатор запрашиваются с помощью опции
 .Fl c .
-Each thread also has a private mask of CPUs it is allowed to run
-on that must be a subset of the assigned set.
-And finally, there is a root set, numbered 0, that is immutable.
-This last set is the list of all possible CPUs in the system and is
-queried using
+Каждый поток также имеет приватную маску CPU, на которых ему разрешено выполняться;
+эта маска должна быть подмножеством назначенного набора.
+Наконец, существует корневой набор с номером 0, который является неизменяемым.
+Этот набор представляет собой список всех возможных CPU в системе и
+запрашивается с помощью опции
 .Fl r .
 .Pp
-Most sets include NUMA memory domain and policy information.
-This can be inspected with
+Большинство наборов включают информацию о домене памяти NUMA и политике.
+Ее можно просмотреть с помощью опции
 .Fl g
-and set with
+и установить с помощью
 .Fl n .
-This will specify which NUMA domains are visible to the process and
-affect where anonymous memory and file pages will be stored on first access.
-Files accessed first by other processes may specify conflicting policy.
+Это определяет, какие домены NUMA видны процессу, и
+влияет на то, где будут сохраняться анонимная память и файловые страницы при первом доступе.
+Файлы, к которым первыми обратились другие процессы, могут определять конфликтующую политику.
 .Pp
-When running a command it may join a set specified with
-.Fl s
-otherwise a new set is created.
-In addition, a mask for the command may be specified using
-.Fl l .
-When used in conjunction with
+При запуске команды она может присоединиться к набору, указанному с помощью опции
+.Fl s ,
+в противном случае создается новый набор.
+Кроме того, с помощью опции
+.Fl l
+может быть задана маска для команды.
+При использовании совместно с
 .Fl c
-the mask modifies the supplied or created set rather than the private mask
-for the thread.
+маска изменяет предоставленный или созданный набор, а не приватную маску потока.
 .Pp
-The options are as follows:
+Доступные опции:
 .Bl -tag -width ".Fl l Ar cpu-list"
 .It Fl C
-Create a new cpuset and assign the target process to that set.
+Создает новый набор cpuset и назначает этому набору целевой процесс.
 .It Fl c
-The requested operation should reference the cpuset available via the
-target specifier.
-.It Fl d Ar domain
-Specifies a NUMA domain id as the target of the operation.
-This can only be used to query the cpus visible in each numberd domain.
+Запрашиваемая операция должна ссылаться на набор cpuset, доступный через
+спецификатор цели.
+.It Fl d Ar домен
+Указывает идентификатор домена NUMA в качестве цели операции.
+Используется только для запроса CPU, видимых в каждом пронумерованном домене.
 .It Fl g
-Causes
+Заставляет
 .Nm
-to print either a list of valid CPUs or, using
-.Fl i ,
-the id of the target.
+выводить либо список допустимых CPU, либо (при использовании
+.Fl i )
+идентификатор цели.
 .It Fl i
-When used with the
+При использовании с опцией
 .Fl g
-option print the id rather than the valid mask of the target.
+выводит идентификатор, а не допустимую маску цели.
 .It Fl j Ar jail
-Specifies a jail id or name as the target of the operation.
-.It Fl l Ar cpu-list
-Specifies a list of CPUs to apply to a target.
-Specification may include
-numbers separated by '-' for ranges and commas separating individual numbers.
-A special list of
-.Dq all
-may be specified in which case the list includes all CPUs from the root set.
-.It Fl n Ar policy:domain-list
-Specifies a list of domains and allocation policy to apply to a target.
-Ranges may be specified as in
+Указывает идентификатор или имя jail в качестве цели операции.
+.It Fl l Ar список-cpu
+Указывает список CPU для применения к цели.
+Спецификация может включать числа, разделенные '-' для диапазонов, и запятые для разделения отдельных чисел.
+Может быть указан специальный список
+.Dq all ;
+в этом случае список включает все CPU из корневого набора.
+.It Fl n Ar политика:список-доменов
+Указывает список доменов и политику выделения для применения к цели.
+Диапазоны задаются так же, как в
 .Fl l .
-Valid policies include first-touch (ft), round-robin (rr), prefer and
+Допустимые политики: first-touch (ft), round-robin (rr), prefer и
 interleave (il).
-First-touch allocates on the local domain when memory is available.
-Round-robin alternates between every possible domain page at a time.
-The prefer policy accepts only a single domain in the set.
-The parent of the set is consulted if the preferred domain is unavailable.
-Interleave operates like round-robin with an implementation defined stripe
-width.
-See
-.Xr domainset 9
-for more details on policies.
+Политика first-touch выделяет память в локальном домене, если она доступна.
+Политика round-robin чередует выделение по одной странице в каждом возможном домене.
+Политика prefer принимает только один домен в наборе.
+Если предпочтительный домен недоступен, опрашивается родительский набор.
+Политика interleave работает аналогично round-robin с шириной полосы (stripe width), зависящей от реализации.
+Подробнее о политиках см. в
+.Xr domainset 9 .
 .It Fl p Ar pid
-Specifies a pid as the target of the operation.
-.It Fl s Ar setid
-Specifies a set id as the target of the operation.
+Указывает pid в качестве цели операции.
+.It Fl s Ar id-набора
+Указывает идентификатор набора в качестве цели операции.
 .It Fl r
-The requested operation should reference the root set available via the
-target specifier.
+Запрашиваемая операция должна ссылаться на корневой набор, доступный через
+спецификатор цели.
 .It Fl t Ar tid
-Specifies a thread id as the target of the operation.
+Указывает идентификатор потока (tid) в качестве цели операции.
 .It Fl x Ar irq
-Specifies an irq as the target of the operation.
+Указывает irq в качестве цели операции.
 .El
-.Sh EXIT STATUS
-.Ex -std
-.Sh EXAMPLES
-Create a new group with CPUs 0-4 inclusive and run
-.Pa /bin/sh
-on it:
+.Sh СТАТУС ЗАВЕРШЕНИЯ
+Утилита
+.Nm
+завершает работу с кодом 0 при успешном выполнении и >0 при возникновении ошибки.
+.Sh ПРИМЕРЫ
+Создает новую группу с CPU от 0 до 4 включительно и запускает в ней
+.Pa /bin/sh :
 .Dl cpuset -c -l 0-4 /bin/sh
 .Pp
-Query the mask of CPUs the
-.Aq sh pid
-is allowed to run on:
+Запрашивает маску CPU, на которых разрешено выполняться
+.Aq sh pid :
 .Dl cpuset -g -p <sh pid>
 .Pp
-Restrict
+Ограничивает выполнение
 .Pa /bin/sh
-to run on CPUs 0 and 2 while its group is still allowed to run on
-CPUs 0-4:
+процессорами 0 и 2, в то время как ее группе по-прежнему разрешено выполняться на
+CPU 0-4:
 .Dl cpuset -l 0,2 -p <sh pid>
 .Pp
-Modify the cpuset
-.Pa /bin/sh
-belongs to restricting it to CPUs 0 and 2:
+Изменяет набор cpuset, к которому принадлежит
+.Pa /bin/sh ,
+ограничивая его процессорами 0 и 2:
 .Dl cpuset -l 0,2 -c -p <sh pid>
 .Pp
-Modify the cpuset all threads are in by default to contain only
-the first 4 CPUs, leaving the rest idle:
+Изменяет набор cpuset, в котором по умолчанию находятся все потоки, так, чтобы он содержал только
+первые 4 CPU, оставляя остальные в простое:
 .Dl cpuset -l 0-3 -s 1
 .Pp
-Print the id of the cpuset
-.Pa /bin/sh
-is in:
+Выводит идентификатор набора cpuset, в котором находится
+.Pa /bin/sh :
 .Dl cpuset -g -i -p <sh pid>
 .Pp
-Move the
+Перемещает
 .Ar pid
-into the specified cpuset
-.Ar setid
-so it may be managed with other pids in that set:
-.Dl cpuset -s <setid> -p <pid>
+в указанный набор cpuset
+.Ar id-набора ,
+чтобы им можно было управлять вместе с другими pid в этом наборе:
+.Dl cpuset -s <id-набора> -p <pid>
 .Pp
-Create a new cpuset that is restricted to CPUs 0 and 2 and move
+Создает новый набор cpuset, ограниченный процессорами 0 и 2, и перемещает
 .Ar pid
-into the new set:
+в этот новый набор:
 .Dl cpuset -C -c -l 0,2 -p <pid>
-.Sh SEE ALSO
+.Sh СМ. ТАКЖЕ
 .Xr nproc 1 ,
 .Xr cpuset 2 ,
 .Xr rctl 8
-.Sh HISTORY
-The
+.Sh ИСТОРИЯ
+Утилита
 .Nm
-command first appeared in
+впервые появилась в
 .Fx 7.1 .
-.Sh AUTHORS
+.Sh АВТОРЫ
 .An Jeffrey Roberson Aq Mt jeff@FreeBSD.org
