@@ -1,3 +1,4 @@
+
 .\"-
 .\" Copyright (c) 2000  Peter Wemm <peter@FreeBSD.org>
 .\"
@@ -22,105 +23,85 @@
 .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 .\" SUCH DAMAGE.
 .\"
-.Dd June 20, 2021
+.Dd 20 июня 2021
 .Dt KENV 1
 .Os
-.Sh NAME
+.Sh ИМЯ
 .Nm kenv
-.Nd list or modify the kernel environment
-.Sh SYNOPSIS
+.Nd вывод и изменение параметров окружения ядра
+.Sh СИНТАКСИС
 .Nm
 .Op Fl l | s
 .Op Fl hNq
 .Nm
 .Op Fl qv
-.Ar variable Ns Op = Ns Ar value
+.Ar переменная Ns Op = Ns Ar значение
 .Nm
 .Op Fl q
 .Fl u
-.Ar variable
-.Sh DESCRIPTION
-The
+.Ar переменная
+.Sh ОПИСАНИЕ
+Если утилита
 .Nm
-utility will list all variables in the kernel environment if
-invoked without arguments.
+вызвана без аргументов, она выводит список всех переменных окружения ядра.
 .Pp
-If the
-.Fl l
-option is specified, then the static environment provided by
-.Xr loader 8
-will be listed instead.
-Similarly, the
+Если указана опция
+.Fl l ,
+будет выведено статическое окружение, предоставленное загрузчиком
+.Xr loader 8 .
+Аналогично, опция
 .Fl s
-option will list the static environment defined by the kernel config.
-Both of the
-.Fl l
-and
-.Fl s
-options are dependent on the kernel being configured to preserve early kernel
-environments.
-The default kernel configuration does not preserve these environments.
+выводит статическое окружение, определенное в конфигурации ядра.
+Обе опции зависят от того, было ли ядро собрано с поддержкой сохранения параметров раннего окружения.
+В конфигурации ядра по умолчанию сохранение этих данных отключено.
 .Pp
-If the
-.Fl h
-option is specified, it will limit the report to kernel probe hints.
-If an optional
-.Ar variable
-name is specified,
+Если указана опция
+.Fl h ,
+вывод будет ограничен подсказками ядра для опроса устройств.
+Если указано имя конкретной
+.Ar переменной ,
 .Nm
-will only report that value.
-If the
-.Fl N
-option is specified,
+выведет только её значение.
+Если указана опция
+.Fl N ,
 .Nm
-will only display variable names and not their values.
-If the
+выведет только имена переменных без их значений.
+При использовании опции
 .Fl u
-option is specified,
-.Nm
-will delete the given environment variable.
-If the environment variable is followed by an optional
-.Ar value ,
-.Nm
-will set the environment variable to this value.
+указанная переменная окружения будет удалена.
+Если после имени переменной указано
+.Ar значение ,
+утилита установит для этой переменной данное значение.
 .Pp
-If the
+Опция
 .Fl q
-option is set, warnings normally printed as a result of being unable to
-perform the requested operation will be suppressed.
+подавляет вывод предупреждений, которые обычно появляются, если запрошенную операцию не удалось выполнить.
 .Pp
-If the
+Если установлена опция
 .Fl v
-option is set, the variable name will be printed out for the
-environment variable in addition to the value when
-.Nm
-is executed with a variable name.
+и утилита вызвана с именем конкретной переменной, то вместе со значением будет выведено и имя этой переменной.
 .Pp
-Variables can be added to the kernel environment using the
+Переменные могут быть добавлены в окружение ядра через файл
 .Pa /boot/loader.conf
-file, or also statically compiled into the kernel using the statement
+или вкомпилированы в ядро статически с помощью инструкции
 .Pp
-.Dl Ic env Ar filename
+.Dl Ic env Ar имя_файла
 .Pp
-in the kernel config file.
-The file can contain lines of the form
+в конфигурационном файле ядра. Этот файл может содержать строки вида:
 .Pp
-.Dl name = "value"  # this is a comment
+.Dl имя = "значение"  # это комментарий
 .Pp
-where whitespace around
-.Sq name
-and
+Пробелы вокруг
+.Sq имя
+и знака
 .Sq = ,
-and everything after a
-.Sq #
-character, are ignored.
-Almost any printable character except
-.Sq =
-is acceptable as part of a name.
-Quotes are optional and necessary only if the value contains whitespace.
-.Sh EXAMPLES
-Show kernel probe hints variable names and filter for the uart
-device
+а также всё, что следует за символом
+.Sq # ,
+игнорируется. В качестве части имени допускается практически любой печатный символ, кроме
+.Sq = .
+Кавычки не обязательны и требуются только в том случае, если значение содержит пробелы.
+.Sh ПРИМЕРЫ
+Вывести имена переменных из подсказок ядра и отфильтровать их по устройству uart:
 .Bd -literal -offset indent
 $ kenv -h -N | grep uart
 hint.uart.0.at
@@ -132,37 +113,36 @@ hint.uart.1.irq
 hint.uart.1.port
 .Ed
 .Pp
-Show the value of a specific variable:
+Показать значение конкретной переменной:
 .Bd -literal -offset indent
 $ kenv hint.uart.1.at
 isa
 .Ed
 .Pp
-Same as above but adding the name of the variable in the report:
+То же самое, но с выводом имени переменной:
 .Bd -literal -offset indent
 $ kenv -v hint.uart.1.at
 hint.uart.1.at="isa"
 .Ed
 .Pp
-Try to delete a variable and suppress warnings if any:
+Попытаться удалить переменную, подавляя возможные предупреждения:
 .Bd -literal -offset indent
 $ kenv -q -u hint.uart.1.at
 .Ed
 .Pp
-Set the value of the
-.Ev verbose_loading
-variable
+Установить значение переменной
+.Ev verbose_loading :
 .Bd -literal -offset indent
 $ kenv verbose_loading="YES"
 verbose_loading="YES"
 .Ed
-.Sh SEE ALSO
+.Sh СМ. ТАКЖЕ
 .Xr kenv 2 ,
 .Xr config 5 ,
 .Xr loader.conf 5 ,
 .Xr loader 8
-.Sh HISTORY
-The
+.Sh ИСТОРИЯ
+Утилита
 .Nm
-utility appeared in
+впервые появилась в
 .Fx 4.1.1 .
