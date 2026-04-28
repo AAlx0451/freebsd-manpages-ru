@@ -1,0 +1,236 @@
+.\"
+.\" SPDX-License-Identifier: BSD-2-Clause
+.\"
+.\" Copyright (c) 1999 Sheldon Hearn
+.\"
+.\" All rights reserved.
+.\"
+.\" Redistribution and use in source and binary forms, with or without
+.\" modification, are permitted provided that the following conditions
+.\" are met:
+.\" 1. Redistributions of source code must retain the above copyright
+.\"    notice, this list of conditions and the following disclaimer.
+.\" 2. Redistributions in binary form must reproduce the above copyright
+.\"    notice, this list of conditions and the following disclaimer in the
+.\"    documentation and/or other materials provided with the distribution.
+.\"
+.\" THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+.\" ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+.\" IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+.\" ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+.\" FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+.\" DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+.\" OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+.\" HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+.\" LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+.\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+.\" SUCH DAMAGE.
+.\"
+.Dd 16 декабря 2025
+.Dt BUILTIN 1
+.Os
+.Sh ИМЯ
+.Nm builtin ,
+.Nm keybinds
+.Nd перечень встроенных команд командных оболочек FreeBSD
+.Sh СИНТАКСИС
+Подробности использования см. в руководстве по вашей командной оболочке.
+.Sh ОПИСАНИЕ
+На этой странице представлен перечень
+.Nm
+команд, ключевых слов и привязок клавиш, предоставляемых
+.Xr csh 1
+и
+.Xr sh 1
+— интерпретаторами командной строки, составляющими пользовательское окружение
+.Bx .
+.Ss Команды
+Ниже приведена таблица с перечнем команд и ключевых слов
+.Nm ,
+с указанием того, существуют ли они в виде отдельных (самостоятельных) утилит,
+и какие стандартные оболочки их поддерживают.
+.Bl -column "uncomplete" "Отдельная утилита" "csh(1)" "sh(1)" -offset indent
+.It Em Команда Ta Em Отдельная утилита Ta Xr csh 1 Ta Xr sh 1
+.It Ic \&! Ta \&Нет Ta \&Нет Ta Да
+.It Ic % Ta \&Нет Ta Да Ta \&Нет
+.It Ic \&. Ta \&Нет Ta \&Нет Ta Да
+.It Ic \&: Ta \&Нет Ta Да Ta Да
+.It Ic @ Ta \&Нет Ta Да Ta \&Нет
+.It Ic \&[ Ta Да Ta \&Нет Ta Да
+.It Ic { Ta \&Нет Ta \&Нет Ta Да
+.It Ic } Ta \&Нет Ta \&Нет Ta Да
+.It Ic alias Ta \&Нет Ta Да Ta Да
+.It Ic alloc Ta \&Нет Ta Да Ta \&Нет
+.It Ic bg Ta \&Нет Ta Да Ta Да
+.It Ic bind Ta \&Нет Ta \&Нет Ta Да
+.It Ic bindkey Ta \&Нет Ta Да Ta \&Нет
+.It Ic break Ta \&Нет Ta Да Ta Да
+.It Ic breaksw Ta \&Нет Ta Да Ta \&Нет
+.It Ic builtin Ta \&Нет Ta \&Нет Ta Да
+.It Ic builtins Ta \&Нет Ta Да Ta \&Нет
+.It Ic case Ta \&Нет Ta Да Ta Да
+.It Ic cd Ta \&Нет Ta Да Ta Да
+.It Ic chdir Ta \&Нет Ta Да Ta Да
+.It Ic command Ta \&Нет Ta \&Нет Ta Да
+.It Ic complete Ta \&Нет Ta Да Ta \&Нет
+.It Ic continue Ta \&Нет Ta Да Ta Да
+.It Ic default Ta \&Нет Ta Да Ta \&Нет
+.It Ic dirs Ta \&Нет Ta Да Ta \&Нет
+.It Ic do Ta \&Нет Ta \&Нет Ta Да
+.It Ic done Ta \&Нет Ta \&Нет Ta Да
+.It Ic echo Ta Да Ta Да Ta Да
+.It Ic echotc Ta \&Нет Ta Да Ta \&Нет
+.It Ic elif Ta \&Нет Ta \&Нет Ta Да
+.It Ic else Ta \&Нет Ta Да Ta Да
+.It Ic end Ta \&Нет Ta Да Ta \&Нет
+.It Ic endif Ta \&Нет Ta Да Ta \&Нет
+.It Ic endsw Ta \&Нет Ta Да Ta \&Нет
+.It Ic esac Ta \&Нет Ta \&Нет Ta Да
+.It Ic eval Ta \&Нет Ta Да Ta Да
+.It Ic exec Ta \&Нет Ta Да Ta Да
+.It Ic exit Ta \&Нет Ta Да Ta Да
+.It Ic export Ta \&Нет Ta \&Нет Ta Да
+.It Ic false Ta Да Ta \&Нет Ta Да
+.It Ic fc Ta \&Нет Ta \&Нет Ta Да
+.It Ic fg Ta \&Нет Ta Да Ta Да
+.It Ic fi Ta \&Нет Ta \&Нет Ta Да
+.It Ic filetest Ta \&Нет Ta Да Ta \&Нет
+.It Ic for Ta \&Нет Ta \&Нет Ta Да
+.It Ic foreach Ta \&Нет Ta Да Ta \&Нет
+.It Ic getopts Ta \&Нет Ta \&Нет Ta Да
+.It Ic glob Ta \&Нет Ta Да Ta \&Нет
+.It Ic goto Ta \&Нет Ta Да Ta \&Нет
+.It Ic hash Ta \&Нет Ta \&Нет Ta Да
+.It Ic hashstat Ta \&Нет Ta Да Ta \&Нет
+.It Ic history Ta \&Нет Ta Да Ta \&Нет
+.It Ic hup Ta \&Нет Ta Да Ta \&Нет
+.It Ic if Ta \&Нет Ta Да Ta Да
+.It Ic jobid Ta \&Нет Ta \&Нет Ta Да
+.It Ic jobs Ta \&Нет Ta Да Ta Да
+.It Ic kill Ta Да Ta Да Ta Да
+.It Ic limit Ta \&Нет Ta Да Ta \&Нет
+.It Ic local Ta \&Нет Ta \&Нет Ta Да
+.It Ic log Ta \&Нет Ta Да Ta \&Нет
+.It Ic login Ta Да Ta Да Ta \&Нет
+.It Ic logout Ta \&Нет Ta Да Ta \&Нет
+.It Ic ls-F Ta \&Нет Ta Да Ta \&Нет
+.It Ic nice Ta Да Ta Да Ta \&Нет
+.It Ic nohup Ta Да Ta Да Ta \&Нет
+.It Ic notify Ta \&Нет Ta Да Ta \&Нет
+.It Ic onintr Ta \&Нет Ta Да Ta \&Нет
+.It Ic popd Ta \&Нет Ta Да Ta \&Нет
+.It Ic printenv Ta Да Ta Да Ta \&Нет
+.It Ic printf Ta Да Ta \&Нет Ta Да
+.It Ic pushd Ta \&Нет Ta Да Ta \&Нет
+.It Ic pwd Ta Да Ta \&Нет Ta Да
+.It Ic read Ta \&Нет Ta \&Нет Ta Да
+.It Ic readonly Ta \&Нет Ta \&Нет Ta Да
+.It Ic rehash Ta \&Нет Ta Да Ta \&Нет
+.It Ic repeat Ta \&Нет Ta Да Ta \&Нет
+.It Ic return Ta \&Нет Ta \&Нет Ta Да
+.It Ic sched Ta \&Нет Ta Да Ta \&Нет
+.It Ic set Ta \&Нет Ta Да Ta Да
+.It Ic setenv Ta \&Нет Ta Да Ta \&Нет
+.It Ic settc Ta \&Нет Ta Да Ta \&Нет
+.It Ic setty Ta \&Нет Ta Да Ta \&Нет
+.It Ic setvar Ta \&Нет Ta \&Нет Ta Да
+.It Ic shift Ta \&Нет Ta Да Ta Да
+.It Ic source Ta \&Нет Ta Да Ta \&Нет
+.It Ic stop Ta \&Нет Ta Да Ta \&Нет
+.It Ic suspend Ta \&Нет Ta Да Ta \&Нет
+.It Ic switch Ta \&Нет Ta Да Ta \&Нет
+.It Ic telltc Ta \&Нет Ta Да Ta \&Нет
+.It Ic test Ta Да Ta \&Нет Ta Да
+.It Ic then Ta \&Нет Ta \&Нет Ta Да
+.It Ic time Ta Да Ta Да Ta \&Нет
+.It Ic times Ta \&Нет Ta \&Нет Ta Да
+.It Ic trap Ta \&Нет Ta \&Нет Ta Да
+.It Ic true Ta Да Ta \&Нет Ta Да
+.It Ic type Ta \&Нет Ta \&Нет Ta Да
+.It Ic ulimit Ta \&Нет Ta \&Нет Ta Да
+.It Ic umask Ta \&Нет Ta Да Ta Да
+.It Ic unalias Ta \&Нет Ta Да Ta Да
+.It Ic uncomplete Ta \&Нет Ta Да Ta \&Нет
+.It Ic unhash Ta \&Нет Ta Да Ta \&Нет
+.It Ic unlimit Ta \&Нет Ta Да Ta \&Нет
+.It Ic unset Ta \&Нет Ta Да Ta Да
+.It Ic unsetenv Ta \&Нет Ta Да Ta \&Нет
+.It Ic until Ta \&Нет Ta \&Нет Ta Да
+.It Ic wait Ta \&Нет Ta Да Ta Да
+.It Ic where Ta \&Нет Ta Да Ta \&Нет
+.It Ic which Ta Да Ta Да Ta \&Нет
+.It Ic while Ta \&Нет Ta Да Ta Да
+.El
+.Ss Привязки клавиш
+Окружение командной строки также предоставляет следующие
+привязки клавиш (горячие клавиши) по умолчанию:
+.Bl -column "Информация о процессе (SIGINFO)" "^M | ^J" "^M | ^J" -offset indent
+.It Em Действие / Сигнал Ta Xr csh 1 Ta Xr sh 1
+.It Ic Удаление символа слева (Backspace) Ta ^H Ta ^H
+.It Ic Возврат каретки (Enter) Ta ^M | ^J Ta ^M | ^J
+.It Ic Табуляция Ta ^I Ta ^I
+.It Ic В начало строки Ta ^A Ta ^A
+.It Ic В конец строки Ta ^E Ta ^E
+.It Ic Курсор вперед Ta ^F Ta ^F
+.It Ic Курсор назад Ta ^B Ta ^B
+.It Ic Очистить экран Ta ^L Ta ^L
+.It Ic Вырезать строку Ta ^U Ta ^U
+.It Ic Вырезать слово слева Ta ^W Ta ^W
+.It Ic Вырезать до конца строки Ta ^K Ta ^K
+.It Ic Вставить вырезанное Ta ^Y Ta ^Y
+.It Ic Исправление опечатки Ta ^T Ta ^T
+.It Конец файла Po Ic EOF Pc Ta ^D Ta ^D
+.It Прерывание Po Ic SIGINT Pc Ta ^C Ta ^C
+.It Информация о процессе Po Ic SIGINFO Pc Ta ^T Ta ^T
+.It Ic Поиск по истории Ta \&Нет Ta ^R
+.It Ic Выход из поиска по истории Ta \&Нет Ta ^G
+.It Ic Предыдущая команда Ta ^P Ta ^P
+.It Ic Следующая команда Ta ^N Ta ^N
+.It Ic Ввод следующего символа как есть Ta ^V Ta ^V
+.It Ic Приостановить вывод Ta ^S Ta ^S
+.It Ic Возобновить вывод Ta ^Q Ta ^Q
+.It Приостановка процесса Ic (SIGTSTP) Ta ^Z Ta ^Z
+.It Ic Режим прокрутки Ta ScrLk* Ta ScrLk*
+.El
+.Pp
+\&*: Привязки, отмеченные символом
+.Ql * ,
+предоставляются драйвером консоли
+.Xr vt 4 .
+.Sh СМ. ТАКЖЕ
+.Xr csh 1 ,
+.Xr echo 1 ,
+.Xr false 1 ,
+.Xr kill 1 ,
+.Xr login 1 ,
+.Xr nice 1 ,
+.Xr nohup 1 ,
+.Xr printenv 1 ,
+.Xr printf 1 ,
+.Xr pwd 1 ,
+.Xr sh 1 ,
+.Xr test 1 ,
+.Xr time 1 ,
+.Xr true 1 ,
+.Xr which 1
+.Sh ИСТОРИЯ
+Страница руководства
+.Nm
+впервые появилась в
+.Fx 3.4 .
+.Sh АВТОРЫ
+.An -nosplit
+Эта страница руководства написана
+.An Alexander Ziaee Aq Mt ziaee@FreeBSD.org
+на основе более ранней версии, автором которой является
+.An Sheldon Hearn Aq Mt sheldonh@FreeBSD.org .
+.Sh ПРЕДОСТЕРЕЖЕНИЯ
+Хотя команды
+.Nm
+могут присутствовать в нескольких оболочках или в виде отдельных утилит,
+их реализация может различаться.
+.Pp
+Отдельные утилиты и руководства к ним необходимо вызывать, указывая полный путь,
+если вызов происходит из оболочки, имеющей встроенную команду
+.Nm
+с таким же именем.
