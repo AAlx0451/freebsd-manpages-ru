@@ -25,102 +25,93 @@
 .Dd June 20, 2021
 .Dt KENV 1
 .Os
-.Sh NAME
+.Sh ИМЯ
 .Nm kenv
-.Nd list or modify the kernel environment
-.Sh SYNOPSIS
+.Nd вывод или изменение окружения ядра
+.Sh СИНТАКСИС
 .Nm
 .Op Fl l | s
 .Op Fl hNq
 .Nm
 .Op Fl qv
-.Ar variable Ns Op = Ns Ar value
+.Ar переменная Ns Op = Ns Ar значение
 .Nm
 .Op Fl q
 .Fl u
-.Ar variable
-.Sh DESCRIPTION
-The
+.Ar переменная
+.Sh ОПИСАНИЕ
+Утилита
 .Nm
-utility will list all variables in the kernel environment if
-invoked without arguments.
+без аргументов выводит список всех переменных в окружении ядра.
 .Pp
-If the
-.Fl l
-option is specified, then the static environment provided by
-.Xr loader 8
-will be listed instead.
-Similarly, the
+Если указан параметр
+.Fl l ,
+то вместо этого будет выведено статическое окружение, предоставленное
+.Xr loader 8 .
+Аналогично, параметр
 .Fl s
-option will list the static environment defined by the kernel config.
-Both of the
+выведет статическое окружение, определённое конфигурацией ядра.
+Оба параметра
 .Fl l
-and
+и
 .Fl s
-options are dependent on the kernel being configured to preserve early kernel
-environments.
-The default kernel configuration does not preserve these environments.
+зависят от того, настроено ли ядро на сохранение ранних окружений ядра.
+Конфигурация ядра по умолчанию не сохраняет эти окружения.
 .Pp
-If the
-.Fl h
-option is specified, it will limit the report to kernel probe hints.
-If an optional
-.Ar variable
-name is specified,
+Если указан параметр
+.Fl h ,
+вывод будет ограничен подсказками (hints) для обнаружения устройств (probe hints).
+Если указано необязательное имя
+.Ar переменной ,
 .Nm
-will only report that value.
-If the
-.Fl N
-option is specified,
+выведет только её значение.
+Если указан параметр
+.Fl N ,
 .Nm
-will only display variable names and not their values.
-If the
-.Fl u
-option is specified,
+будет выводить только имена переменных без их значений.
+Если указан параметр
+.Fl u ,
 .Nm
-will delete the given environment variable.
-If the environment variable is followed by an optional
-.Ar value ,
+удалит указанную переменную окружения.
+Если после переменной окружения указано необязательное
+.Ar значение ,
 .Nm
-will set the environment variable to this value.
+установит переменную окружения в это значение.
 .Pp
-If the
-.Fl q
-option is set, warnings normally printed as a result of being unable to
-perform the requested operation will be suppressed.
+Если установлен параметр
+.Fl q ,
+предупреждения, обычно выводимые в случае невозможности выполнить запрошенную операцию, будут подавлены.
 .Pp
-If the
-.Fl v
-option is set, the variable name will be printed out for the
-environment variable in addition to the value when
+Если установлен параметр
+.Fl v ,
+при выполнении
 .Nm
-is executed with a variable name.
+с именем переменной будет выводиться также имя переменной окружения вместе со значением.
 .Pp
-Variables can be added to the kernel environment using the
-.Pa /boot/loader.conf
-file, or also statically compiled into the kernel using the statement
+Переменные могут быть добавлены в окружение ядра с помощью файла
+.Pa /boot/loader.conf ,
+а также статически скомпилированы в ядро с помощью оператора
 .Pp
-.Dl Ic env Ar filename
+.Dl Ic env Ar имя_файла
 .Pp
-in the kernel config file.
-The file can contain lines of the form
+в файле конфигурации ядра.
+Файл может содержать строки вида
 .Pp
-.Dl name = "value"  # this is a comment
+.Dl name = "value"  # это комментарий
 .Pp
-where whitespace around
+где пробельные символы вокруг
 .Sq name
-and
+и
 .Sq = ,
-and everything after a
+а также всё после символа
 .Sq #
-character, are ignored.
-Almost any printable character except
+игнорируются.
+Почти любой печатный символ, кроме
 .Sq =
-is acceptable as part of a name.
-Quotes are optional and necessary only if the value contains whitespace.
-.Sh EXAMPLES
-Show kernel probe hints variable names and filter for the uart
-device
+допустим в имени.
+Кавычки необязательны и необходимы только в том случае, если значение содержит пробелы.
+.Sh ПРИМЕРЫ
+Показать имена переменных с подсказками для обнаружения устройств и отфильтровать для устройства uart:
 .Bd -literal -offset indent
 $ kenv -h -N | grep uart
 hint.uart.0.at
@@ -132,37 +123,36 @@ hint.uart.1.irq
 hint.uart.1.port
 .Ed
 .Pp
-Show the value of a specific variable:
+Показать значение конкретной переменной:
 .Bd -literal -offset indent
 $ kenv hint.uart.1.at
 isa
 .Ed
 .Pp
-Same as above but adding the name of the variable in the report:
+То же, что выше, но с добавлением имени переменной в вывод:
 .Bd -literal -offset indent
 $ kenv -v hint.uart.1.at
 hint.uart.1.at="isa"
 .Ed
 .Pp
-Try to delete a variable and suppress warnings if any:
+Попытаться удалить переменную и подавить предупреждения:
 .Bd -literal -offset indent
 $ kenv -q -u hint.uart.1.at
 .Ed
 .Pp
-Set the value of the
-.Ev verbose_loading
-variable
+Установить значение переменной
+.Ev verbose_loading :
 .Bd -literal -offset indent
 $ kenv verbose_loading="YES"
 verbose_loading="YES"
 .Ed
-.Sh SEE ALSO
+.Sh СМ. ТАКЖЕ
 .Xr kenv 2 ,
 .Xr config 5 ,
 .Xr loader.conf 5 ,
 .Xr loader 8
-.Sh HISTORY
-The
+.Sh ИСТОРИЯ
+Утилита
 .Nm
-utility appeared in
+появилась в
 .Fx 4.1.1 .

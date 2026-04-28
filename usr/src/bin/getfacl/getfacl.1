@@ -31,110 +31,105 @@
 .Dd June 19, 2023
 .Dt GETFACL 1
 .Os
-.Sh NAME
+.Sh ИМЯ
 .Nm getfacl
-.Nd get ACL information
-.Sh SYNOPSIS
+.Nd получение информации об ACL
+.Sh СИНТАКСИС
 .Nm
 .Op Fl dhinqv
 .Op Ar
-.Sh DESCRIPTION
-The
+.Sh ОПИСАНИЕ
+Утилита
 .Nm
-utility writes discretionary access control information associated with
-the specified file(s) to standard output.
-If the
+выводит в стандартный вывод информацию об избирательном управлении доступом,
+связанную с указанным файлом (файлами).
+Если утилита
 .Xr getconf 1
-utility indicates that
+указывает, что
 .Brq Va _POSIX_ACL_EXTENDED
-is not in effect for a
-.Ar file
-then the standard discretionary access permissions are interpreted as
-an ACL containing only the required ACL entries.
+не действует для
+.Ar файла ,
+то стандартные права избирательного доступа интерпретируются как ACL,
+содержащий только обязательные записи ACL.
 .Pp
-The following option is available:
+Доступен следующий параметр:
 .Bl -tag -width indent
 .It Fl d , Fl -default
-The operation applies to the default ACL of a directory instead of the
-access ACL.
-An error is generated if a default ACL cannot be associated with
-.Ar file .
-This option is not valid for NFSv4 ACLs.
+Операция применяется к ACL по умолчанию каталога вместо ACL доступа.
+Возникает ошибка, если для
+.Ar файла
+не может быть связан ACL по умолчанию.
+Этот параметр недопустим для ACL NFSv4.
 .It Fl h
-If the target of the operation is a symbolic link, return the ACL from
-the symbolic link itself rather than following the link.
+Если целью операции является символическая ссылка, вернуть ACL самой
+символической ссылки, а не переходить по ссылке.
 .It Fl i
-For NFSv4 ACLs, append numerical ID at the end of each entry containing
-user or group name.
-Ignored for POSIX.1e ACLs.
+Для ACL NFSv4 добавлять числовой идентификатор в конец каждой записи,
+содержащей имя пользователя или группы.
+Игнорируется для ACL POSIX.1e.
 .It Fl n , Fl -numeric
-Display user and group IDs numerically rather than converting to
-a user or group name.
-Ignored for POSIX.1e ACLs.
+Отображать идентификаторы пользователей и групп численно, а не преобразовывать
+их в имена пользователей или групп.
+Игнорируется для ACL POSIX.1e.
 .It Fl q , Fl -omit-header
-Do not write commented information about file name and ownership.
-This is
-useful when dealing with filenames with unprintable characters.
+Не выводить комментарии с информацией об имени файла и владельце.
+Это полезно при работе с именами файлов, содержащими непечатаемые символы.
 .It Fl s , Fl -skip-base
-Skip files that only have a trivial ACL, as defined by
+Пропускать файлы, которые имеют только тривиальный ACL, как определено в
 .Xr acl_is_trivial_np 3 .
-Notably, files with POSIX.1e ACLs that only represent the owner, group and other
-to match the mode of the file will be skipped.
+В частности, файлы с ACL POSIX.1e, которые только представляют владельца, группу
+и остальных для соответствия режиму файла, будут пропущены.
 .It Fl v
-For NFSv4 ACLs, display access mask and flags in a verbose form.
-Ignored for POSIX.1e ACLs.
+Для ACL NFSv4 отображать маску доступа и флаги в подробной форме.
+Игнорируется для ACL POSIX.1e.
 .El
 .Pp
-The following operand is available:
+Доступен следующий операнд:
 .Bl -tag -width indent
-.It Ar file
-A pathname of a file whose ACL shall be retrieved.
-If
-.Ar file
-is not specified, or a
-.Ar file
-is specified as
+.It Ar файл
+Путь к файлу, ACL которого должен быть получен.
+Если
+.Ar файл
+не указан или указан как
 .Fl ,
-then
+то
 .Nm
-reads a list of pathnames, each terminated by one newline character,
-from the standard input.
+читает из стандартного ввода список путей, каждый из которых завершается символом новой строки.
 .El
 .Pp
-For an explanation of the ACL syntax, see the
-.Xr setfacl 1
-manual page.
-.Sh EXIT STATUS
+За объяснением синтаксиса ACL обратитесь к странице руководства
+.Xr setfacl 1 .
+.Sh КОД ЗАВЕРШЕНИЯ
 .Ex -std
-.Sh EXAMPLES
+.Sh ПРИМЕРЫ
 .Dl getfacl /
 .Pp
-Retrieve ACL for the directory
+Получить ACL для каталога
 .Pa / .
 .Pp
 .Dl getfacl -d /
 .Pp
-Retrieve the default ACL for the directory
+Получить ACL по умолчанию для каталога
 .Pa / ,
-if any.
-.Sh SEE ALSO
+если он существует.
+.Sh СМ. ТАКЖЕ
 .Xr setfacl 1 ,
 .Xr acl 3 ,
 .Xr getextattr 8 ,
 .Xr setextattr 8 ,
 .Xr acl 9 ,
 .Xr extattr 9
-.Sh STANDARDS
-The
+.Sh СТАНДАРТЫ
+Утилита
 .Nm
-utility is expected to be
+должна соответствовать стандарту
 .Tn IEEE
-Std 1003.2c compliant.
-.Sh HISTORY
-Extended Attribute and Access Control List support was developed as part
-of the
+Std 1003.2c.
+.Sh ИСТОРИЯ
+Поддержка расширенных атрибутов и списков управления доступом была разработана в рамках
+проекта
 .Tn TrustedBSD
-Project and introduced in
+и представлена во
 .Fx 5.0 .
-.Sh AUTHORS
+.Sh АВТОРЫ
 .An Robert N M Watson

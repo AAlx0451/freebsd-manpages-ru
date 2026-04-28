@@ -31,295 +31,290 @@
 .Dd October 5, 2016
 .Dt EXPR 1
 .Os
-.Sh NAME
+.Sh ИМЯ
 .Nm expr
-.Nd evaluate expression
-.Sh SYNOPSIS
+.Nd вычислить выражение
+.Sh СИНТАКСИС
 .Nm
 .Op Fl e
-.Ar expression
-.Sh DESCRIPTION
-The
+.Ar выражение
+.Sh ОПИСАНИЕ
+Утилита
 .Nm
-utility evaluates
-.Ar expression
-and writes the result on standard output.
+вычисляет
+.Ar выражение
+и записывает результат в стандартный вывод.
 .Pp
-All operators and operands must be passed as separate arguments.
-Several of the operators have special meaning to command interpreters
-and must therefore be quoted appropriately.
-All integer operands are interpreted in base 10 and must consist of only
-an optional leading minus sign followed by one or more digits (unless
-less strict parsing has been enabled for backwards compatibility with
-prior versions of
+Все операторы и операнды должны передаваться как отдельные аргументы.
+Некоторые операторы имеют особое значение для интерпретаторов команд,
+поэтому они должны быть соответствующим образом экранированы.
+Все целочисленные операнды интерпретируются в системе счисления по основанию 10
+и должны состоять только из необязательного ведущего знака минус,
+за которым следует одна или несколько цифр (если не включён менее строгий разбор
+для обратной совместимости с предыдущими версиями
 .Nm
-in
+во
 .Fx ) .
 .Pp
-Arithmetic operations are performed using signed integer math with a
-range according to the C
+Арифметические операции выполняются с использованием целочисленной математики со знаком
+с диапазоном в соответствии с типом данных C
 .Vt intmax_t
-data type (the largest signed integral type available).
-All conversions and operations are checked for overflow.
-Overflow results in program termination with an error message on stdout
-and with an error status.
+(самый большой доступный целочисленный тип со знаком).
+Все преобразования и операции проверяются на переполнение.
+Переполнение приводит к завершению программы с сообщением об ошибке в stdout
+и с кодом ошибки.
 .Pp
-The
+Параметр
 .Fl e
-option enables backwards compatible behaviour as detailed below.
+включает поведение, совместимое с предыдущими версиями, как подробно описано ниже.
 .Pp
-Operators are listed below in order of increasing precedence; all
-are left-associative.
-Operators with equal precedence are grouped within symbols
+Операторы перечислены ниже в порядке увеличения приоритета; все
+они левоассоциативны.
+Операторы с равным приоритетом сгруппированы внутри символов
 .Ql {
-and
+и
 .Ql } .
 .Bl -tag -width indent
-.It Ar expr1 Li \&| Ar expr2
-Return the evaluation of
-.Ar expr1
-if it is neither an empty string nor zero;
-otherwise, returns the evaluation of
-.Ar expr2
-if it is not an empty string;
-otherwise, returns zero.
-.It Ar expr1 Li & Ar expr2
-Return the evaluation of
-.Ar expr1
-if neither expression evaluates to an empty string or zero;
-otherwise, returns zero.
-.It Ar expr1 Bro =, >, >=, <, <=, != Brc Ar expr2
-Return the results of integer comparison if both arguments are integers;
-otherwise, returns the results of string comparison using the locale-specific
-collation sequence.
-The result of each comparison is 1 if the specified relation is true,
-or 0 if the relation is false.
-.It Ar expr1 Bro +, - Brc Ar expr2
-Return the results of addition or subtraction of integer-valued arguments.
-.It Ar expr1 Bro *, /, % Brc Ar expr2
-Return the results of multiplication, integer division, or remainder of integer-valued arguments.
-.It Ar expr1 Li \&: Ar expr2
-The
+.It Ar выражение1 Li \&| Ar выражение2
+Возвращает результат вычисления
+.Ar выражения1 ,
+если оно не является ни пустой строкой, ни нулём;
+в противном случае возвращает результат вычисления
+.Ar выражения2 ,
+если оно не является пустой строкой;
+в противном случае возвращает ноль.
+.It Ar выражение1 Li & Ar выражение2
+Возвращает результат вычисления
+.Ar выражения1 ,
+если ни одно из выражений не вычисляется в пустую строку или ноль;
+в противном случае возвращает ноль.
+.It Ar выражение1 Bro =, >, >=, <, <=, != Brc Ar выражение2
+Возвращает результат целочисленного сравнения, если оба аргумента являются целыми числами;
+в противном случае возвращает результат строкового сравнения с использованием
+зависящей от локали последовательности свертки (collation).
+Результат каждого сравнения равен 1, если указанное отношение истинно,
+или 0, если отношение ложно.
+.It Ar выражение1 Bro +, - Brc Ar выражение2
+Возвращает результат сложения или вычитания аргументов, имеющих целочисленные значения.
+.It Ar выражение1 Bro *, /, % Brc Ar выражение2
+Возвращает результат умножения, целочисленного деления или остатка от деления
+аргументов, имеющих целочисленные значения.
+.It Ar выражение1 Li \&: Ar выражение2
+Оператор
 .Dq Li \&:
-operator matches
-.Ar expr1
-against
-.Ar expr2 ,
-which must be a basic regular expression.
-The regular expression is anchored
-to the beginning of the string with an implicit
+сопоставляет
+.Ar выражение1
+с
+.Ar выражением2 ,
+которое должно быть базовым регулярным выражением.
+Регулярное выражение привязывается к началу строки неявным
 .Dq Li ^ .
 .Pp
-If the match succeeds and the pattern contains at least one regular
-expression subexpression
+Если сопоставление успешно и шаблон содержит хотя бы одно подвыражение
+регулярного выражения
 .Dq Li "\e(...\e)" ,
-the string corresponding to
-.Dq Li \e1
-is returned;
-otherwise the matching operator returns the number of characters matched.
-If the match fails and the pattern contains a regular expression subexpression
-the null string is returned;
-otherwise 0.
+возвращается строка, соответствующая
+.Dq Li \e1 ;
+в противном случае оператор сопоставления возвращает количество сопоставленных символов.
+Если сопоставление не удалось и шаблон содержит подвыражение регулярного выражения,
+возвращается пустая строка;
+в противном случае возвращается 0.
 .El
 .Pp
-Parentheses are used for grouping in the usual manner.
+Круглые скобки используются для группировки обычным образом.
 .Pp
-The
+Утилита
 .Nm
-utility makes no lexical distinction between arguments which may be
-operators and arguments which may be operands.
-An operand which is lexically identical to an operator will be considered a
-syntax error.
-See the examples below for a work-around.
+не делает лексического различия между аргументами, которые могут быть
+операторами, и аргументами, которые могут быть операндами.
+Операнд, лексически идентичный оператору, будет считаться синтаксической ошибкой.
+Смотрите примеры ниже для обходного пути.
 .Pp
-The syntax of the
+Синтаксис команды
 .Nm
-command in general is historic and inconvenient.
-New applications are advised to use shell arithmetic rather than
+в целом исторический и неудобный.
+Новым приложениям рекомендуется использовать арифметику оболочки вместо
 .Nm .
-.Ss Compatibility with previous implementations
-Unless
+.Ss Совместимость с предыдущими реализациями
+Если не включена совместимость с
 .Fx
-4.x
-compatibility is enabled, this version of
+4.x,
+эта версия
 .Nm
-adheres to the
+следует
 .Tn POSIX
-Utility Syntax Guidelines, which require that a leading argument beginning
-with a minus sign be considered an option to the program.
-The standard
+Руководству по синтаксису утилит, которое требует, чтобы ведущий аргумент,
+начинающийся с минуса, рассматривался как опция программы.
+Стандартный синтаксис
 .Fl Fl
-syntax may be used to prevent this interpretation.
-However, many historic implementations of
+может использоваться для предотвращения такой интерпретации.
+Однако многие исторические реализации
 .Nm ,
-including the one in previous versions of
+включая ту, что была в предыдущих версиях
 .Fx ,
-will not permit this syntax.
-See the examples below for portable ways to guarantee the correct
-interpretation.
-The
+не допускают этого синтаксиса.
+Смотрите примеры ниже для переносимых способов гарантировать правильную интерпретацию.
+Функция
 .Xr check_utility_compat 3
-function (with a
+(с аргументом
 .Fa utility
-argument of
 .Dq Li expr )
-is used to determine whether backwards compatibility mode should be enabled.
-This feature is intended for use as a transition and debugging aid, when
+используется для определения, должен ли быть включён режим обратной совместимости.
+Эта возможность предназначена для использования в качестве вспомогательного средства
+при переходе и отладке, когда
 .Nm
-is used in complex scripts which cannot easily be recast to avoid the
-non-portable usage.
-Enabling backwards compatibility mode also implicitly enables the
-.Fl e
-option, since this matches the historic behavior of
+используется в сложных сценариях, которые не могут быть легко переписаны
+для избежания непереносимого использования.
+Включение режима обратной совместимости также неявно включает параметр
+.Fl e ,
+поскольку это соответствует историческому поведению
 .Nm
-in
-.Fx . This option makes number parsing less strict and permits leading
-white space and an optional leading plus sign.
-In addition, empty operands
-have an implied value of zero in numeric context.
-For historical reasons, defining the environment variable
+во
+.Fx .
+Этот параметр делает разбор чисел менее строгим и допускает ведущие пробелы
+и необязательный ведущий знак плюса.
+Кроме того, пустые операнды имеют неявное значение ноль в числовом контексте.
+По историческим причинам определение переменной окружения
 .Ev EXPR_COMPAT
-also enables backwards compatibility mode.
-.Sh ENVIRONMENT
+также включает режим обратной совместимости.
+.Sh ОКРУЖЕНИЕ
 .Bl -tag -width ".Ev EXPR_COMPAT"
 .It Ev EXPR_COMPAT
-If set, enables backwards compatibility mode.
+Если установлена, включает режим обратной совместимости.
 .El
-.Sh EXIT STATUS
-The
+.Sh КОД ЗАВЕРШЕНИЯ
+Утилита
 .Nm
-utility exits with one of the following values:
+завершается с одним из следующих значений:
 .Bl -tag -width indent -compact
 .It 0
-the expression is neither an empty string nor 0.
+выражение не является ни пустой строкой, ни 0.
 .It 1
-the expression is an empty string or 0.
+выражение является пустой строкой или 0.
 .It 2
-the expression is invalid.
+выражение недопустимо.
 .El
-.Sh EXAMPLES
+.Sh ПРИМЕРЫ
 .Bl -bullet
 .It
-The following example (in
-.Xr sh 1
-syntax) adds one to the variable
+Следующий пример (в синтаксисе
+.Xr sh 1 )
+добавляет единицу к переменной
 .Va a :
 .Dl "a=$(expr $a + 1)"
 .It
-This will fail if the value of
+Это не сработает, если значение
 .Va a
-is a negative number.
-To protect negative values of
+является отрицательным числом.
+Чтобы защитить отрицательные значения
 .Va a
-from being interpreted as options to the
-.Nm
-command, one might rearrange the expression:
+от интерпретации как параметров команды
+.Nm ,
+можно переставить выражение:
 .Dl "a=$(expr 1 + $a)"
 .It
-More generally, parenthesize possibly-negative values:
+В более общем случае, заключите потенциально отрицательные значения в скобки:
 .Dl "a=$(expr \e( $a \e) + 1)"
 .It
-With shell arithmetic, no escaping is required:
+С арифметикой оболочки экранирование не требуется:
 .Dl "a=$((a + 1))"
 .It
-This example prints the filename portion of a pathname stored
-in variable
+Этот пример выводит часть имени файла из пути, сохранённого
+в переменной
 .Va a .
-Since
+Поскольку
 .Va a
-might represent the path
+может представлять путь
 .Pa / ,
-it is necessary to prevent it from being interpreted as the division operator.
-The
+необходимо предотвратить его интерпретацию как оператора деления.
+Символы
 .Li //
-characters resolve this ambiguity.
+разрешают эту неоднозначность.
 .Dl "expr \*q//$a\*q \&: '.*/\e(.*\e)'"
 .It
-With modern
+С современным синтаксисом
 .Xr sh 1
-syntax,
 .Dl "\*q${a##*/}\*q"
-expands to the same value.
+раскрывается в то же значение.
 .El
 .Pp
-The following examples output the number of characters in variable
+Следующие примеры выводят количество символов в переменной
 .Va a .
-Again, if
+Опять же, если
 .Va a
-might begin with a hyphen, it is necessary to prevent it from being
-interpreted as an option to
+может начинаться с дефиса, необходимо предотвратить его интерпретацию
+как параметра
 .Nm ,
-and
+и
 .Va a
-might be interpreted as an operator.
+может интерпретироваться как оператор.
 .Bl -bullet
 .It
-To deal with all of this, a complicated command
-is required:
+Чтобы справиться со всем этим, требуется сложная команда:
 .Dl "expr \e( \*qX$a\*q \&: \*q.*\*q \e) - 1"
 .It
-With modern
+С современным синтаксисом
 .Xr sh 1
-syntax, this can be done much more easily:
+это можно сделать гораздо проще:
 .Dl "${#a}"
-expands to the required number.
+раскрывается в требуемое число.
 .El
-.Sh SEE ALSO
+.Sh СМ. ТАКЖЕ
 .Xr sh 1 ,
 .Xr test 1 ,
 .Xr check_utility_compat 3
-.Sh STANDARDS
-The
+.Sh СТАНДАРТЫ
+Утилита
 .Nm
-utility conforms to
+соответствует стандарту
 .St -p1003.1-2008 ,
-provided that backwards compatibility mode is not enabled.
+при условии, что режим обратной совместимости не включён.
 .Pp
-Backwards compatibility mode performs less strict checks of numeric arguments:
+Режим обратной совместимости выполняет менее строгие проверки числовых аргументов:
 .Bl -bullet
 .It
-An empty operand string is interpreted as 0.
+Пустая строка операнда интерпретируется как 0.
 .El
 .Bl -bullet
 .It
-Leading white space and/or a plus sign before an otherwise valid positive
-numeric operand are allowed and will be ignored.
+Ведущие пробелы и/или знак плюса перед допустимым положительным числовым операндом
+допускаются и будут игнорироваться.
 .El
 .Pp
-The extended arithmetic range and overflow checks do not conflict with
-POSIX's requirement that arithmetic be done using signed longs, since
-they only make a difference to the result in cases where using signed
-longs would give undefined behavior.
+Расширенный арифметический диапазон и проверки переполнения не противоречат
+требованию POSIX о том, что арифметика должна выполняться с использованием signed long,
+поскольку они влияют на результат только в тех случаях, когда использование signed long
+привело бы к неопределённому поведению.
 .Pp
-According to the
-.Tn POSIX
-standard, the use of string arguments
+Согласно стандарту
+.Tn POSIX ,
+использование строковых аргументов
 .Va length ,
 .Va substr ,
-.Va index ,
-or
+.Va index
+или
 .Va match
-produces undefined results.
-In this version of
-.Nm ,
-these arguments are treated just as their respective string values.
+приводит к неопределённым результатам.
+В этой версии
+.Nm
+эти аргументы обрабатываются просто как соответствующие им строковые значения.
 .Pp
-The
+Флаг
 .Fl e
-flag is an extension.
-.Sh HISTORY
-An
+является расширением.
+.Sh ИСТОРИЯ
+Утилита
 .Nm
-utility first appeared in the Programmer's Workbench (PWB/UNIX).
-A public domain version of
+впервые появилась в Programmer's Workbench (PWB/UNIX).
+Версия
 .Nm
-written by
-.An Pace Willisson Aq Mt pace@blitz.com
-appeared in
+в общественном достоянии, написанная
+.An Pace Willisson Aq Mt pace@blitz.com ,
+появилась в
 .Bx 386 0.1 .
-.Sh AUTHORS
-Initial implementation by
+.Sh АВТОРЫ
+Первоначальная реализация
 .An Pace Willisson Aq Mt pace@blitz.com
-was largely rewritten by
+была в значительной степени переписана
 .An -nosplit
 .An J.T. Conklin Aq Mt jtc@FreeBSD.org .

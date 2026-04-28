@@ -29,234 +29,213 @@
 .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 .\" SUCH DAMAGE.
 .\"
-.Dd June 12, 2018
+.Dd June 12 2018
 .Dt CHFLAGS 1
 .Os
-.Sh NAME
+.Sh ИМЯ
 .Nm chflags
-.Nd change file flags
-.Sh SYNOPSIS
+.Nd изменить флаги файлов
+.Sh СИНТАКСИС
 .Nm
 .Op Fl fhvx
 .Oo
 .Fl R
 .Op Fl H | Fl L | Fl P
 .Oc
-.Ar flags
+.Ar флаги
 .Ar
-.Sh DESCRIPTION
-The
+.Sh ОПИСАНИЕ
+Утилита
 .Nm
-utility modifies the file flags of the listed files
-as specified by the
-.Ar flags
-operand.
+изменяет флаги файлов для перечисленных файлов в соответствии с операндом
+.Ar флаги .
 .Pp
-The options are as follows:
+Доступны следующие параметры:
 .Bl -tag -width indent
 .It Fl f
-Do not display a diagnostic message if
+Не выводить диагностическое сообщение, если
 .Nm
-could not modify the flags for
-.Va file ,
-nor modify the exit status to reflect such failures.
+не удалось изменить флаги для
+.Va файла ,
+а также не изменять код возврата для отражения таких ошибок.
 .It Fl H
-If the
-.Fl R
-option is specified, symbolic links on the command line are followed
-and hence unaffected by the command.
-(Symbolic links encountered during traversal are not followed.)
+Если указан параметр
+.Fl R ,
+то символические ссылки, переданные в командной строке, будут разыменованы,
+и, следовательно, команда не затронет их.
+(Символические ссылки, встреченные при обходе, не разыменовываются.)
 .It Fl h
-If the
-.Ar file
-is a symbolic link,
-change the file flags of the link itself rather than the file to which it points.
+Если
+.Ar файл
+является символической ссылкой, изменить флаги самой ссылки, а не файла, на который она указывает.
 .It Fl L
-If the
-.Fl R
-option is specified, all symbolic links are followed.
+Если указан параметр
+.Fl R ,
+то все символические ссылки будут разыменованы.
 .It Fl P
-If the
-.Fl R
-option is specified, no symbolic links are followed.
-This is the default.
+Если указан параметр
+.Fl R ,
+то символические ссылки не разыменовываются.
+Это значение по умолчанию.
 .It Fl R
-Change the file flags of the file hierarchies rooted in the files,
-instead of just the files themselves.
-Beware of unintentionally matching the
+Рекурсивно изменять флаги для всех файлов в иерархиях, корнями которых являются указанные файлы,
+а не только для самих файлов.
+Остерегайтесь непреднамеренного соответствия жёсткой ссылке
 .Dq Pa ".."
-hard link to the parent directory when using wildcards like
+на родительский каталог при использовании шаблонов вроде
 .Dq Li ".*" .
 .It Fl v
-Cause
-.Nm
-to be verbose, showing filenames as the flags are modified.
-If the
+Действовать подробно, показывая имена файлов по мере изменения флагов.
+Если параметр
 .Fl v
-option is specified more than once, the old and new flags of the file
-will also be printed, in octal notation.
+указан более одного раза, также будут выведены старые и новые флаги файла в восьмеричной записи.
 .It Fl x
-Do not cross mount points.
+Не пересекать точки монтирования.
 .El
 .Pp
-The flags are specified as an octal number or a comma separated list
-of keywords.
-The following keywords are currently defined:
+Флаги задаются в виде восьмеричного числа или списка ключевых слов, разделённых запятыми.
+В настоящее время определены следующие ключевые слова:
 .Bl -tag -offset indent -width ".Cm opaque"
 .It Cm arch , archived
-set the archived flag (super-user only)
+установить флаг архивирования (только для суперпользователя)
 .It Cm nodump
-set the nodump flag (owner or super-user only)
+установить флаг nodump (только для владельца или суперпользователя)
 .It Cm opaque
-set the opaque flag (owner or super-user only)
+установить флаг opaque (только для владельца или суперпользователя)
 .It Cm sappnd , sappend
-set the system append-only flag (super-user only)
+установить флаг системного добавления (только для суперпользователя)
 .It Cm schg , schange , simmutable
-set the system immutable flag (super-user only)
+установить флаг системной неизменяемости (только для суперпользователя)
 .It Cm snapshot
-set the snapshot flag (filesystems do not allow changing this flag)
+установить флаг снимка (файловые системы не разрешают изменять этот флаг)
 .It Cm sunlnk , sunlink
-set the system undeletable flag (super-user only)
+установить флаг системной неудаляемости (только для суперпользователя)
 .It Cm uappnd , uappend
-set the user append-only flag (owner or super-user only)
+установить флаг добавления для пользователя (только для владельца или суперпользователя)
 .It Cm uarch , uarchive
-set the archive flag (owner or super-user only)
+установить флаг архива для пользователя (только для владельца или суперпользователя)
 .It Cm uchg , uchange , uimmutable
-set the user immutable flag (owner or super-user only)
+установить флаг неизменяемости для пользователя (только для владельца или суперпользователя)
 .It Cm uhidden , hidden
-set the hidden file attribute (owner or super-user only)
+установить атрибут скрытого файла (только для владельца или суперпользователя)
 .It Cm uoffline , offline
-set the offline file attribute (owner or super-user only)
+установить атрибут файла "не в сети" (offline) (только для владельца или суперпользователя)
 .It Cm urdonly , rdonly , readonly
-set the DOS, Windows and CIFS readonly flag (owner or super-user only)
+установить флаг "только чтение" для DOS, Windows и CIFS (только для владельца или суперпользователя)
 .It Cm usparse , sparse
-set the sparse file attribute (owner or super-user only)
+установить атрибут разрежённого файла (sparse) (только для владельца или суперпользователя)
 .It Cm usystem , system
-set the DOS, Windows and CIFS system flag (owner or super-user only)
+установить системный флаг для DOS, Windows и CIFS (только для владельца или суперпользователя)
 .It Cm ureparse , reparse
-set the Windows reparse point file attribute (owner or super-user only)
+установить атрибут точки повторной обработки (reparse point) Windows (только для владельца или суперпользователя)
 .It Cm uunlnk , uunlink
-set the user undeletable flag (owner or super-user only)
+установить флаг неудаляемости для пользователя (только для владельца или суперпользователя)
 .El
 .Pp
-Putting the letters
+Добавление букв
 .Dq Ar no
-before or removing the letters
+перед ключевым словом или удаление
 .Dq Ar no
-from a keyword causes the flag to be cleared.
-For example:
+из ключевого слова приводит к сбросу соответствующего флага.
+Например:
 .Pp
 .Bl -tag -offset indent -width "nouchg" -compact
 .It Cm nouchg
-clear the user immutable flag (owner or super-user only)
+сбросить флаг неизменяемости для пользователя (только для владельца или суперпользователя)
 .It Cm dump
-clear the nodump flag (owner or super-user only)
+сбросить флаг nodump (только для владельца или суперпользователя)
 .El
 .Pp
-A few of the octal values include:
+Некоторые восьмеричные значения включают:
 .Bl -tag -offset indent -width ".Li 10"
 .It Li 0
-Clear all file flags.
+Сбросить все флаги файла.
 .It Li 1
-Translates to the
-.Cm nodump
-keyword.
+Соответствует ключевому слову
+.Cm nodump .
 .It Li 2
-Translates to the
-.Cm uchg
-keyword.
+Соответствует ключевому слову
+.Cm uchg .
 .It Li 3
-Translates to the
-.Cm uchg , nodump
-keywords.
+Соответствует ключевым словам
+.Cm uchg , nodump .
 .It Li 4
-Translates to the
-.Cm uappnd
-keyword.
+Соответствует ключевому слову
+.Cm uappnd .
 .It Li 10
-Translates to the
-.Cm opaque
-keyword.
+Соответствует ключевому слову
+.Cm opaque .
 .It Li 20
-translates to the
-.Cm uunlnk
-keyword.
+Соответствует ключевому слову
+.Cm uunlnk .
 .El
 .Pp
-Other combinations of keywords may be placed by using
-the octets assigned; however, these are the most notable.
+Другие комбинации ключевых слов могут быть заданы с использованием соответствующих восьмеричных разрядов; однако приведённые выше являются наиболее примечательными.
 .Pp
-Unless the
-.Fl H ,
-.Fl L ,
-or
-.Fl h
-options are given,
-.Nm
-on a symbolic link always succeeds and has no effect.
-The
+Если не заданы параметры
 .Fl H ,
 .Fl L
-and
-.Fl P
-options are ignored unless the
-.Fl R
-option is specified.
-In addition, these options override each other and the
-command's actions are determined by the last one specified.
-.Pp
-You can use "ls -lo" to see the flags of existing files.
-.Pp
-Note that the ability to change certain flags is dependent
-on the current kernel
-.Va securelevel
-setting.
-See
-.Xr security 7
-for more information on this setting.
-.Pp
-If
+или
+.Fl h ,
+то
 .Nm
-receives a
+для символической ссылки всегда завершается успешно и не оказывает никакого эффекта.
+Параметры
+.Fl H ,
+.Fl L
+и
+.Fl P
+игнорируются, если не указан параметр
+.Fl R .
+Кроме того, эти параметры переопределяют друг друга, и действия команды определяются последним указанным параметром.
+.Pp
+Вы можете использовать "ls -lo" для просмотра флагов существующих файлов.
+.Pp
+Обратите внимание, что возможность изменения некоторых флагов зависит от текущего значения
+.Va securelevel
+(уровня безопасности) ядра.
+См.
+.Xr security 7
+для получения дополнительной информации об этом параметре.
+.Pp
+Если
+.Nm
+получает сигнал
 .Dv SIGINFO
-signal (see the
+(см. аргумент
 .Cm status
-argument for
+команды
 .Xr stty 1 ) ,
-then the current filename as well as the old and new flags are displayed.
-.Sh EXIT STATUS
+то отображаются текущее имя файла, а также старые и новые флаги.
+.Sh КОД ЗАВЕРШЕНИЯ
 .Ex -std
-.Sh EXAMPLES
-Recursively clear all flags on files and directories contained within the
-.Fa foobar
-directory hierarchy:
+.Sh ПРИМЕРЫ
+Рекурсивно сбросить все флаги для файлов и каталогов внутри иерархии
+.Fa foobar :
 .Dl Nm Fl R Ar 0 Ar foobar
-.Sh SEE ALSO
+.Sh СМ. ТАКЖЕ
 .Xr ls 1 ,
 .Xr chflags 2 ,
 .Xr stat 2 ,
 .Xr fts 3 ,
 .Xr security 7 ,
 .Xr symlink 7
-.Sh HISTORY
-The
+.Sh ИСТОРИЯ
+Команда
 .Nm
-command first appeared in
+впервые появилась в
 .Bx 4.4 .
-.Sh BUGS
-Only a limited number of utilities are
-.Nm
-aware.
-Some of these tools include
+.Sh ОШИБКИ (BUGS)
+Лишь ограниченное число утилит "понимают" флаги, изменяемые
+.Nm .
+Некоторые из этих инструментов включают
 .Xr ls 1 ,
 .Xr cp 1 ,
 .Xr find 1 ,
 .Xr install 1 ,
-.Xr dump 8 ,
-and
+.Xr dump 8
+и
 .Xr restore 8 .
-In particular a tool which is not currently
-.Nm
-aware is the
-.Xr pax 1
-utility.
+В частности, утилита, которая в настоящее время не "понимает" эти флаги, —
+это
+.Xr pax 1 .

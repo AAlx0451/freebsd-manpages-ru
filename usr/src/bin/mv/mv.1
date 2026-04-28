@@ -32,155 +32,145 @@
 .Dd March 15, 2013
 .Dt MV 1
 .Os
-.Sh NAME
+.Sh ИМЯ
 .Nm mv
-.Nd move files
-.Sh SYNOPSIS
+.Nd перемещение файлов
+.Sh СИНТАКСИС
 .Nm
 .Op Fl f | i | n
 .Op Fl hv
-.Ar source target
+.Ar источник целевой_объект
 .Nm
 .Op Fl f | i | n
 .Op Fl v
-.Ar source ... directory
-.Sh DESCRIPTION
-In its first form, the
+.Ar источник ... каталог
+.Sh ОПИСАНИЕ
+В первой форме утилита
 .Nm
-utility renames the file named by the
-.Ar source
-operand to the destination path named by the
-.Ar target
-operand.
-This form is assumed when the last operand does not name an already
-existing directory.
+переименовывает файл, указанный операндом
+.Ar источник ,
+в путь назначения, указанный операндом
+.Ar целевой_объект .
+Эта форма используется, когда последний операнд не указывает на уже существующий каталог.
 .Pp
-In its second form,
+Во второй форме
 .Nm
-moves each file named by a
-.Ar source
-operand to a destination file in the existing directory named by the
-.Ar directory
-operand.
-The destination path for each operand is the pathname produced by the
-concatenation of the last operand, a slash, and the final pathname
-component of the named file.
+перемещает каждый файл, указанный операндом
+.Ar источник ,
+в целевой файл в существующем каталоге, указанном операндом
+.Ar каталог .
+Путь назначения для каждого операнда — это путь, полученный конкатенацией последнего операнда,
+косой черты и последнего компонента пути указанного файла.
 .Pp
-The following options are available:
+Доступны следующие параметры:
 .Bl -tag -width indent
 .It Fl f
-Do not prompt for confirmation before overwriting the destination
-path.
-(The
+Не запрашивать подтверждение перед перезаписью пути назначения.
+(Параметр
 .Fl f
-option overrides any previous
+переопределяет любые предыдущие параметры
 .Fl i
-or
-.Fl n
-options.)
+или
+.Fl n . )
 .It Fl h
-If the
-.Ar target
-operand is a symbolic link to a directory,
-do not follow it.
-This causes the
+Если операнд
+.Ar целевой_объект
+является символической ссылкой на каталог,
+не переходить по ней.
+Это заставляет утилиту
 .Nm
-utility to rename the file
-.Ar source
-to the destination path
-.Ar target
-rather than moving
-.Ar source
-into the directory referenced by
-.Ar target .
+переименовать файл
+.Ar источник
+в путь назначения
+.Ar целевой_объект ,
+вместо перемещения
+.Ar источник
+в каталог, на который указывает
+.Ar целевой_объект .
 .It Fl i
-Cause
+Заставляет
 .Nm
-to write a prompt to standard error before moving a file that would
-overwrite an existing file.
-If the response from the standard input begins with the character
+вывести запрос в стандартный поток ошибок перед перемещением файла,
+который перезапишет существующий файл.
+Если ответ из стандартного ввода начинается с символа
 .Ql y
-or
+или
 .Ql Y ,
-the move is attempted.
-(The
+перемещение выполняется.
+(Параметр
 .Fl i
-option overrides any previous
+переопределяет любые предыдущие параметры
 .Fl f
-or
-.Fl n
-options.)
+или
+.Fl n . )
 .It Fl n
-Do not overwrite an existing file.
-(The
+Не перезаписывать существующий файл.
+(Параметр
 .Fl n
-option overrides any previous
+переопределяет любые предыдущие параметры
 .Fl f
-or
-.Fl i
-options.)
+или
+.Fl i . )
 .It Fl v
-Cause
+Заставляет
 .Nm
-to be verbose, showing files after they are moved.
+работать подробно, показывая файлы после их перемещения.
 .El
 .Pp
-It is an error for the
-.Ar source
-operand to specify a directory if the target exists and is not a directory.
+Ошибкой является указание операндом
+.Ar источник
+каталога, если целевой объект существует и не является каталогом.
 .Pp
-If the destination path does not have a mode which permits writing,
+Если путь назначения не имеет режима, разрешающего запись,
 .Nm
-prompts the user for confirmation as specified for the
-.Fl i
-option.
+запрашивает у пользователя подтверждение, как указано для параметра
+.Fl i .
 .Pp
-As the
+Поскольку вызов
 .Xr rename 2
-call does not work across file systems,
+не работает между файловыми системами,
 .Nm
-uses
+использует
 .Xr cp 1
-and
+и
 .Xr rm 1
-to accomplish the move.
-The effect is equivalent to:
+для выполнения перемещения.
+Эффект эквивалентен:
 .Bd -literal -offset indent
-rm -f destination_path && \e
-cp -pRP source_file destination && \e
-rm -rf source_file
+rm -f путь_назначения && \e
+cp -pRP исходный_файл назначение && \e
+rm -rf исходный_файл
 .Ed
-.Sh EXIT STATUS
+.Sh КОД ЗАВЕРШЕНИЯ
 .Ex -std
-.Sh EXAMPLES
-Rename file
+.Sh ПРИМЕРЫ
+Переименовать файл
 .Pa foo
-to
+в
 .Pa bar ,
-overwriting
-.Pa bar
-if it already exists:
+перезаписав
+.Pa bar ,
+если он уже существует:
 .Pp
 .Dl $ mv -f foo bar
-.Sh COMPATIBILITY
-The
+.Sh СОВМЕСТИМОСТЬ
+Параметры
 .Fl h ,
-.Fl n ,
-and
+.Fl n
+и
 .Fl v
-options are non-standard and their use in scripts is not recommended.
-.Sh SEE ALSO
+не являются стандартными, и их использование в скриптах не рекомендуется.
+.Sh СМ. ТАКЖЕ
 .Xr cp 1 ,
 .Xr rm 1 ,
 .Xr symlink 7
-.Sh STANDARDS
-The
+.Sh СТАНДАРТЫ
+Утилита
 .Nm
-utility is expected to be
-.St -p1003.2
-compatible.
-.Sh HISTORY
-A
+должна быть совместима со стандартом
+.St -p1003.2 .
+.Sh ИСТОРИЯ
+Команда
 .Nm
-command appeared in
+появилась в
 .At v1 .

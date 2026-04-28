@@ -26,106 +26,105 @@
 .Dd August 27, 2025
 .Dt FREEBSD-VERSION 1
 .Os
-.Sh NAME
+.Sh ИМЯ
 .Nm freebsd-version
-.Nd print the version and patch level of the installed system
-.Sh SYNOPSIS
+.Nd вывод версии и уровня исправлений установленной системы
+.Sh СИНТАКСИС
 .Nm
 .Op Fl kru
 .Op Fl j Ar jail
-.Sh DESCRIPTION
-The
+.Sh ОПИСАНИЕ
+Утилита
 .Nm
-utility makes a best effort to determine the version and patch level
-of the installed kernel and / or userland.
+прилагает все усилия для определения версии и уровня исправлений (patch level)
+установленного ядра и/или пользовательского окружения.
 .Pp
-The following options are available:
+Доступны следующие параметры:
 .Bl -tag -width Fl
 .It Fl k
-Print the version and patch level of the installed kernel.
-Unlike
+Вывести версию и уровень исправлений установленного ядра.
+В отличие от
 .Xr uname 1 ,
-if a new kernel has been installed but the system has not yet
-rebooted,
+если новое ядро было установлено, но система ещё не перезагружалась,
 .Nm
-will print the version and patch level of the new kernel.
+выведет версию и уровень исправлений нового ядра.
 .It Fl r
-Print the version and patch level of the running kernel.
-Unlike
+Вывести версию и уровень исправлений работающего ядра.
+В отличие от
 .Xr uname 1 ,
-this is unaffected by environment variables.
+на это не влияют переменные окружения.
 .It Fl u
-Print the version and patch level of the installed userland.
-These are hardcoded into
+Вывести версию и уровень исправлений установленного пользовательского окружения.
+Эти значения жёстко заданы в
 .Nm
-during the build.
+во время сборки.
 .It Fl j Ar jail
-Print the version and patch level of the installed userland in the
-given jail specified by
+Вывести версию и уровень исправлений пользовательского окружения в указанной
+изолированной среде (jail), заданной
 .Va jid
-or
+или
 .Va name .
-This option can be specified multiple times.
+Этот параметр может быть указан несколько раз.
 .El
 .Pp
-If several of the above options are specified,
+Если указано несколько из вышеперечисленных параметров,
 .Nm
-will print the installed kernel version first, then the running kernel
-version, next the userland version, and finally the userland version
-of the specified jails, on separate lines.
-If no option is specified, it will print the userland version only.
-.Sh IMPLEMENTATION NOTES
-The
+выведет сначала версию установленного ядра, затем версию работающего ядра,
+далее версию пользовательского окружения и, наконец, версию пользовательского окружения
+указанных изолированных сред, каждую на отдельной строке.
+Если параметры не указаны, будет выведена только версия пользовательского окружения.
+.Sh ЗАМЕЧАНИЯ ПО РЕАЛИЗАЦИИ
+Утилита
 .Nm
-utility should provide the correct answer in the vast majority of
-cases, including on systems kept up-to-date using
+должна давать правильный ответ в подавляющем большинстве случаев,
+включая системы, обновляемые с помощью
 .Xr freebsd-update 8 ,
-which does not update the kernel version unless the kernel itself was
-affected by the latest patch.
+который не обновляет версию ядра, если только само ядро не было затронуто последним исправлением.
 .Pp
-To determine the name (and hence the location) of a custom kernel, the
+Чтобы определить имя (и, следовательно, расположение) пользовательского ядра,
+утилита
 .Nm
-utility will attempt to parse
+пытается проанализировать
 .Pa /boot/defaults/loader.conf
-and
+и
 .Pa /boot/loader.conf ,
-looking for definitions of the
+ища определения переменных
 .Va kernel
-and
-.Va bootfile
-variables, both with a default value of
+и
+.Va bootfile ,
+обе из которых по умолчанию имеют значение
 .Dq kernel .
-It may however fail to locate the correct kernel if either or both of
-these variables are defined in a non-standard location, such as in
+Однако ей может не удаться найти правильное ядро, если одна или обе из этих переменных
+определены в нестандартном месте, например, в
 .Pa /boot/loader.rc .
-.Sh ENVIRONMENT
+.Sh ОКРУЖЕНИЕ
 .Bl -tag -width ROOT
 .It Ev ROOT
-Path to the root of the filesystem in which to look for
+Путь к корню файловой системы, в которой следует искать
 .Pa loader.conf
-and the kernel.
+и ядро.
 .El
-.Sh EXAMPLES
-To determine the version of the currently running userland:
+.Sh ПРИМЕРЫ
+Чтобы определить версию работающего пользовательского окружения:
 .Bd -literal -offset indent
 /bin/freebsd-version -u
 .Ed
 .Pp
-To inspect a system being repaired using a live system:
+Чтобы проверить систему, восстанавливаемую с помощью работающей системы:
 .Bd -literal -offset indent
 mount -rt ufs /dev/ada0p2 /mnt
 env ROOT=/mnt /mnt/bin/freebsd-version -ku
 .Ed
-.Sh SEE ALSO
+.Sh СМ. ТАКЖЕ
 .Xr uname 1 ,
 .Xr loader.conf 5
-.Sh HISTORY
-The
+.Sh ИСТОРИЯ
+Команда
 .Nm
-command appeared in
+появилась в
 .Fx 10.0 .
-.Sh AUTHORS
-The
+.Sh АВТОРЫ
+Утилита
 .Nm
-utility and this manual page were written by
+и эта страница руководства были написаны
 .An Dag-Erling Sm\(/orgrav Aq Mt des@FreeBSD.org .

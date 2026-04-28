@@ -1,360 +1,322 @@
 .Dd April 9, 2021
 .Dt ED 1
 .Os
-.Sh NAME
+.Sh ИМЯ
 .Nm ed ,
 .Nm red
-.Nd text editor
-.Sh SYNOPSIS
+.Nd текстовый редактор
+.Sh СИНТАКСИС
 .Nm
 .Op Fl
 .Op Fl s
-.Op Fl p Ar string
-.Op Ar file
+.Op Fl p Ar строка
+.Op Ar файл
 .Nm red
 .Op Fl
 .Op Fl s
-.Op Fl p Ar string
-.Op Ar file
-.Sh DESCRIPTION
-The
+.Op Fl p Ar строка
+.Op Ar файл
+.Sh ОПИСАНИЕ
+Утилита
 .Nm
-utility is a line-oriented text editor.
-It is used to create, display, modify and otherwise manipulate text
-files.
-When invoked as
-.Nm red ,
-the editor runs in
-.Qq restricted
-mode, in which the only difference is that the editor restricts the
-use of filenames which start with
+является построчным текстовым редактором.
+Она используется для создания, отображения, изменения и иных манипуляций с текстовыми файлами.
+При вызове как
+.Nm red
+редактор работает в «ограниченном» режиме,
+отличие которого состоит в том, что редактор ограничивает использование
+имён файлов, начинающихся с
 .Ql \&!
-(interpreted as shell commands by
+(интерпретируемых как команды оболочки
 .Nm )
-or contain a
+или содержащих
 .Ql \&/ .
-Note that editing outside of the current directory is only prohibited
-if the user does not have write access to the current directory.
-If a user has write access to the current directory, then symbolic
-links can be created in the current directory, in which case
+Обратите внимание, что редактирование вне текущего каталога запрещено только в том случае,
+если у пользователя нет права записи в текущий каталог.
+Если у пользователя есть право записи в текущий каталог, то в текущем каталоге могут быть созданы
+символические ссылки, и в этом случае
 .Nm red
-will not stop the user from editing the file that the symbolic link
-points to.
+не помешает пользователю редактировать файл, на который указывает символическая ссылка.
 .Pp
-If invoked with a
-.Ar file
-argument, then a copy of
-.Ar file
-is read into the editor's buffer.
-Changes are made to this copy and not directly to
-.Ar file
-itself.
-Upon quitting
-.Nm ,
-any changes not explicitly saved with a
-.Em w
-command are lost.
-.Pp
-Editing is done in two distinct modes:
-.Em command
-and
-.Em input .
-When first invoked,
+При вызове с аргументом
+.Ar файл
+копия
+.Ar файла
+считывается в буфер редактора.
+Изменения вносятся в эту копию, а не непосредственно в сам
+.Ar файл .
+При выходе из
 .Nm
-is in command mode.
-In this mode commands are read from the standard input and
-executed to manipulate the contents of the editor buffer.
-A typical command might look like:
+любые изменения, не сохранённые явно с помощью команды
+.Em w ,
+теряются.
+.Pp
+Редактирование выполняется в двух различных режимах:
+.Em командном
+и
+.Em ввода .
+При первом запуске
+.Nm
+находится в командном режиме.
+В этом режиме команды считываются из стандартного ввода и
+выполняются для управления содержимым буфера редактора.
+Типичная команда может выглядеть так:
 .Pp
 .Sm off
-.Cm ,s No / Em old Xo
-.No / Em new
+.Cm ,s No / Em старое Xo
+.No / Em новое
 .No / Cm g
 .Xc
 .Sm on
 .Pp
-which replaces all occurrences of the string
-.Em old
-with
-.Em new .
+которая заменяет все вхождения строки
+.Em старое
+на
+.Em новое .
 .Pp
-When an input command, such as
+Когда даётся команда ввода, такая как
 .Em a
-(append),
+(добавить),
 .Em i
-(insert) or
+(вставить) или
 .Em c
-(change), is given,
+(изменить),
 .Nm
-enters input mode.
-This is the primary means
-of adding text to a file.
-In this mode, no commands are available;
-instead, the standard input is written
-directly to the editor buffer.
-Lines consist of text up to and
-including a
+переходит в режим ввода.
+Это основной способ добавления текста в файл.
+В этом режиме никакие команды не доступны;
+вместо этого стандартный ввод записывается непосредственно в буфер редактора.
+Строки состоят из текста вплоть до символа
 .Em newline
-character.
-Input mode is terminated by
-entering a single period
+и включая его.
+Режим ввода завершается вводом одной точки
 .Pq Em .\&
-on a line.
+в строке.
 .Pp
-All
+Все команды
 .Nm
-commands operate on whole lines or ranges of lines; e.g.,
-the
+работают с целыми строками или диапазонами строк; например,
+команда
 .Em d
-command deletes lines; the
+удаляет строки; команда
 .Em m
-command moves lines, and so on.
-It is possible to modify only a portion of a line by means of replacement,
-as in the example above.
-However even here, the
+перемещает строки и так далее.
+Возможно изменить только часть строки с помощью замены,
+как в примере выше.
+Однако даже в этом случае команда
 .Em s
-command is applied to whole lines at a time.
+применяется к целым строкам одновременно.
 .Pp
-In general,
+В общем случае команды
 .Nm
-commands consist of zero or more line addresses, followed by a single
-character command and possibly additional parameters; i.e.,
-commands have the structure:
+состоят из нуля или более адресов строк, за которыми следует односимвольная
+команда и, возможно, дополнительные параметры; т.е. команды имеют структуру:
 .Pp
 .Sm off
 .Xo
-.Op Ar address Op , Ar address
-.Ar command Op Ar parameters
+.Op Ar адрес Op , Ar адрес
+.Ar команда Op Ar параметры
 .Xc
 .Sm on
 .Pp
-The address(es) indicate the line or range of lines to be affected by the
-command.
-If fewer addresses are given than the command accepts, then
-default addresses are supplied.
-.Sh OPTIONS
-The following options are available:
+Адрес(а) указывает строку или диапазон строк, на которые должна повлиять команда.
+Если задано меньше адресов, чем принимает команда, используются адреса по умолчанию.
+.Sh ПАРАМЕТРЫ
+Доступны следующие параметры:
 .Bl -tag -width indent
 .It Fl s
-Suppress diagnostics.
-This should be used if
-.Nm Ns 's
-standard input is from a script.
-.It Fl p Ar string
-Specify a command prompt.
-This may be toggled on and off with the
-.Em P
-command.
-.It Ar file
-Specify the name of a file to read.
-If
-.Ar file
-is prefixed with a
-bang (!), then it is interpreted as a shell command.
-In this case,
-what is read is
-the standard output of
-.Ar file
-executed via
-.Xr sh 1 .
-To read a file whose name begins with a bang, prefix the
-name with a backslash (\\).
-The default filename is set to
-.Ar file
-only if it is not prefixed with a bang.
-.El
-.Sh LINE ADDRESSING
-An address represents the number of a line in the buffer.
-The
+Подавлять диагностические сообщения.
+Это следует использовать, если стандартный ввод
 .Nm
-utility maintains a
-.Em current address
-which is
-typically supplied to commands as the default address when none is specified.
-When a file is first read, the current address is set to the last line
-of the file.
-In general, the current address is set to the last line
-affected by a command.
+поступает из скрипта.
+.It Fl p Ar строка
+Задать приглашение командной строки.
+Его можно включать и выключать с помощью команды
+.Em P .
+.It Ar файл
+Задать имя файла для чтения.
+Если перед
+.Ar файл
+стоит восклицательный знак (!), он интерпретируется как команда оболочки.
+В этом случае читается стандартный вывод
+.Ar файл ,
+выполненного через
+.Xr sh 1 .
+Чтобы прочитать файл, имя которого начинается с восклицательного знака,
+перед именем ставится обратная косая черта (\\).
+Имя файла по умолчанию устанавливается в
+.Ar файл
+только если перед ним не стоит восклицательный знак.
+.El
+.Sh АДРЕСАЦИЯ СТРОК
+Адрес представляет номер строки в буфере.
+Утилита
+.Nm
+поддерживает
+.Em текущий адрес ,
+который обычно передаётся командам в качестве адреса по умолчанию, если он не указан.
+Когда файл только что прочитан, текущий адрес устанавливается на последнюю строку файла.
+В общем случае текущий адрес устанавливается на последнюю строку, затронутую командой.
 .Pp
-A line address is
-constructed from one of the bases in the list below, optionally followed
-by a numeric offset.
-The offset may include any combination
-of digits, operators (i.e.,
+Адрес строки строится из одной из основ в списке ниже, за которой необязательно следует числовое смещение.
+Смещение может включать любую комбинацию цифр, операторов (т.е.
 .Em + ,
 .Em -
-and
+и
 .Em ^ )
-and whitespace.
-Addresses are read from left to right, and their values are computed
-relative to the current address.
+и пробелов.
+Адреса читаются слева направо, и их значения вычисляются относительно текущего адреса.
 .Pp
-One exception to the rule that addresses represent line numbers is the
-address
+Одним из исключений из правила, что адреса представляют номера строк, является адрес
 .Em 0
-(zero).
-This means "before the first line,"
-and is legal wherever it makes sense.
+(ноль).
+Он означает «перед первой строкой» и допустим везде, где имеет смысл.
 .Pp
-An address range is two addresses separated either by a comma or
-semi-colon.
-The value of the first address in a range cannot exceed the
-value of the second.
-If only one address is given in a range, then
-the second address is set to the given address.
-If an
-.Em n Ns -tuple
-of addresses is given where
+Диапазон адресов — это два адреса, разделённых запятой или точкой с запятой.
+Значение первого адреса в диапазоне не может превышать значение второго.
+Если в диапазоне указан только один адрес, второй адрес устанавливается равным указанному.
+Если задан кортеж из
+.Em n
+адресов, где
 .Em "n\ >\ 2" ,
-then the corresponding range is determined by the last two addresses in
-the
-.Em n Ns -tuple .
-If only one address is expected, then the last address is used.
+то соответствующий диапазон определяется последними двумя адресами в
+.Em n
+-кортеже.
+Если ожидается только один адрес, используется последний адрес.
 .Pp
-Each address in a comma-delimited range is interpreted relative to the
-current address.
-In a semi-colon-delimited range, the first address is
-used to set the current address, and the second address is interpreted
-relative to the first.
+Каждый адрес в диапазоне, разделённом запятыми, интерпретируется относительно текущего адреса.
+В диапазоне, разделённом точкой с запятой, первый адрес используется для установки текущего адреса,
+а второй адрес интерпретируется относительно первого.
 .Pp
-The following address symbols are recognized:
+Распознаются следующие символы адресов:
 .Bl -tag -width indent
 .It .
-The current line (address) in the buffer.
+Текущая строка (адрес) в буфере.
 .It $
-The last line in the buffer.
+Последняя строка в буфере.
 .It n
-The
-.Em n Ns th
-line in the buffer
-where
+Строка с номером
 .Em n
-is a number in the range
+в буфере,
+где
+.Em n
+— число в диапазоне
 .Em [0,$] .
-.It - or ^
-The previous line.
-This is equivalent to
+.It - или ^
+Предыдущая строка.
+Это эквивалентно
 .Em -1
-and may be repeated with cumulative effect.
-.It -n or ^n
-The
-.Em n Ns th
-previous line, where
+и может повторяться с накопительным эффектом.
+.It -n или ^n
+Предыдущая строка с номером
+.Em n ,
+где
 .Em n
-is a non-negative number.
+— неотрицательное число.
 .It +
-The next line.
-This is equivalent to
+Следующая строка.
+Это эквивалентно
 .Em +1
-and may be repeated with cumulative effect.
+и может повторяться с накопительным эффектом.
 .It +n
-The
-.Em n Ns th
-next line, where
+Следующая строка с номером
+.Em n ,
+где
 .Em n
-is a non-negative number.
-.It , or %
-The first through last lines in the buffer.
-This is equivalent to
-the address range
+— неотрицательное число.
+.It , или %
+Строки с первой по последнюю в буфере.
+Это эквивалентно диапазону адресов
 .Em 1,$ .
 .It ;
-The current through last lines in the buffer.
-This is equivalent to
-the address range
+Строки с текущей по последнюю в буфере.
+Это эквивалентно диапазону адресов
 .Em .,$ .
-.It /re/
-The next line containing the regular expression
-.Em re .
-The search wraps to the beginning of the buffer and continues down to the
-current line, if necessary.
-// repeats the last search.
-.It ?re?
-The
-previous line containing the regular expression
-.Em re .
-The search wraps to the end of the buffer and continues up to the
-current line, if necessary.
-?? repeats the last search.
-.It 'lc
-The
-line previously marked by a
+.It /ре/
+Следующая строка, содержащая регулярное выражение
+.Em ре .
+Поиск при необходимости переходит к началу буфера и продолжается до текущей строки.
+// повторяет последний поиск.
+.It ?ре?
+Предыдущая строка, содержащая регулярное выражение
+.Em ре .
+Поиск при необходимости переходит к концу буфера и продолжается до текущей строки.
+?? повторяет последний поиск.
+.It 'мк
+Строка, ранее отмеченная командой
 .Em k
-(mark) command, where
-.Em lc
-is a lower case letter.
+(метка), где
+.Em мк
+— строчная буква.
 .El
-.Sh REGULAR EXPRESSIONS
-Regular expressions are patterns used in selecting text.
-For example, the command:
+.Sh РЕГУЛЯРНЫЕ ВЫРАЖЕНИЯ
+Регулярные выражения — это шаблоны, используемые для выбора текста.
+Например, команда:
 .Pp
 .Sm off
-.Cm g No / Em string Xo
+.Cm g No / Em строка Xo
 .No /
 .Xc
 .Sm on
 .Pp
-prints all lines containing
-.Em string .
-Regular expressions are also
-used by the
+выводит все строки, содержащие
+.Em строка .
+Регулярные выражения также используются
+командой
 .Em s
-command for selecting old text to be replaced with new.
+для выбора старого текста, заменяемого на новый.
 .Pp
-In addition to a specifying string literals, regular expressions can
-represent
-classes of strings.
-Strings thus represented are said to be matched
-by the corresponding regular expression.
-If it is possible for a regular expression
-to match several strings in a line, then the left-most longest match is
-the one selected.
+Помимо задания строковых литералов, регулярные выражения могут представлять
+классы строк.
+Говорят, что строки, представленные таким образом, соответствуют данному регулярному выражению.
+Если регулярное выражение может соответствовать нескольким строкам в строке,
+выбирается самое левое самое длинное соответствие.
 .Pp
-The following symbols are used in constructing regular expressions:
+Для построения регулярных выражений используются следующие символы:
 .Bl -tag -width indent
 .It c
-Any character
+Любой символ
 .Em c
-not listed below, including
+не перечисленный ниже, включая
 .Ql \&{ ,
 .Ql \&} ,
 .Ql \&( ,
 .Ql \&) ,
 .Ql <
-and
+и
 .Ql > ,
-matches itself.
+соответствует самому себе.
 .It Pf \e c
-Any backslash-escaped character
-.Em c ,
-except for
+Любой символ
+.Em c
+с экранированием обратной косой чертой, за исключением
 .Ql \&{ ,
 .Ql \&} ,
 .Ql \&( ,
 .Ql \&) ,
 .Ql <
-and
+и
 .Ql > ,
-matches itself.
+соответствует самому себе.
 .It .
-Match any single character.
-.It Op char-class
-Match any single character in
-.Em char-class .
-To include a
+Соответствует любому одному символу.
+.It Op класс-символов
+Соответствует любому одному символу из
+.Em класса-символов .
+Чтобы включить
 .Ql \&]
-in
-.Em char-class ,
-it must be the first character.
-A range of characters may be specified by separating the end characters
-of the range with a
+в
+.Em класс-символов ,
+он должен быть первым символом.
+Диапазон символов может быть указан путём разделения конечных символов диапазона
+с помощью
 .Ql - ,
-e.g.,
+например,
 .Ql a-z
-specifies the lower case characters.
-The following literal expressions can also be used in
-.Em char-class
-to specify sets of characters:
+означает строчные буквы.
+Следующие буквальные выражения также могут использоваться в
+.Em классе-символов
+для указания наборов символов:
 .Pp
 .Bl -column "[:alnum:]" "[:cntrl:]" "[:lower:]" "[:xdigit:]" -compact
 .It [:alnum:] Ta [:cntrl:] Ta [:lower:] Ta [:space:]
@@ -362,591 +324,541 @@ to specify sets of characters:
 .It [:blank:] Ta [:graph:] Ta [:punct:] Ta [:xdigit:]
 .El
 .Pp
-If
+Если
 .Ql -
-appears as the first or last
-character of
-.Em char-class ,
-then it matches itself.
-All other characters in
-.Em char-class
-match themselves.
+появляется как первый или последний символ
+.Em класса-символов ,
+то он соответствует самому себе.
+Все остальные символы в
+.Em классе-символов
+соответствуют сами себе.
 .Pp
-Patterns in
-.Em char-class
-of the form:
+Шаблоны в
+.Em классе-символов
+вида:
 .Pp
 .Bl -item -compact -offset 2n
 .It
-.Op \&. Ns Ar col-elm Ns .\&
-or,
+.Op \&. Ns Ar кол-эл Ns .\&
+или,
 .It
-.Op = Ns Ar col-elm Ns =
+.Op = Ns Ar кол-эл Ns =
 .El
 .Pp
-where
-.Ar col-elm
-is a
-.Em collating element
-are interpreted according to the current locale settings
-(not currently supported).
-See
+где
+.Ar кол-эл
+— это
+.Em элемент свертки (collating element)
+интерпретируются в соответствии с текущими настройками локали
+(в настоящее время не поддерживается).
+См.
 .Xr regex 3
-and
+и
 .Xr re_format 7
-for an explanation of these constructs.
-.It Op ^char-class
-Match any single character, other than newline, not in
-.Em char-class .
-.Em Char-class
-is defined
-as above.
+для объяснения этих конструкций.
+.It Op ^класс-символов
+Соответствует любому одному символу, кроме символа новой строки,
+не входящему в
+.Em класс-символов .
+.Em Класс-символов
+определяется как выше.
 .It ^
-If
+Если
 .Em ^
-is the first character of a regular expression, then it
-anchors the regular expression to the beginning of a line.
-Otherwise, it matches itself.
+является первым символом регулярного выражения, то он
+привязывает регулярное выражение к началу строки.
+В противном случае он соответствует самому себе.
 .It $
-If
+Если
 .Em $
-is the last character of a regular expression, it
-anchors the regular expression to the end of a line.
-Otherwise, it matches itself.
+является последним символом регулярного выражения, он
+привязывает регулярное выражение к концу строки.
+В противном случае он соответствует самому себе.
 .It Pf \e <
-Anchor the single character regular expression or subexpression
-immediately following it to the beginning of a word.
-(This may not be available)
+Привязать непосредственно следующее за ним односимвольное регулярное выражение или подвыражение
+к началу слова.
+(Может быть недоступно)
 .It Pf \e >
-Anchor the single character regular expression or subexpression
-immediately following it to the end of a word.
-(This may not be available)
-.It Pf \e (re\e)
-Define a subexpression
-.Em re .
-Subexpressions may be nested.
-A subsequent backreference of the form
+Привязать непосредственно следующее за ним односимвольное регулярное выражение или подвыражение
+к концу слова.
+(Может быть недоступно)
+.It Pf \e (ре\e)
+Определить подвыражение
+.Em ре .
+Подвыражения могут быть вложенными.
+Последующая обратная ссылка вида
 .Pf \e Em n ,
-where
+где
 .Em n
-is a number in the range [1,9], expands to the text matched by the
-.Em n Ns th
-subexpression.
-For example, the regular expression
+— число в диапазоне [1,9], раскрывается в текст, соответствующий
+.Em n
+-му подвыражению.
+Например, регулярное выражение
 .Ql \e(.*\e)\e1
-matches any string
-consisting of identical adjacent substrings.
-Subexpressions are ordered relative to
-their left delimiter.
+соответствует любой строке, состоящей из одинаковых соседних подстрок.
+Подвыражения упорядочены относительно их левого разделителя.
 .It *
-Match the single character regular expression or subexpression
-immediately preceding it zero or more times.
-If
+Соответствует непосредственно предшествующему ему односимвольному регулярному выражению или подвыражению
+ноль или более раз.
+Если
 .Em *
-is the first
-character of a regular expression or subexpression, then it matches
-itself.
-The
+является первым символом регулярного выражения или подвыражения, то он соответствует самому себе.
+Оператор
 .Em *
-operator sometimes yields unexpected results.
-For example, the regular expression
+иногда даёт неожиданные результаты.
+Например, регулярное выражение
 .Ql b*
-matches the beginning of
-the string
+соответствует началу строки
 .Ql abbb
-(as opposed to the substring
+(в отличие от подстроки
 .Ql bbb ) ,
-since a null match
-is the only left-most match.
-.It \e{n,m\e} or \e{n,\e} or \e{n\e}
-Match the single character regular expression or subexpression
-immediately preceding it at least
+поскольку пустое соответствие является единственным самым левым соответствием.
+.It \e{n,m\e} или \e{n,\e} или \e{n\e}
+Соответствует непосредственно предшествующему ему односимвольному регулярному выражению или подвыражению
+не менее
 .Em n
-and at most
+и не более
 .Em m
-times.
-If
+раз.
+Если
 .Em m
-is omitted, then it matches at least
+опущено, то соответствует не менее
 .Em n
-times.
-If the comma is also omitted, then it matches exactly
+раз.
+Если запятая также опущена, то соответствует ровно
 .Em n
-times.
+раз.
 .El
 .Pp
-Additional regular expression operators may be defined depending on the
-particular
-.Xr regex 3
-implementation.
-.Sh COMMANDS
-All
+Дополнительные операторы регулярных выражений могут быть определены в зависимости от конкретной
+реализации
+.Xr regex 3 .
+.Sh КОМАНДЫ
+Все команды
 .Nm
-commands are single characters, though some require additional parameters.
-If a command's parameters extend over several lines, then
-each line except for the last
-must be terminated with a backslash (\\).
+являются односимвольными, хотя некоторые требуют дополнительных параметров.
+Если параметры команды занимают несколько строк, то
+каждая строка, кроме последней, должна заканчиваться обратной косой чертой (\\).
 .Pp
-In general, at most one command is allowed per line.
-However, most commands accept a print suffix, which is any of
+В общем случае допускается не более одной команды на строку.
+Однако большинство команд принимают суффикс вывода, который может быть
 .Em p
-(print),
+(печать),
 .Em l
-(list),
-or
+(вывод в бесспорной форме)
+или
 .Em n
-(enumerate),
-to print the last line affected by the command.
+(нумерация),
+для вывода последней строки, затронутой командой.
 .Pp
-An interrupt (typically ^C) has the effect of aborting the current command
-and returning the editor to command mode.
+Прерывание (обычно ^C) приводит к прерыванию текущей команды
+и возврату редактора в командный режим.
 .Pp
-The
+Утилита
 .Nm
-utility
-recognizes the following commands.
-The commands are shown together with
-the default address or address range supplied if none is
-specified (in parenthesis).
+распознаёт следующие команды.
+Команды показаны вместе с адресом или диапазоном адресов по умолчанию,
+который используется, если он не указан (в скобках).
 .Bl -tag -width indent
 .It (.)a
-Append text to the buffer after the addressed line.
-Text is entered in input mode.
-The current address is set to last line entered.
+Добавить текст в буфер после адресованной строки.
+Текст вводится в режиме ввода.
+Текущий адрес устанавливается на последнюю введённую строку.
 .It (.,.)c
-Change lines in the buffer.
-The addressed lines are deleted
-from the buffer, and text is appended in their place.
-Text is entered in input mode.
-The current address is set to last line entered.
+Изменить строки в буфере.
+Адресованные строки удаляются из буфера, а вместо них добавляется текст.
+Текст вводится в режиме ввода.
+Текущий адрес устанавливается на последнюю введённую строку.
 .It (.,.)d
-Delete the addressed lines from the buffer.
-If there is a line after the deleted range, then the current address is set
-to this line.
-Otherwise the current address is set to the line
-before the deleted range.
-.It e Ar file
-Edit
-.Ar file ,
-and sets the default filename.
-If
-.Ar file
-is not specified, then the default filename is used.
-Any lines in the buffer are deleted before
-the new file is read.
-The current address is set to the last line read.
-.It e Ar !command
-Edit the standard output of
-.Ar !command ,
-(see
-.Ar !command
-below).
-The default filename is unchanged.
-Any lines in the buffer are deleted before the output of
-.Ar command
-is read.
-The current address is set to the last line read.
-.It E Ar file
-Edit
-.Ar file
-unconditionally.
-This is similar to the
-.Em e
-command,
-except that unwritten changes are discarded without warning.
-The current address is set to the last line read.
-.It f Ar file
-Set the default filename to
-.Ar file .
-If
-.Ar file
-is not specified, then the default unescaped filename is printed.
-.It (1,$)g/re/command-list
-Apply
-.Ar command-list
-to each of the addressed lines matching a regular expression
-.Ar re .
-The current address is set to the
-line currently matched before
-.Ar command-list
-is executed.
-At the end of the
+Удалить адресованные строки из буфера.
+Если после удалённого диапазона есть строка, текущий адрес устанавливается на эту строку.
+В противном случае текущий адрес устанавливается на строку перед удалённым диапазоном.
+.It e Ar файл
+Редактировать
+.Ar файл
+и устанавливает имя файла по умолчанию.
+Если
+.Ar файл
+не указан, используется имя по умолчанию.
+Любые строки в буфере удаляются перед чтением нового файла.
+Текущий адрес устанавливается на последнюю прочитанную строку.
+.It e Ar !команда
+Редактировать стандартный вывод
+.Ar !команда ,
+(см.
+.Ar !команда
+ниже).
+Имя файла по умолчанию не изменяется.
+Любые строки в буфере удаляются перед чтением вывода
+.Ar команда .
+Текущий адрес устанавливается на последнюю прочитанную строку.
+.It E Ar файл
+Безусловно редактировать
+.Ar файл .
+Это похоже на команду
+.Em e ,
+за исключением того, что несохранённые изменения отбрасываются без предупреждения.
+Текущий адрес устанавливается на последнюю прочитанную строку.
+.It f Ar файл
+Установить имя файла по умолчанию в
+.Ar файл .
+Если
+.Ar файл
+не указан, выводится имя файла по умолчанию (без экранирования).
+.It (1,$)g/ре/список-команд
+Применить
+.Ar список-команд
+к каждой из адресованных строк, соответствующих регулярному выражению
+.Ар ре .
+Текущий адрес устанавливается на строку, соответствующую в данный момент, перед выполнением
+.Ar списка-команд .
+В конце команды
 .Em g
-command, the current address is set to the last line affected by
-.Ar command-list .
+текущий адрес устанавливается на последнюю строку, затронутую
+.Ar списком-команд .
 .Pp
-Each command in
-.Ar command-list
-must be on a separate line,
-and every line except for the last must be terminated by a backslash
+Каждая команда в
+.Ar списке-команд
+должна быть на отдельной строке,
+и каждая строка, кроме последней, должна заканчиваться обратной косой чертой
 (\\).
-Any commands are allowed, except for
+Допускаются любые команды, кроме
 .Em g ,
 .Em G ,
-.Em v ,
-and
+.Em v
+и
 .Em V .
-A newline alone in
-.Ar command-list
-is equivalent to a
-.Em p
-command.
-.It (1,$)G/re/
-Interactively edit the addressed lines matching a regular expression
-.Ar re .
-For each matching line,
-the line is printed,
-the current address is set,
-and the user is prompted to enter a
-.Ar command-list .
-At the end of the
+Одна лишь новая строка в
+.Ar списке-команд
+эквивалентна команде
+.Em p .
+.It (1,$)G/ре/
+Интерактивно редактировать адресованные строки, соответствующие регулярному выражению
+.Ar ре .
+Для каждой соответствующей строки строка выводится,
+текущий адрес устанавливается,
+и пользователю предлагается ввести
+.Ar список-команд .
+В конце команды
 .Em G
-command, the current address
-is set to the last line affected by (the last)
-.Ar command-list .
+текущий адрес устанавливается на последнюю строку, затронутую (последним)
+.Ar списком-команд .
 .Pp
-The format of
-.Ar command-list
-is the same as that of the
-.Em g
-command.
-A newline alone acts as a null command list.
-A single
+Формат
+.Ar списка-команд
+такой же, как у команды
+.Em g .
+Одна новая строка действует как пустой список команд.
+Один
 .Ql &
-repeats the last non-null command list.
+повторяет последний непустой список команд.
 .It H
-Toggle the printing of error explanations.
-By default, explanations are not printed.
-It is recommended that ed scripts begin with this command to
-aid in debugging.
-.It h
-Print an explanation of the last error.
-.It (.)i
-Insert text in the buffer before the current line.
-Text is entered in input mode.
-The current address is set to the last line entered.
-.It (.,.+1)j
-Join the addressed lines.
-The addressed lines are
-deleted from the buffer and replaced by a single
-line containing their joined text.
-The current address is set to the resultant line.
-.It (.)klc
-Mark a line with a lower case letter
-.Em lc .
-The line can then be addressed as
-.Em 'lc
-(i.e., a single quote followed by
-.Em lc )
-in subsequent commands.
-The mark is not cleared until the line is
-deleted or otherwise modified.
-.It (.,.)l
-Print the addressed lines unambiguously.
-If a single line fills more than one screen (as might be the case
-when viewing a binary file, for instance), a
-.Dq Li --More--
-prompt is printed on the last line.
-The
+Переключить вывод пояснений к ошибкам.
+По умолчанию пояснения не выводятся.
+Рекомендуется, чтобы скрипты
 .Nm
-utility waits until the RETURN key is pressed
-before displaying the next screen.
-The current address is set to the last line
-printed.
+начинались с этой команды для облегчения отладки.
+.It h
+Вывести объяснение последней ошибки.
+.It (.)i
+Вставить текст в буфер перед текущей строкой.
+Текст вводится в режиме ввода.
+Текущий адрес устанавливается на последнюю введённую строку.
+.It (.,.+1)j
+Объединить адресованные строки.
+Адресованные строки удаляются из буфера и заменяются одной
+строкой, содержащей объединённый текст.
+Текущий адрес устанавливается на результирующую строку.
+.It (.)kмк
+Отметить строку строчной буквой
+.Em мк .
+Затем на строку можно ссылаться как на
+.Em 'мк
+(т.е. одиночная кавычка, за которой следует
+.Em мк )
+в последующих командах.
+Метка не снимается, пока строка не будет удалена или иным образом изменена.
+.It (.,.)l
+Вывести адресованные строки в бесспорной форме (недвусмысленно).
+Если одна строка занимает более одного экрана (как может быть, например,
+при просмотре двоичного файла), на последней строке выводится приглашение
+.Dq Li --More-- .
+Утилита
+.Nm
+ждёт нажатия клавиши RETURN перед отображением следующего экрана.
+Текущий адрес устанавливается на последнюю выведенную строку.
 .It (.,.)m(.)
-Move lines in the buffer.
-The addressed lines are moved to after the
-right-hand destination address, which may be the address
+Переместить строки в буфере.
+Адресованные строки перемещаются после правого адреса назначения, которым может быть адрес
 .Em 0
-(zero).
-The current address is set to the
-last line moved.
+(ноль).
+Текущий адрес устанавливается на последнюю перемещённую строку.
 .It (.,.)n
-Print the addressed lines along with
-their line numbers.
-The current address is set to the last line
-printed.
+Вывести адресованные строки вместе с их номерами строк.
+Текущий адрес устанавливается на последнюю выведенную строку.
 .It (.,.)p
-Print the addressed lines.
-The current address is set to the last line
-printed.
+Вывести адресованные строки.
+Текущий адрес устанавливается на последнюю выведенную строку.
 .It P
-Toggle the command prompt on and off.
-Unless a prompt was specified by with command-line option
-.Fl p Ar string ,
-the command prompt is by default turned off.
+Включить и выключить приглашение командной строки.
+Если приглашение не было задано с помощью параметра командной строки
+.Fl p Ar строка ,
+приглашение командной строки по умолчанию выключено.
 .It q
-Quit
+Выйти из
 .Nm .
 .It Q
-Quit
-.Nm
-unconditionally.
-This is similar to the
-.Em q
-command,
-except that unwritten changes are discarded without warning.
-.It ($)r Ar file
-Read
-.Ar file
-to after the addressed line.
-If
-.Ar file
-is not specified, then the default
-filename is used.
-If there was no default filename prior to the command,
-then the default filename is set to
-.Ar file .
-Otherwise, the default filename is unchanged.
-The current address is set to the last line read.
-.It ($)r Ar !command
-Read
-to after the addressed line
-the standard output of
-.Ar !command ,
-(see the
-.Ar !command
-below).
-The default filename is unchanged.
-The current address is set to the last line read.
-.It (.,.)s/re/replacement/
-.It (.,.)s/re/replacement/g
-.It (.,.)s/re/replacement/n
-Replace text in the addressed lines
-matching a regular expression
-.Ar re
-with
-.Ar replacement .
-By default, only the first match in each line is replaced.
-If the
+Безусловно выйти из
+.Nm .
+Это похоже на команду
+.Em q ,
+за исключением того, что несохранённые изменения отбрасываются без предупреждения.
+.It ($)r Ar файл
+Прочитать
+.Ar файл
+после адресованной строки.
+Если
+.Ar файл
+не указан, используется имя файла по умолчанию.
+Если до выполнения команды не было имени файла по умолчанию,
+то имя по умолчанию устанавливается в
+.Ar файл .
+В противном случае имя по умолчанию не изменяется.
+Текущий адрес устанавливается на последнюю прочитанную строку.
+.It ($)r Ar !команда
+Прочитать после адресованной строки стандартный вывод
+.Ar !команда
+(см.
+.Ar !команда
+ниже).
+Имя файла по умолчанию не изменяется.
+Текущий адрес устанавливается на последнюю прочитанную строку.
+.It (.,.)s/ре/замена/
+.It (.,.)s/ре/замена/g
+.It (.,.)s/ре/замена/n
+Заменить текст в адресованных строках, соответствующий регулярному выражению
+.Ar ре ,
+на
+.Ar замену .
+По умолчанию заменяется только первое соответствие в каждой строке.
+Если указан суффикс
 .Em g
-(global) suffix is given, then every match is to be replaced.
-The
-.Em n
-suffix, where
-.Em n
-is a positive number, causes only the
-.Em n Ns th
-match to be replaced.
-It is an error if no substitutions are performed on any of the addressed
-lines.
-The current address is set the last line affected.
-.Pp
-.Ar \&Re
-and
-.Ar replacement
-may be delimited by any character other than space and newline
-(see the
-.Em s
-command below).
-If one or two of the last delimiters is omitted, then the last line
-affected is printed as though the print suffix
-.Em p
-were specified.
-.Pp
-An unescaped
-.Ql &
-in
-.Ar replacement
-is replaced by the currently matched text.
-The character sequence
-.Em \em ,
-where
-.Em m
-is a number in the range [1,9], is replaced by the
-.Em m th
-backreference expression of the matched text.
-If
-.Ar replacement
-consists of a single
-.Ql % ,
-then
-.Ar replacement
-from the last substitution is used.
-Newlines may be embedded in
-.Ar replacement
-if they are escaped with a backslash (\\).
-.It (.,.)s
-Repeat the last substitution.
-This form of the
-.Em s
-command accepts a count suffix
+(глобальный), заменяется каждое соответствие.
+Суффикс
 .Em n ,
-or any combination of the characters
-.Em r ,
-.Em g ,
-and
-.Em p .
-If a count suffix
+где
 .Em n
-is given, then only the
-.Em n Ns th
-match is replaced.
-The
-.Em r
-suffix causes
-the regular expression of the last search to be used instead of the
-that of the last substitution.
-The
+— положительное число, вызывает замену только
+.Em n
+-го соответствия.
+Ошибкой считается, если ни одной замены не выполнено ни в одной из адресованных строк.
+Текущий адрес устанавливается на последнюю затронутую строку.
+.Pp
+.Ar \&Ре
+и
+.Ar замена
+могут быть разделены любым символом, отличным от пробела и новой строки
+(см. команду
+.Em s
+ниже).
+Если один или два из последних разделителей опущены, последняя затронутая строка
+выводится так, как если бы был указан суффикс вывода
+.Em p .
+.Pp
+Неэкранированный
+.Ql &
+в
+.Ar замене
+заменяется на текущий соответствующий текст.
+Последовательность символов
+.Em \em ,
+где
+.Em m
+— число в диапазоне [1,9], заменяется
+.Em m
+-м обратным ссылочным выражением соответствующего текста.
+Если
+.Ar замена
+состоит из одного
+.Ql % ,
+используется
+.Ar замена
+из последней замены.
+Символы новой строки могут быть встроены в
+.Ar замену ,
+если они экранированы обратной косой чертой (\\).
+.It (.,.)s
+Повторить последнюю замену.
+Эта форма команды
+.Em s
+принимает суффикс счёта
+.Em n
+или любую комбинацию символов
+.Em r ,
 .Em g
-suffix toggles the global suffix of the last substitution.
-The
+и
+.Em p .
+Если задан суффикс счёта
+.Em n ,
+заменяется только
+.Em n
+-е соответствие.
+Суффикс
+.Em r
+заставляет использовать регулярное выражение последнего поиска вместо
+регулярного выражения последней замены.
+Суффикс
+.Em g
+переключает глобальный суффикс последней замены.
+Суффикс
 .Em p
-suffix toggles the print suffix of the last substitution
-The current address is set to the last line affected.
+переключает суффикс вывода последней замены.
+Текущий адрес устанавливается на последнюю затронутую строку.
 .It (.,.)t(.)
-Copy (i.e., transfer) the addressed lines to after the right-hand
-destination address, which may be the address
+Скопировать (т.е. перенести) адресованные строки после правого адреса назначения,
+которым может быть адрес
 .Em 0
-(zero).
-The current address is set to the last line
-copied.
+(ноль).
+Текущий адрес устанавливается на последнюю скопированную строку.
 .It u
-Undo the last command and restores the current address
-to what it was before the command.
-The global commands
+Отменить последнюю команду и восстановить текущий адрес
+в состояние до выполнения команды.
+Глобальные команды
 .Em g ,
 .Em G ,
-.Em v ,
-and
-.Em V .
-are treated as a single command by undo.
+.Em v
+и
+.Em V
+рассматриваются как одна команда для undo.
 .Em u
-is its own inverse.
-.It (1,$)v/re/command-list
-Apply
-.Ar command-list
-to each of the addressed lines not matching a regular expression
-.Ar re .
-This is similar to the
-.Em g
-command.
-.It (1,$)V/re/
-Interactively edit the addressed lines not matching a regular expression
-.Ar re .
-This is similar to the
-.Em G
-command.
-.It (1,$)w Ar file
-Write the addressed lines to
-.Ar file .
-Any previous contents of
-.Ar file
-are lost without warning.
-If there is no default filename, then the default filename is set to
-.Ar file ,
-otherwise it is unchanged.
-If no filename is specified, then the default
-filename is used.
-The current address is unchanged.
-.It (1,$)wq Ar file
-Write the addressed lines to
-.Ar file ,
-and then executes a
-.Em q
-command.
-.It (1,$)w Ar !command
-Write the addressed lines to the standard input of
-.Ar !command ,
-(see the
-.Em !command
-below).
-The default filename and current address are unchanged.
-.It (1,$)W Ar file
-Append the addressed lines to the end of
-.Ar file .
-This is similar to the
-.Em w
-command, expect that the previous contents of file is not clobbered.
-The current address is unchanged.
+является обратной самой себе.
+.It (1,$)v/ре/список-команд
+Применить
+.Ar список-команд
+к каждой из адресованных строк, не соответствующих регулярному выражению
+.Ar ре .
+Это похоже на команду
+.Em g .
+.It (1,$)V/ре/
+Интерактивно редактировать адресованные строки, не соответствующие регулярному выражению
+.Ar ре .
+Это похоже на команду
+.Em G .
+.It (1,$)w Ar файл
+Записать адресованные строки в
+.Ar файл .
+Любое предыдущее содержимое
+.Ar файл
+теряется без предупреждения.
+Если нет имени файла по умолчанию, то имя по умолчанию устанавливается в
+.Ar файл ,
+в противном случае оно не изменяется.
+Если имя файла не указано, используется имя по умолчанию.
+Текущий адрес не изменяется.
+.It (1,$)wq Ar файл
+Записать адресованные строки в
+.Ar файл ,
+а затем выполнить команду
+.Em q .
+.It (1,$)w Ar !команда
+Записать адресованные строки в стандартный ввод
+.Ar !команда
+(см.
+.Em !команда
+ниже).
+Имя файла по умолчанию и текущий адрес не изменяются.
+.It (1,$)W Ar файл
+Добавить адресованные строки в конец
+.Ar файл .
+Это похоже на команду
+.Em w ,
+за исключением того, что предыдущее содержимое файла не затирается.
+Текущий адрес не изменяется.
 .It Pf (.+1)z n
-Scroll
+Прокручивать по
 .Ar n
-lines at a time starting at addressed line.
-If
+строк за раз, начиная с адресованной строки.
+Если
 .Ar n
-is not specified, then the current window size is used.
-The current address is set to the last line printed.
-.It !command
-Execute
-.Ar command
-via
+не указан, используется текущий размер окна.
+Текущий адрес устанавливается на последнюю выведенную строку.
+.It !команда
+Выполнить
+.Ar команду
+через
 .Xr sh 1 .
-If the first character of
-.Ar command
-is
+Если первый символ
+.Ar команды
+равен
 .Ql \&! ,
-then it is replaced by text of the
-previous
-.Ar !command .
-The
+то он заменяется текстом предыдущей
+.Ar !команды .
+Утилита
 .Nm
-utility does not process
-.Ar command
-for backslash (\\) escapes.
-However, an unescaped
+не обрабатывает
+.Ar команду
+для escape-последовательностей с обратной косой чертой (\\\\).
+Однако неэкранированный
 .Em %
-is replaced by the default filename.
-When the shell returns from execution, a
-.Ql \&!
-is printed to the standard output.
-The current line is unchanged.
+заменяется на имя файла по умолчанию.
+Когда оболочка возвращается из выполнения,
+в стандартный вывод выводится
+.Ql \&! .
+Текущая строка не изменяется.
 .It ($)=
-Print the line number of the addressed line.
-.It (.+1)newline
-Print the addressed line, and sets the current address to
-that line.
+Вывести номер строки адресованной строки.
+.It (.+1)новая_строка
+Вывести адресованную строку и установить текущий адрес на эту строку.
 .El
-.Sh FILES
+.Sh ФАЙЛЫ
 .Bl -tag -width /tmp/ed.* -compact
 .It Pa /tmp/ed.*
-buffer file
+файл буфера
 .It Pa ed.hup
-the file to which
+файл, в который
 .Nm
-attempts to write the buffer if the terminal hangs up
+пытается записать буфер при обрыве терминала
 .El
-.Sh DIAGNOSTICS
-When an error occurs,
+.Sh ДИАГНОСТИКА
+При возникновении ошибки
 .Nm
-prints a
+выводит
 .Ql \&?
-and either returns to command mode
-or exits if its input is from a script.
-An explanation of the last error can be
-printed with the
+и либо возвращается в командный режим,
+либо завершает работу, если его ввод поступает из скрипта.
+Объяснение последней ошибки может быть выведено с помощью команды
 .Em h
-(help) command.
+(help).
 .Pp
-Since the
+Поскольку команда
 .Em g
-(global) command masks any errors from failed searches and substitutions,
-it can be used to perform conditional operations in scripts; e.g.,
+(глобальная) маскирует любые ошибки от неудачных поисков и замен,
+она может использоваться для выполнения условных операций в скриптах; например:
 .Pp
 .Sm off
-.Cm g No / Em old Xo
+.Cm g No / Em старое Xo
 .No / Cm s
-.No // Em new
+.No // Em новое
 .No /
 .Xc
 .Sm on
 .Pp
-replaces any occurrences of
-.Em old
-with
-.Em new .
-If the
+заменяет любые вхождения
+.Em старое
+на
+.Em новое .
+Если команда
 .Em u
-(undo) command occurs in a global command list, then
-the command list is executed only once.
+(отмена) встречается в глобальном списке команд,
+то список команд выполняется только один раз.
 .Pp
-If diagnostics are not disabled, attempting to quit
+Если диагностика не отключена, попытка выйти из
 .Nm
-or edit another file before writing a modified buffer
-results in an error.
-If the command is entered a second time, it succeeds,
-but any changes to the buffer are lost.
-.Sh SEE ALSO
+или отредактировать другой файл без записи изменённого буфера
+приводит к ошибке.
+Если команда вводится второй раз, она выполняется успешно,
+но любые изменения в буфере теряются.
+.Sh СМ. ТАКЖЕ
 .Xr sed 1 ,
 .Xr sh 1 ,
 .Xr vi 1 ,
@@ -970,30 +882,29 @@ USD:12-13
 .%A B. W. Kernighan
 .%T Advanced Editing on UNIX
 .Re
-.Sh LIMITATIONS
-The
+.Sh ОГРАНИЧЕНИЯ
+Утилита
 .Nm
-utility processes
-.Ar file
-arguments for backslash escapes, i.e., in a filename,
-any characters preceded by a backslash (\\) are
-interpreted literally.
+обрабатывает аргументы
+.Ar файл
+для escape-последовательностей с обратной косой чертой, т.е. в имени файла
+любые символы, перед которыми стоит обратная косая черта (\\), интерпретируются буквально.
 .Pp
-If a text (non-binary) file is not terminated by a newline character,
-then
+Если текстовый (не двоичный) файл не заканчивается символом новой строки,
+то
 .Nm
-appends one on reading/writing it.
-In the case of a binary file,
+добавляет его при чтении/записи.
+В случае двоичного файла
 .Nm
-does not append a newline on reading/writing.
+не добавляет новую строку при чтении/записи.
 .Pp
-per line overhead: 4 ints
-.Sh HISTORY
-An
+Накладные расходы на строку: 4 целых числа.
+.Sh ИСТОРИЯ
+Команда
 .Nm
-command appeared in
+появилась в
 .At v1 .
-.Sh BUGS
-The
+.Sh ОШИБКИ (BUGS)
+Утилита
 .Nm
-utility does not recognize multibyte characters.
+не распознаёт многобайтовые символы.

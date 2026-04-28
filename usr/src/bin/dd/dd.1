@@ -32,472 +32,437 @@
 .Dd June 4, 2020
 .Dt DD 1
 .Os
-.Sh NAME
+.Sh ИМЯ
 .Nm dd
-.Nd convert and copy a file
-.Sh SYNOPSIS
+.Nd преобразование и копирование файла
+.Sh СИНТАКСИС
 .Nm
-.Op Ar operands ...
-.Sh DESCRIPTION
-The
+.Op Ar операнды ...
+.Sh ОПИСАНИЕ
+Утилита
 .Nm
-utility copies the standard input to the standard output.
-Input data is read and written in 512-byte blocks.
-If input reads are short, input from multiple reads are aggregated
-to form the output block.
-When finished,
+копирует стандартный ввод на стандартный вывод.
+Входные данные читаются и записываются блоками по 512 байт.
+Если при чтении получено меньше данных, чем размер блока, данные из нескольких операций чтения
+агрегируются для формирования выходного блока.
+По завершении
 .Nm
-displays the number of complete and partial input and output blocks
-and truncated input records to the standard error output.
+выводит в стандартный поток ошибок количество полных и частичных входных и выходных блоков,
+а также усечённых входных записей.
 .Pp
-The following operands are available:
+Доступны следующие операнды:
 .Bl -tag -width "of=file"
 .It Cm bs Ns = Ns Ar n
-Set both input and output block size to
+Установить размер и входного, и выходного блока в
 .Ar n
-bytes, superseding the
+байт, заменяя операнды
 .Cm ibs
-and
-.Cm obs
-operands.
-If no conversion values other than
+и
+.Cm obs .
+Если не указаны значения преобразования, кроме
 .Cm noerror ,
 .Cm notrunc
-or
-.Cm sync
-are specified, then each input block is copied to the output as a
-single block without any aggregation of short blocks.
+или
+.Cm sync ,
+то каждый входной блок копируется в выходной как один блок без какого-либо агрегирования коротких блоков.
 .It Cm cbs Ns = Ns Ar n
-Set the conversion record size to
+Установить размер записи преобразования в
 .Ar n
-bytes.
-The conversion record size is required by the record oriented conversion
-values.
+байт.
+Размер записи преобразования требуется для преобразований, ориентированных на записи.
 .It Cm count Ns = Ns Ar n
-Copy only
+Скопировать только
 .Ar n
-input blocks.
+входных блоков.
 .It Cm files Ns = Ns Ar n
-Copy
+Скопировать
 .Ar n
-input files before terminating.
-This operand is only applicable when the input device is a tape.
+входных файлов перед завершением.
+Этот операнд применим только когда устройство ввода является лентой.
 .It Cm fillchar Ns = Ns Ar c
-When padding a block in conversion mode or due to use of
+При дополнении блока в режиме преобразования или из-за использования режимов
 .Cm noerror
-and
+и
 .Cm sync
-modes, fill with the specified
+заполнять его указанным
 .Tn ASCII
-character, rather than using a space or
+символом вместо пробела или
 .Dv NUL .
 .It Cm ibs Ns = Ns Ar n
-Set the input block size to
+Установить размер входного блока в
 .Ar n
-bytes instead of the default 512.
+байт вместо 512 по умолчанию.
 .It Cm if Ns = Ns Ar file
-Read input from
+Читать ввод из
 .Ar file
-instead of the standard input.
-.It Cm iflag Ns = Ns Ar value Ns Op , Ns Ar value ...
-Where
-.Cm value
-is one of the symbols from the following list.
+вместо стандартного ввода.
+.It Cm iflag Ns = Ns Ar значение Ns Op , Ns Ar значение ...
+Где
+.Cm значение
+— один из символов следующего списка.
 .Bl -tag -width "fullblock"
 .It Cm fullblock
-Reading from the input file may not obtain a full block.
-When a read returns short, continue reading to fill the block.
-Without this flag,
+Чтение из входного файла может не дать полного блока.
+Если чтение вернуло меньше данных, продолжить чтение, чтобы заполнить блок.
+Без этого флага
 .Cm count
-limits the number of times
+ограничивает количество вызовов
 .Xr read 2
-is called on the input rather than the number of blocks copied in full.
-May not be combined with
+для ввода, а не количество полностью скопированных блоков.
+Не может сочетаться с
 .Cm conv=sync .
 .It Cm direct
-Set the O_DIRECT flag on the input file to make reads bypass any local caching.
+Установить флаг O_DIRECT для входного файла, чтобы чтение обходило локальное кэширование.
 .El
 .It Cm iseek Ns = Ns Ar n
-Seek on the input file
+Переместиться во входном файле на
 .Ar n
-blocks.
-This is synonymous with
+блоков.
+Это синоним
 .Cm skip Ns = Ns Ar n .
 .It Cm obs Ns = Ns Ar n
-Set the output block size to
+Установить размер выходного блока в
 .Ar n
-bytes instead of the default 512.
+байт вместо 512 по умолчанию.
 .It Cm of Ns = Ns Ar file
-Write output to
+Записывать вывод в
 .Ar file
-instead of the standard output.
-Any regular output file is truncated unless the
-.Cm notrunc
-conversion value is specified.
-If an initial portion of the output file is seeked past (see the
-.Cm oseek
-operand),
-the output file is truncated at that point.
-.It Cm oflag Ns = Ns Ar value Ns Op , Ns Ar value ...
-Where
-.Cm value
-is one of the symbols from the following list.
+вместо стандартного вывода.
+Любой обычный выходной файл усекается, если не указано значение преобразования
+.Cm notrunc .
+Если начальная часть выходного файла пропущена (см. операнд
+.Cm oseek ),
+выходной файл усекается в этой точке.
+.It Cm oflag Ns = Ns Ar значение Ns Op , Ns Ar значение ...
+Где
+.Cm значение
+— один из символов следующего списка.
 .Bl -tag -width "direct"
 .It Cm fsync
-Set the O_FSYNC flag on the output file to make writes synchronous.
+Установить флаг O_FSYNC для выходного файла, чтобы запись выполнялась синхронно.
 .It Cm sync
-Set the O_SYNC flag on the output file to make writes synchronous.
-This is synonymous with the
-.Cm fsync
-value.
+Установить флаг O_SYNC для выходного файла, чтобы запись выполнялась синхронно.
+Это синоним значения
+.Cm fsync .
 .It Cm direct
-Set the O_DIRECT flag on the output file to make writes bypass any local caching.
+Установить флаг O_DIRECT для выходного файла, чтобы запись обходила локальное кэширование.
 .El
 .It Cm oseek Ns = Ns Ar n
-Seek on the output file
+Переместиться в выходном файле на
 .Ar n
-blocks.
-This is synonymous with
+блоков.
+Это синоним
 .Cm seek Ns = Ns Ar n .
 .It Cm seek Ns = Ns Ar n
-Seek
+Переместиться на
 .Ar n
-blocks from the beginning of the output before copying.
-On non-tape devices, an
-.Xr lseek 2
-operation is used.
-Otherwise, existing blocks are read and the data discarded.
-If the user does not have read permission for the tape, it is positioned
-using the tape
+блоков от начала вывода перед копированием.
+На устройствах, не являющихся лентами, используется операция
+.Xr lseek 2 .
+В противном случае существующие блоки читаются, а данные отбрасываются.
+Если пользователь не имеет права чтения для ленты, позиционирование выполняется с помощью
+функций
 .Xr ioctl 2
-function calls.
-If the seek operation is past the end of file, space from the current
-end of file to the specified offset is filled with blocks of
-.Dv NUL
-bytes.
+для ленты.
+Если операция позиционирования выходит за конец файла, пространство от текущего конца
+файла до указанного смещения заполняется блоками из байтов
+.Dv NUL .
 .It Cm skip Ns = Ns Ar n
-Skip
+Пропустить
 .Ar n
-blocks from the beginning of the input before copying.
-On input which supports seeks, an
-.Xr lseek 2
-operation is used.
-Otherwise, input data is read and discarded.
-For pipes, the correct number of bytes is read.
-For all other devices, the correct number of blocks is read without
-distinguishing between a partial or complete block being read.
+блоков от начала ввода перед копированием.
+Для ввода, поддерживающего позиционирование, используется операция
+.Xr lseek 2 .
+В противном случае входные данные читаются и отбрасываются.
+Для каналов читается корректное количество байт.
+Для всех остальных устройств читается корректное количество блоков без различения
+между частично или полностью прочитанным блоком.
 .It Cm speed Ns = Ns Ar n
-Limit the copying speed to
+Ограничить скорость копирования до
 .Ar n
-bytes per second.
-.It Cm status Ns = Ns Ar value
-Where
-.Cm value
-is one of the symbols from the following list.
+байт в секунду.
+.It Cm status Ns = Ns Ar значение
+Где
+.Cm значение
+— один из символов следующего списка.
 .Bl -tag -width "progress"
 .It Cm noxfer
-Do not print the transfer statistics as the last line of status output.
+Не выводить статистику передачи в последней строке выходного статуса.
 .It Cm none
-Do not print the status output.
-Error messages are shown; informational messages are not.
+Не выводить выходной статус.
+Сообщения об ошибках показываются; информационные сообщения — нет.
 .It Cm progress
-Print basic transfer statistics once per second.
+Выводить базовую статистику передачи раз в секунду.
 .El
-.It Cm conv Ns = Ns Ar value Ns Op , Ns Ar value ...
-Where
-.Cm value
-is one of the symbols from the following list.
+.It Cm conv Ns = Ns Ar значение Ns Op , Ns Ar значение ...
+Где
+.Cm значение
+— один из символов следующего списка.
 .Bl -tag -width "unblock"
 .It Cm ascii , oldascii
-The same as the
-.Cm unblock
-value except that characters are translated from
+То же, что и значение
+.Cm unblock ,
+за исключением того, что символы преобразуются из
 .Tn EBCDIC
-to
+в
 .Tn ASCII
-before the
-records are converted.
-(These values imply
-.Cm unblock
-if the operand
-.Cm cbs
-is also specified.)
-There are two conversion maps for
+перед преобразованием записей.
+(Эти значения подразумевают
+.Cm unblock ,
+если также указан операнд
+.Cm cbs . )
+Существует две карты преобразования для
 .Tn ASCII .
-The value
+Значение
 .Cm ascii
-specifies the recommended one which is compatible with
+задаёт рекомендуемую карту, совместимую с
 .At V .
-The value
+Значение
 .Cm oldascii
-specifies the one used in historic
+задаёт карту, использовавшуюся в исторических
 .At
-and
-.No pre- Ns Bx 4.3 reno
-systems.
+и системах до
+.Bx 4.3 reno .
 .It Cm block
-Treats the input as a sequence of newline or end-of-file terminated variable
-length records independent of input and output block boundaries.
-Any trailing newline character is discarded.
-Each input record is converted to a fixed length output record where the
-length is specified by the
-.Cm cbs
-operand.
-Input records shorter than the conversion record size are padded with spaces.
-Input records longer than the conversion record size are truncated.
-The number of truncated input records, if any, are reported to the standard
-error output at the completion of the copy.
+Обрабатывает ввод как последовательность записей переменной длины, ограниченных символами
+новой строки или концом файла, независимо от границ входных и выходных блоков.
+Любой завершающий символ новой строки отбрасывается.
+Каждая входная запись преобразуется в выходную запись фиксированной длины,
+которая задаётся операндом
+.Cm cbs .
+Входные записи короче размера записи преобразования дополняются пробелами.
+Входные записи длиннее размера записи преобразования усекаются.
+Количество усечённых входных записей (если они есть) сообщается в стандартный поток ошибок
+по завершении копирования.
 .It Cm ebcdic , ibm , oldebcdic , oldibm
-The same as the
-.Cm block
-value except that characters are translated from
+То же, что и значение
+.Cm block ,
+за исключением того, что символы преобразуются из
 .Tn ASCII
-to
+в
 .Tn EBCDIC
-after the
-records are converted.
-(These values imply
-.Cm block
-if the operand
-.Cm cbs
-is also specified.)
-There are four conversion maps for
+после преобразования записей.
+(Эти значения подразумевают
+.Cm block ,
+если также указан операнд
+.Cm cbs . )
+Существует четыре карты преобразования для
 .Tn EBCDIC .
-The value
+Значение
 .Cm ebcdic
-specifies the recommended one which is compatible with
+задаёт рекомендуемую карту, совместимую с
 .At V .
-The value
+Значение
 .Cm ibm
-is a slightly different mapping, which is compatible with the
-.At V
+задаёт несколько иное отображение, совместимое со значением
 .Cm ibm
-value.
-The values
+из
+.At V .
+Значения
 .Cm oldebcdic
-and
+и
 .Cm oldibm
-are maps used in historic
+— это карты, использовавшиеся в исторических
 .At
-and
-.No pre- Ns Bx 4.3 reno
-systems.
+и системах до
+.Bx 4.3 reno .
 .It Cm fdatasync
-Perform an
+Выполнить
 .Xr fdatasync 2
-on the output file before closing it.
+для выходного файла перед его закрытием.
 .It Cm fsync
-Perform an
+Выполнить
 .Xr fsync 2
-on the output file before closing it.
+для выходного файла перед его закрытием.
 .It Cm lcase
-Transform uppercase characters into lowercase characters.
+Преобразовать прописные символы в строчные.
 .It Cm pareven , parnone , parodd , parset
-Output data with the specified parity.
-The parity bit on input is stripped unless
+Выводить данные с указанной чётностью.
+Бит чётности во входных данных удаляется, если только также не задано преобразование
+из
 .Tn EBCDIC
-to
-.Tn ASCII
-conversions is also specified.
+в
+.Tn ASCII .
 .It Cm noerror
-Do not stop processing on an input error.
-When an input error occurs, a diagnostic message followed by the current
-input and output block counts will be written to the standard error output
-in the same format as the standard completion message.
-If the
-.Cm sync
-conversion is also specified, any missing input data will be replaced
-with
+Не прекращать обработку при ошибке ввода.
+При возникновении ошибки ввода диагностическое сообщение, за которым следуют текущие
+счётчики входных и выходных блоков, будет записано в стандартный поток ошибок в том же
+формате, что и стандартное сообщение о завершении.
+Если также указано преобразование
+.Cm sync ,
+любые недостающие входные данные будут заменены байтами
 .Dv NUL
-bytes (or with spaces if a block oriented conversion value was
-specified) and processed as a normal input buffer.
-If the
-.Cm fillchar
-option is specified, the fill character provided on the command line
-will override
-the automatic selection of the fill character.
-If the
+(или пробелами, если было указано блочно-ориентированное преобразование) и обработаны
+как обычный входной буфер.
+Если указан параметр
+.Cm fillchar ,
+символ заполнения, заданный в командной строке, отменяет автоматический выбор
+символа заполнения.
+Если преобразование
 .Cm sync
-conversion is not specified, the input block is omitted from the output.
-On input files which are not tapes or pipes, the file offset
-will be positioned past the block in which the error occurred using
+не указано, входной блок пропускается при выводе.
+Для входных файлов, не являющихся лентами или каналами, смещение в файле
+будет установлено за блок, в котором произошла ошибка, с помощью
 .Xr lseek 2 .
 .It Cm notrunc
-Do not truncate the output file.
-This will preserve any blocks in the output file not explicitly written
-by
+Не усекать выходной файл.
+Это сохранит любые блоки в выходном файле, которые не были явно записаны
 .Nm .
-The
+Значение
 .Cm notrunc
-value is not supported for tapes.
+не поддерживается для лент.
 .It Cm osync
-Pad the final output block to the full output block size.
-If the input file is not a multiple of the output block size
-after conversion, this conversion forces the final output block
-to be the same size as preceding blocks for use on devices that require
-regularly sized blocks to be written.
-This option is incompatible with use of the
-.Cm bs Ns = Ns Ar n
-block size specification.
+Дополнить последний выходной блок до полного размера выходного блока.
+Если входной файл после преобразования не кратен размеру выходного блока,
+это преобразование заставляет последний выходной блок иметь тот же размер,
+что и предыдущие блоки, для использования на устройствах, требующих записи
+блоков регулярного размера.
+Эта опция несовместима с использованием спецификации размера блока
+.Cm bs Ns = Ns Ar n .
 .It Cm sparse
-If one or more output blocks would consist solely of
-.Dv NUL
-bytes, try to seek the output file by the required space instead of
-filling them with
-.Dv NUL Ns s ,
-resulting in a sparse file.
+Если один или несколько выходных блоков должны состоять только из байтов
+.Dv NUL ,
+попытаться выполнить позиционирование в выходном файле на требуемое пространство
+вместо заполнения его байтами
+.Dv NUL ,
+что приводит к созданию разрежённого файла (sparse file).
 .It Cm swab
-Swap every pair of input bytes.
-If an input buffer has an odd number of bytes, the last byte will be
-ignored during swapping.
+Поменять местами каждую пару входных байтов.
+Если входной буфер содержит нечётное количество байтов, последний байт будет
+проигнорирован при обмене.
 .It Cm sync
-Pad every input block to the input buffer size.
-Spaces are used for pad bytes if a block oriented conversion value is
-specified, otherwise
-.Dv NUL
-bytes are used.
+Дополнить каждый входной блок до размера входного буфера.
+Для дополнения используются пробелы, если указано блочно-ориентированное преобразование,
+в противном случае — байты
+.Dv NUL .
 .It Cm ucase
-Transform lowercase characters into uppercase characters.
+Преобразовать строчные символы в прописные.
 .It Cm unblock
-Treats the input as a sequence of fixed length records independent of input
-and output block boundaries.
-The length of the input records is specified by the
-.Cm cbs
-operand.
-Any trailing space characters are discarded and a newline character is
-appended.
+Обрабатывает ввод как последовательность записей фиксированной длины независимо
+от границ входных и выходных блоков.
+Длина входных записей задаётся операндом
+.Cm cbs .
+Любые завершающие пробелы отбрасываются, и добавляется символ новой строки.
 .El
 .El
 .Pp
-Where sizes or speed are specified, a decimal, octal, or hexadecimal number of
-bytes is expected.
-If the number ends with a
+Когда указываются размеры или скорость, ожидается десятичное, восьмеричное или
+шестнадцатеричное число байтов.
+Если число оканчивается на
 .Dq Li b ,
 .Dq Li k ,
 .Dq Li m ,
 .Dq Li g ,
 .Dq Li t ,
-.Dq Li p ,
-or
+.Dq Li p
+или
 .Dq Li w ,
-the
-number is multiplied by 512, 1024 (1K), 1048576 (1M), 1073741824 (1G),
-1099511627776 (1T), 1125899906842624 (1P)
-or the number of bytes in an integer, respectively.
-Two or more numbers may be separated by an
+оно умножается соответственно на 512, 1024 (1K), 1048576 (1M), 1073741824 (1G),
+1099511627776 (1T), 1125899906842624 (1P) или количество байтов в целом числе.
+Два или более числа могут быть разделены
 .Dq Li x
-to indicate a product.
+для обозначения произведения.
 .Pp
-When finished,
+По завершении
 .Nm
-displays the number of complete and partial input and output blocks,
-truncated input records and odd-length byte-swapping blocks to the
-standard error output.
-A partial input block is one where less than the input block size
-was read.
-A partial output block is one where less than the output block size
-was written.
-Partial output blocks to tape devices are considered fatal errors.
-Otherwise, the rest of the block will be written.
-Partial output blocks to character devices will produce a warning message.
-A truncated input block is one where a variable length record oriented
-conversion value was specified and the input line was too long to
-fit in the conversion record or was not newline terminated.
+выводит в стандартный поток ошибок количество полных и частичных входных и выходных блоков,
+усечённых входных записей и блоков с нечётной длиной при байт-свопинге.
+Частичный входной блок — это блок, в котором прочитано меньше, чем размер входного блока.
+Частичный выходной блок — это блок, в котором записано меньше, чем размер выходного блока.
+Частичные выходные блоки для ленточных устройств считаются фатальными ошибками.
+В противном случае остальная часть блока будет записана.
+Частичные выходные блоки для символьных устройств выдают предупреждение.
+Усечённый входной блок — это блок, для которого было указано преобразование,
+ориентированное на записи переменной длины, и входная строка была слишком длинной,
+чтобы поместиться в запись преобразования, или не заканчивалась символом новой строки.
 .Pp
-Normally, data resulting from input or conversion or both are aggregated
-into output blocks of the specified size.
-After the end of input is reached, any remaining output is written as
-a block.
-This means that the final output block may be shorter than the output
-block size.
+Обычно данные, полученные в результате ввода, преобразования или того и другого,
+агрегируются в выходные блоки указанного размера.
+После достижения конца ввода все оставшиеся данные записываются как блок.
+Это означает, что последний выходной блок может быть короче размера выходного блока.
 .Pp
-If
+Если
 .Nm
-receives a
+получает сигнал
 .Dv SIGINFO
-(see the
+(см. аргумент
 .Cm status
-argument for
-.Xr stty 1 )
-signal, the current input and output block counts will
-be written to the standard error output
-in the same format as the standard completion message.
-If
+команды
+.Xr stty 1 ) ,
+текущие счётчики входных и выходных блоков будут записаны в стандартный поток ошибок
+в том же формате, что и стандартное сообщение о завершении.
+Если
 .Nm
-receives a
-.Dv SIGINT
-signal, the current input and output block counts will
-be written to the standard error output
-in the same format as the standard completion message and
+получает сигнал
+.Dv SIGINT ,
+текущие счётчики входных и выходных блоков будут записаны в стандартный поток ошибок
+в том же формате, что и стандартное сообщение о завершении, после чего
 .Nm
-will exit.
-.Sh EXIT STATUS
+завершит работу.
+.Sh КОД ЗАВЕРШЕНИЯ
 .Ex -std
-.Sh EXAMPLES
-Check that a disk drive contains no bad blocks:
+.Sh ПРИМЕРЫ
+Проверить, что диск не содержит сбойных блоков:
 .Pp
 .Dl "dd if=/dev/ada0 of=/dev/null bs=1m"
 .Pp
-Do a refresh of a disk drive, in order to prevent presently
-recoverable read errors from progressing into unrecoverable read errors:
+Освежить данные на диске, чтобы предотвратить прогрессирование восстановимых
+ошибок чтения в невосстановимые:
 .Pp
 .Dl "dd if=/dev/ada0 of=/dev/ada0 bs=1m"
 .Pp
-Remove parity bit from a file:
+Удалить бит чётности из файла:
 .Pp
 .Dl "dd if=file conv=parnone of=file.txt"
 .Pp
-Check for (even) parity errors on a file:
+Проверить наличие ошибок чётности (чётной) в файле:
 .Pp
 .Dl "dd if=file conv=pareven | cmp -x - file"
 .Pp
-To create an image of a Mode-1 CD-ROM, which is a commonly used format
-for data CD-ROM disks, use a block size of 2048 bytes:
+Чтобы создать образ CD-ROM в формате Mode-1 (обычно используется для дисков с данными),
+используйте размер блока 2048 байт:
 .Pp
 .Dl "dd if=/dev/cd0 of=filename.iso bs=2048"
 .Pp
-Write a filesystem image to a memory stick, padding the end with zeros,
-if necessary, to a 1MiB boundary:
+Записать образ файловой системы на флеш-накопитель, при необходимости дополнив
+конец нулями до границы 1 МиБ:
 .Pp
 .Dl "dd if=memstick.img of=/dev/da0 bs=1m conv=noerror,sync"
-.Sh SEE ALSO
+.Sh СМ. ТАКЖЕ
 .Xr cp 1 ,
 .Xr mt 1 ,
 .Xr recoverdisk 1 ,
 .Xr tr 1 ,
 .Xr geom 4 ,
 .Xr trim 8
-.Sh STANDARDS
-The
+.Sh СТАНДАРТЫ
+Утилита
 .Nm
-utility is expected to be a superset of the
-.St -p1003.2
-standard.
-The
+должна быть надмножеством стандарта
+.St -p1003.2 .
+Операнды
 .Cm files
-and
-.Cm status
-operands and the
+и
+.Cm status ,
+а также значения
 .Cm ascii ,
 .Cm ebcdic ,
 .Cm ibm ,
 .Cm oldascii ,
 .Cm oldebcdic
-and
+и
 .Cm oldibm
-values are extensions to the
-.Tn POSIX
-standard.
-.Sh HISTORY
-A
+являются расширениями стандарта
+.Tn POSIX .
+.Sh ИСТОРИЯ
+Команда
 .Nm
-command appeared in
+появилась в
 .At v5 .
-.Sh BUGS
-Protection mechanisms in the
+.Sh ОШИБКИ (BUGS)
+Механизмы защиты в подсистеме
 .Xr geom 4
-subsystem might prevent the super-user from writing blocks to a disk.
-Instructions for temporarily disabling these protection mechanisms can be
-found in the
-.Xr geom 4
-man page.
+могут препятствовать записи блоков на диск даже суперпользователем.
+Инструкции по временному отключению этих механизмов защиты можно найти
+на странице руководства
+.Xr geom 4 .

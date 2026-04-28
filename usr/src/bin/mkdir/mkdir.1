@@ -32,89 +32,84 @@
 .Dd March 15, 2013
 .Dt MKDIR 1
 .Os
-.Sh NAME
+.Sh ИМЯ
 .Nm mkdir
-.Nd make directories
-.Sh SYNOPSIS
+.Nd создание каталогов
+.Sh СИНТАКСИС
 .Nm
 .Op Fl pv
-.Op Fl m Ar mode
-.Ar directory_name ...
-.Sh DESCRIPTION
-The
+.Op Fl m Ar режим
+.Ar имя_каталога ...
+.Sh ОПИСАНИЕ
+Утилита
 .Nm
-utility creates the directories named as operands, in the order specified,
-using mode
+создаёт каталоги, указанные в операндах, в заданном порядке,
+используя режим
 .Dq Li rwxrwxrwx
-(0777)
-as modified by the current
+(0777),
+изменённый текущей маской создания файлов
 .Xr umask 2 .
 .Pp
-The options are as follows:
-.Bl -tag -width ".Fl m Ar mode"
-.It Fl m Ar mode
-Set the file permission bits of the final created directory to
-the specified mode.
-The
-.Ar mode
-argument can be in any of the formats specified to the
-.Xr chmod 1
-command.
-If a symbolic mode is specified, the operation characters
+Доступны следующие параметры:
+.Bl -tag -width ".Fl m Ar режим"
+.It Fl m Ar режим
+Установить биты прав доступа для конечного создаваемого каталога в указанный режим.
+Аргумент
+.Ar режим
+может быть в любом из форматов, поддерживаемых командой
+.Xr chmod 1 .
+Если указан символьный режим, символы операций
 .Ql +
-and
+и
 .Ql -
-are interpreted relative to an initial mode of
+интерпретируются относительно начального режима
 .Dq Li a=rwx .
 .It Fl p
-Create intermediate directories as required.
-If this option is not specified, the full path prefix of each
-operand must already exist.
-On the other hand, with this option specified, no error will
-be reported if a directory given as an operand already exists.
-Intermediate directories are created with permission bits of
+Создавать промежуточные каталоги по мере необходимости.
+Если этот параметр не указан, полный префикс пути каждого операнда должен уже существовать.
+С другой стороны, если этот параметр указан, ошибка не будет выдаваться, если каталог,
+заданный в операнде, уже существует.
+Промежуточные каталоги создаются с битами прав
 .Dq Li rwxrwxrwx
-(0777)
-as modified by the current umask, plus write and search
-permission for the owner.
+(0777),
+изменёнными текущей маской umask, плюс права на запись и поиск для владельца.
 .It Fl v
-Be verbose when creating directories, listing them as they are created.
+Действовать подробно, выводя имена создаваемых каталогов.
 .El
 .Pp
-The user must have write permission in the parent directory.
-.Sh EXIT STATUS
+Пользователь должен иметь право на запись в родительском каталоге.
+.Sh КОД ЗАВЕРШЕНИЯ
 .Ex -std
-.Sh EXAMPLES
-Create a directory named
+.Sh ПРИМЕРЫ
+Создать каталог с именем
 .Pa foobar :
 .Pp
 .Dl $ mkdir foobar
 .Pp
-Create a directory named
+Создать каталог с именем
 .Pa foobar
-and set its file mode to 700:
+и установить его режим доступа 700:
 .Pp
 .Dl $ mkdir -m 700 foobar
 .Pp
-Create a directory named
+Создать каталог
 .Pa cow/horse/monkey ,
-creating any non-existent intermediate directories as necessary:
+создавая при необходимости любые несуществующие промежуточные каталоги:
 .Pp
 .Dl $ mkdir -p cow/horse/monkey
-.Sh COMPATIBILITY
-The
+.Sh СОВМЕСТИМОСТЬ
+Параметр
 .Fl v
-option is non-standard and its use in scripts is not recommended.
-.Sh SEE ALSO
+не является стандартным, и его использование в скриптах не рекомендуется.
+.Sh СМ. ТАКЖЕ
 .Xr rmdir 1
-.Sh STANDARDS
-The
+.Sh СТАНДАРТЫ
+Утилита
 .Nm
-utility is expected to be
-.St -p1003.2
-compatible.
-.Sh HISTORY
-A
+должна быть совместима со стандартом
+.St -p1003.2 .
+.Sh ИСТОРИЯ
+Команда
 .Nm
-command appeared in
+появилась в
 .At v1 .

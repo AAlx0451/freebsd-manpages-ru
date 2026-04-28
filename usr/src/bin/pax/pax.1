@@ -33,109 +33,109 @@
 .Dd October 19, 2022
 .Dt PAX 1
 .Os
-.Sh NAME
+.Sh ИМЯ
 .Nm pax
-.Nd read and write file archives and copy directory hierarchies
-.Sh SYNOPSIS
+.Nd чтение и запись файловых архивов и копирование иерархий каталогов
+.Sh СИНТАКСИС
 .Nm
 .Op Fl cdnvzO
 .Bk -words
-.Op Fl f Ar archive
+.Op Fl f Ar архив
 .Ek
 .Bk -words
 .Op Fl s Ar replstr
 .Ar ...\&
 .Ek
 .Bk -words
-.Op Fl U Ar user
+.Op Fl U Ar пользователь
 .Ar ...\&
 .Ek
 .Bk -words
-.Op Fl G Ar group
+.Op Fl G Ar группа
 .Ar ...\&
 .Ek
 .Bk -words
 .Oo
 .Fl T
-.Op Ar from_date
-.Op Ar ,to_date
+.Op Ar дата_от
+.Op Ar ,дата_до
 .Oc
 .Ar ...\&
 .Ek
-.Op Ar pattern ...\&
+.Op Ar шаблон ...\&
 .Nm
 .Fl r
 .Op Fl cdiknuvzDOYZ
 .Bk -words
-.Op Fl f Ar archive
+.Op Fl f Ar архив
 .Ek
 .Bk -words
-.Op Fl o Ar options
+.Op Fl o Ar параметры
 .Ar ...\&
 .Ek
 .Bk -words
-.Op Fl p Ar string
+.Op Fl p Ar строка
 .Ar ...\&
 .Ek
 .Bk -words
 .Op Fl s Ar replstr
 .Ar ...\&
 .Ek
-.Op Fl E Ar limit
+.Op Fl E Ar лимит
 .Bk -words
-.Op Fl U Ar user
+.Op Fl U Ar пользователь
 .Ar ...\&
 .Ek
 .Bk -words
-.Op Fl G Ar group
+.Op Fl G Ar группа
 .Ar ...\&
 .Ek
 .Bk -words
 .Oo
 .Fl T
-.Op Ar from_date
-.Op Ar ,to_date
+.Op Ar дата_от
+.Op Ar ,дата_до
 .Oc
 .Ar ...\&
 .Ek
-.Op Ar pattern ...\&
+.Op Ar шаблон ...\&
 .Nm
 .Fl w
 .Op Fl dituvzHLOPX
 .Bk -words
-.Op Fl b Ar blocksize
+.Op Fl b Ar размер_блока
 .Ek
 .Oo
 .Op Fl a
-.Op Fl f Ar archive
+.Op Fl f Ar архив
 .Oc
 .Bk -words
-.Op Fl x Ar format
+.Op Fl x Ar формат
 .Ek
 .Bk -words
 .Op Fl s Ar replstr
 .Ar ...\&
 .Ek
 .Bk -words
-.Op Fl o Ar options
+.Op Fl o Ar параметры
 .Ar ...\&
 .Ek
 .Bk -words
-.Op Fl U Ar user
+.Op Fl U Ar пользователь
 .Ar ...\&
 .Ek
 .Bk -words
-.Op Fl G Ar group
+.Op Fl G Ar группа
 .Ar ...\&
 .Ek
 .Bk -words
-.Op Fl B Ar bytes
+.Op Fl B Ar байты
 .Ek
 .Bk -words
 .Oo
 .Fl T
-.Op Ar from_date
-.Op Ar ,to_date
+.Op Ar дата_от
+.Op Ar ,дата_до
 .Op Ar /[c][m]
 .Oc
 .Ar ...\&
@@ -146,7 +146,7 @@
 .Fl w
 .Op Fl diklntuvDHLOPXYZ
 .Bk -words
-.Op Fl p Ar string
+.Op Fl p Ar строка
 .Ar ...\&
 .Ek
 .Bk -words
@@ -154,849 +154,787 @@
 .Ar ...\&
 .Ek
 .Bk -words
-.Op Fl U Ar user
+.Op Fl U Ar пользователь
 .Ar ...\&
 .Ek
 .Bk -words
-.Op Fl G Ar group
+.Op Fl G Ar группа
 .Ar ...\&
 .Ek
 .Bk -words
 .Oo
 .Fl T
-.Op Ar from_date
-.Op Ar ,to_date
+.Op Ar дата_от
+.Op Ar ,дата_до
 .Op Ar /[c][m]
 .Oc
 .Ar ...\&
 .Ek
 .Op Ar
-.Ar directory
-.Sh DESCRIPTION
-The
+.Ar каталог
+.Sh ОПИСАНИЕ
+Утилита
 .Nm
-utility will read, write, and list the members of an archive file,
-and will copy directory hierarchies.
-These operations are independent of the specific archive format,
-and support a wide variety of different archive formats.
-A list of supported archive formats can be found under the description of the
-.Fl x
-option.
+выполняет чтение, запись и вывод списка членов архивного файла,
+а также копирование иерархий каталогов.
+Эти операции не зависят от конкретного формата архива и поддерживают
+широкий спектр различных архивных форматов.
+Список поддерживаемых форматов архивов приведён в описании параметра
+.Fl x .
 .Pp
-The presence of the
+Наличие параметров
 .Fl r
-and the
+и
 .Fl w
-options specifies which of the following functional modes
-.Nm
-will operate under:
-.Em list , read , write ,
-and
-.Em copy .
+определяет, в каком из следующих функциональных режимов будет работать
+.Nm :
+.Em list (вывод списка), read (чтение), write (запись)
+и
+.Em copy (копирование).
 .Bl -tag -width 6n
-.It <none>
-.Em List .
-Write to
-.Dv standard output
-a table of contents of the members of the archive file read from
-.Dv standard input ,
-whose pathnames match the specified
-.Ar patterns .
-The table of contents contains one filename per line
-and is written using single line buffering.
+.It <нет>
+.Em Вывод списка (List).
+Вывести в
+.Dv стандартный вывод
+содержимое (таблицу) членов архива, считанного из
+.Dv стандартного ввода ,
+чьи пути соответствуют указанным
+.Ar шаблонам .
+Таблица содержит по одному имени файла на строку и выводится с построчной буферизацией.
 .It Fl r
-.Em Read .
-Extract the members of the archive file read from the
-.Dv standard input ,
-with pathnames matching the specified
-.Ar patterns .
-The archive format and blocking is automatically determined on input.
-When an extracted file is a directory, the entire file hierarchy
-rooted at that directory is extracted.
-All extracted files are created relative to the current file hierarchy.
-The setting of ownership, access and modification times, and file mode of
-the extracted files are discussed in more detail under the
-.Fl p
-option.
+.Em Чтение (Read).
+Извлечь члены архива, считанного из
+.Dv стандартного ввода ,
+с путями, соответствующими указанным
+.Ar шаблонам .
+Формат архива и размер блока определяются автоматически при вводе.
+Если извлекаемый файл является каталогом, извлекается вся иерархия файлов,
+уходящая корнем в этот каталог.
+Все извлечённые файлы создаются относительно текущей иерархии файлов.
+Установка прав владения, времени доступа и модификации, а также режима файла
+для извлечённых файлов подробно обсуждается в описании параметра
+.Fl p .
 .It Fl w
-.Em Write .
-Write an archive containing the
-.Ar file
-operands to
-.Dv standard output
-using the specified archive format.
-When no
-.Ar file
-operands are specified, a list of files to copy with one per line is read from
-.Dv standard input .
-When a
-.Ar file
-operand is also a directory, the entire file hierarchy rooted
-at that directory will be included.
+.Em Запись (Write).
+Записать архив, содержащий операнды
+.Ar файл ,
+в
+.Dv стандартный вывод
+с использованием указанного формата архива.
+Если операнды
+.Ar файл
+не указаны, из
+.Dv стандартного ввода
+читается список файлов для копирования (по одному на строку).
+Если операнд
+.Ar файл
+является каталогом, будет включена вся иерархия файлов, уходящая корнем в этот каталог.
 .It Fl r Fl w
-.Em Copy .
-Copy the
-.Ar file
-operands to the destination
-.Ar directory .
-When no
-.Ar file
-operands are specified, a list of files to copy with one per line is read from
-the
-.Dv standard input .
-When a
-.Ar file
-operand is also a directory the entire file
-hierarchy rooted at that directory will be included.
-The effect of the
-.Em copy
-is as if the copied files were written to an archive file and then
-subsequently extracted, except that there may be hard links between
-the original and the copied files (see the
+.Em Копирование (Copy).
+Скопировать операнды
+.Ar файл
+в целевой
+.Ar каталог .
+Если операнды
+.Ar файл
+не указаны, из
+.Dv стандартного ввода
+читается список файлов для копирования (по одному на строку).
+Если операнд
+.Ar файл
+является каталогом, будет включена вся иерархия файлов, уходящая корнем в этот каталог.
+Эффект
+.Em копирования
+таков, как если бы копируемые файлы были записаны в архивный файл,
+а затем извлечены, за исключением того, что между исходными и скопированными
+файлами могут существовать жёсткие ссылки (см. параметр
 .Fl l
-option below).
+ниже).
 .Pp
-.Em Warning :
-The destination
-.Ar directory
-must not be one of the
-.Ar file
-operands or a member of a file hierarchy rooted at one of the
-.Ar file
-operands.
-The result of a
-.Em copy
-under these conditions is unpredictable.
+.Em Внимание:
+Целевой
+.Ar каталог
+не должен быть одним из операндов
+.Ar файл
+или частью иерархии файлов, уходящей корнем в один из операндов
+.Ar файл .
+Результат
+.Em копирования
+в таких условиях непредсказуем.
 .El
 .Pp
-While processing a damaged archive during a
-.Em read
-or
-.Em list
-operation,
+При обработке повреждённого архива во время операций
+.Em чтения
+или
+.Em вывода списка
 .Nm
-will attempt to recover from media defects and will search through the archive
-to locate and process the largest number of archive members possible (see the
+будет пытаться восстановиться после дефектов носителя и выполнять поиск по архиву,
+чтобы найти и обработать максимально возможное количество членов архива
+(см. параметр
 .Fl E
-option for more details on error handling).
-.Sh OPERANDS
-The
-.Ar directory
-operand specifies a destination directory pathname.
-If the
-.Ar directory
-operand does not exist, or it is not writable by the user,
-or it is not of type directory,
+для получения более подробной информации об обработке ошибок).
+.Sh ОПЕРАНДЫ
+Операнд
+.Ar каталог
+задаёт путь к целевому каталогу.
+Если операнд
+.Ar каталог
+не существует, или не доступен пользователю для записи,
+или не является каталогом,
 .Nm
-will exit with a non-zero exit status.
+завершится с ненулевым кодом возврата.
 .Pp
-The
-.Ar pattern
-operand is used to select one or more pathnames of archive members.
-Archive members are selected using the pattern matching notation described
-by
+Операнд
+.Ar шаблон
+используется для выбора одного или нескольких путей членов архива.
+Члены архива выбираются с использованием нотации сопоставления с шаблоном,
+описанной в
 .Xr fnmatch 3 .
-When the
-.Ar pattern
-operand is not supplied, all members of the archive will be selected.
-When a
-.Ar pattern
-matches a directory, the entire file hierarchy rooted at that directory will
-be selected.
-When a
-.Ar pattern
-operand does not select at least one archive member,
+Если операнд
+.Ar шаблон
+не указан, выбираются все члены архива.
+Если
+.Ar шаблон
+соответствует каталогу, будет выбрана вся иерархия файлов, уходящая корнем в этот каталог.
+Если операнд
+.Ar шаблон
+не выбирает ни одного члена архива,
 .Nm
-will write these
-.Ar pattern
-operands in a diagnostic message to
-.Dv standard error
-and then exit with a non-zero exit status.
+запишет эти операнды
+.Ar шаблон
+в диагностическом сообщении в
+.Dv стандартный поток ошибок
+и завершится с ненулевым кодом возврата.
 .Pp
-The
-.Ar file
-operand specifies the pathname of a file to be copied or archived.
-When a
-.Ar file
-operand does not select at least one archive member,
+Операнд
+.Ar файл
+задаёт путь к файлу, который должен быть скопирован или заархивирован.
+Если операнд
+.Ar файл
+не выбирает ни одного члена архива,
 .Nm
-will write these
-.Ar file
-operand pathnames in a diagnostic message to
-.Dv standard error
-and then exit with a non-zero exit status.
-.Sh OPTIONS
-The following options are supported:
+запишет пути этих операндов
+.Ar файл
+в диагностическом сообщении в
+.Dv стандартный поток ошибок
+и завершится с ненулевым кодом возврата.
+.Sh ПАРАМЕТРЫ
+Поддерживаются следующие параметры:
 .Bl -tag -width 4n
 .It Fl r
-Read an archive file from
-.Dv standard input
-and extract the specified
-.Ar files .
-If any intermediate directories are needed in order to extract an archive
-member, these directories will be created as if
+Читать архивный файл из
+.Dv стандартного ввода
+и извлечь указанные
+.Ar файлы .
+Если для извлечения члена архива требуются какие-либо промежуточные каталоги,
+эти каталоги будут созданы так, как если бы
 .Xr mkdir 2
-was called with the bitwise inclusive
+был вызван с побитовым
 .Dv OR
-of
-.Dv S_IRWXU , S_IRWXG ,
-and
+от
+.Dv S_IRWXU , S_IRWXG
+и
 .Dv S_IRWXO
-as the mode argument.
-When the selected archive format supports the specification of linked
-files and these files cannot be linked while the archive is being extracted,
+в качестве аргумента режима.
+Если выбранный формат архива поддерживает спецификацию связанных файлов,
+и эти файлы не могут быть связаны во время извлечения архива,
 .Nm
-will write a diagnostic message to
-.Dv standard error
-and exit with a non-zero exit status at the completion of operation.
+запишет диагностическое сообщение в
+.Dv стандартный поток ошибок
+и завершится с ненулевым кодом возврата по завершении операции.
 .It Fl w
-Write files to the
-.Dv standard output
-in the specified archive format.
-When no
-.Ar file
-operands are specified,
-.Dv standard input
-is read for a list of pathnames with one per line without any leading or
-trailing
-.Aq blanks .
+Записать файлы в
+.Dv стандартный вывод
+в указанном формате архива.
+Если операнды
+.Ar файл
+не указаны,
+.Dv стандартный ввод
+читается для получения списка путей (по одному на строку) без каких-либо начальных или
+конечных пробелов.
 .It Fl a
-Append
-.Ar files
-to the end of an archive that was previously written.
-If an archive format is not specified with a
-.Fl x
-option, the format currently being used in the archive will be selected.
-Any attempt to append to an archive in a format different from the
-format already used in the archive will cause
+Добавить
+.Ar файлы
+в конец архива, который был ранее записан.
+Если формат архива не указан с помощью параметра
+.Fl x ,
+будет выбран формат, который в данный момент используется в архиве.
+Любая попытка добавить данные в архив в формате, отличном от уже используемого в архиве,
+приведёт к немедленному завершению
 .Nm
-to exit immediately
-with a non-zero exit status.
-The blocking size used in the archive volume where writing starts
-will continue to be used for the remainder of that archive volume.
+с ненулевым кодом возврата.
+Размер блока, использовавшийся на томе архива, в котором начинается запись,
+будет продолжать использоваться для остальной части этого тома архива.
 .Pp
-.Em Warning :
-Many storage devices are not able to support the operations necessary
-to perform an append operation.
-Any attempt to append to an archive stored on such a device may damage the
-archive or have other unpredictable results.
-Tape drives in particular are more likely to not support an append operation.
-An archive stored in a regular file system file or on a disk device will
-usually support an append operation.
-.It Fl b Ar blocksize
-When
-.Em writing
-an archive,
-block the output at a positive decimal integer number of
-bytes per write to the archive file.
-The
-.Ar blocksize
-must be a multiple of 512 bytes with a maximum of 64512 bytes.
-A
-.Ar blocksize
-larger than 32256 bytes violates the
+.Em Внимание:
+Многие устройства хранения не способны поддерживать операции, необходимые
+для выполнения добавления.
+Любая попытка добавить данные в архив, хранящийся на таком устройстве,
+может повредить архив или привести к другим непредсказуемым результатам.
+Особенно ленточные накопители с большой вероятностью не поддерживают операцию добавления.
+Архив, хранящийся в обычном файле файловой системы или на дисковом устройстве,
+обычно поддерживает операцию добавления.
+.It Fl b Ar размер_блока
+При
+.Em записи
+архива объединять вывод в блоки размером в положительное десятичное целое число
+байт на каждую запись в архивный файл.
+.Ar Размер_блока
+должен быть кратен 512 байтам с максимумом 64512 байт.
+.Ar Размер_блока
+больше 32256 байт нарушает стандарт
 .Tn POSIX
-standard and will not be portable to all systems.
-A
-.Ar blocksize
-can end with
+и не будет переносимым на все системы.
+.Ar Размер_блока
+может заканчиваться на
 .Li k
-or
+или
 .Li b
-to specify multiplication by 1024 (1K) or 512, respectively.
-A pair of
-.Ar blocksizes
-can be separated by
+для указания умножения на 1024 (1K) или 512 соответственно.
+Пара
+.Ar размеров_блока
+может быть разделена
 .Li x
-to indicate a product.
-A specific archive device may impose additional restrictions on the size
-of blocking it will support.
-When blocking is not specified, the default
-.Ar blocksize
-is dependent on the specific archive format being used (see the
-.Fl x
-option).
+для указания произведения.
+Конкретное архивное устройство может накладывать дополнительные ограничения на размер блока,
+который оно поддерживает.
+Если размер блока не указан, значение по умолчанию зависит от конкретного используемого
+формата архива (см. параметр
+.Fl x ).
 .It Fl c
-Match all file or archive members
-.Em except
-those specified by the
-.Ar pattern
-and
-.Ar file
-operands.
+Соответствовать всем файлам или членам архива,
+.Em кроме
+тех, которые указаны операндами
+.Ar шаблон
+и
+.Ar файл .
 .It Fl d
-Cause files of type directory being copied or archived, or archive members of
-type directory being extracted, to match only the directory file or archive
-member and not the file hierarchy rooted at the directory.
-.It Fl f Ar archive
-Specify
-.Ar archive
-as the pathname of the input or output archive, overriding the default
-.Dv standard input
-(for
-.Em list
-and
-.Em read )
-or
-.Dv standard output
-(for
-.Em write ) .
-A single archive may span multiple files and different archive devices.
-When required,
+При копировании или архивировании файлов типа каталог или извлечении членов архива
+типа каталог сопоставлять только сам файл каталога или член архива,
+но не иерархию файлов, уходящую корнем в этот каталог.
+.It Fl f Ar архив
+Указать
+.Ar архив
+как путь к входному или выходному архиву, заменяя значения по умолчанию
+.Dv стандартный ввод
+(для
+.Em вывода списка
+и
+.Em чтения )
+или
+.Dv стандартный вывод
+(для
+.Em записи ) .
+Один архив может состоять из нескольких файлов и различных архивных устройств.
+При необходимости
 .Nm
-will prompt for the pathname of the file or device of the next volume in the
-archive.
+запросит путь к файлу или устройству следующего тома в архиве.
 .It Fl i
-Interactively rename files or archive members.
-For each archive member matching a
-.Ar pattern
-operand or each file matching a
-.Ar file
-operand,
+Интерактивно переименовывать файлы или члены архива.
+Для каждого члена архива, соответствующего операнду
+.Ar шаблон ,
+или каждого файла, соответствующего операнду
+.Ar файл ,
 .Nm
-will prompt to
+выведет приглашение на
 .Pa /dev/tty
-giving the name of the file, its file mode and its modification time.
-The
+с именем файла, его режимом и временем модификации.
+Затем утилита
 .Nm
-utility will then read a line from
+прочитает строку из
 .Pa /dev/tty .
-If this line is blank, the file or archive member is skipped.
-If this line consists of a single period, the
-file or archive member is processed with no modification to its name.
-Otherwise, its name is replaced with the contents of the line.
-The
+Если строка пуста, файл или член архива пропускается.
+Если строка состоит из одной точки, файл или член архива обрабатывается без изменения имени.
+В противном случае его имя заменяется содержимым строки.
 .Nm
-utility will immediately exit with a non-zero exit status if
+немедленно завершится с ненулевым кодом возврата, если при чтении ответа встретится
 .Dv <EOF>
-is encountered when reading a response or if
+или если
 .Pa /dev/tty
-cannot be opened for reading and writing.
+не удастся открыть для чтения и записи.
 .It Fl k
-Do not overwrite existing files.
+Не перезаписывать существующие файлы.
 .It Fl l
-Link files.
-(The letter ell).
-In the
-.Em copy
-mode
+Создавать ссылки (буква ell).
+В режиме
+.Em копирования
 .Pq Fl r w ,
-hard links are made between the source and destination file hierarchies
-whenever possible.
+когда это возможно, создаются жёсткие ссылки между исходной и целевой иерархиями файлов.
 .It Fl n
-Select the first archive member that matches each
-.Ar pattern
-operand.
-No more than one archive member is matched for each
-.Ar pattern .
-When members of type directory are matched, the file hierarchy rooted at that
-directory is also matched (unless
-.Fl d
-is also specified).
-.It Fl o Ar options
-Information to modify the algorithm for extracting or writing archive files
-which is specific to the archive format specified by
+Выбирать первый член архива, соответствующий каждому операнду
+.Ar шаблон .
+Для каждого
+.Ar шаблона
+сопоставляется не более одного члена архива.
+Когда сопоставляются члены типа каталог, также сопоставляется иерархия файлов,
+уходящая корнем в этот каталог (если также не указан
+.Fl d ) .
+.It Fl o Ar параметры
+Информация для изменения алгоритма извлечения или записи архивных файлов,
+специфичная для формата архива, указанного с помощью
 .Fl x .
-In general,
-.Ar options
-take the form:
-.Cm name=value
-.It Fl p Ar string
-Specify one or more file characteristic options (privileges).
-The
-.Ar string
-option-argument is a string specifying file characteristics to be retained or
-discarded on extraction.
-The string consists of the specification characters
-.Cm a , e , m , o ,
-and
+В общем случае
+.Ar параметры
+имеют вид:
+.Cm имя=значение
+.It Fl p Ar строка
+Задать одну или несколько опций характеристик файла (привилегий).
+Аргумент-операнд
+.Ar строка
+— это строка, указывающая, какие характеристики файла следует сохранить или отбросить при извлечении.
+Строка состоит из символов спецификации
+.Cm a , e , m , o
+и
 .Cm p .
-Multiple characteristics can be concatenated within the same string
-and multiple
-.Fl p
-options can be specified.
-The meaning of the specification characters are as follows:
+Несколько характеристик могут быть объединены в одной строке,
+и может быть указано несколько параметров
+.Fl p .
+Значение символов спецификации:
 .Bl -tag -width 2n
 .It Cm a
-Do not preserve file access times.
-By default, file access times are preserved whenever possible.
+Не сохранять время доступа к файлам.
+По умолчанию время доступа к файлам сохраняется, когда это возможно.
 .It Cm e
-.Sq Preserve everything ,
-the user ID, group ID, file mode bits,
-file access time, and file modification time.
-This is intended to be used by
-.Em root ,
-someone with all the appropriate privileges, in order to preserve all
-aspects of the files as they are recorded in the archive.
-The
+«Сохранить всё» — идентификатор пользователя, идентификатор группы, биты режима файла,
+время доступа к файлу и время модификации файла.
+Предназначен для использования
+.Em root
+(пользователем со всеми соответствующими привилегиями), чтобы сохранить все аспекты
+файлов в том виде, в котором они записаны в архиве.
+Флаг
 .Cm e
-flag is the sum of the
+является суммой флагов
 .Cm o
-and
-.Cm p
-flags.
+и
+.Cm p .
 .It Cm m
-Do not preserve file modification times.
-By default, file modification times are preserved whenever possible.
+Не сохранять время модификации файлов.
+По умолчанию время модификации файлов сохраняется, когда это возможно.
 .It Cm o
-Preserve the user ID and group ID.
+Сохранять идентификатор пользователя и идентификатор группы.
 .It Cm p
-.Sq Preserve
-the file mode bits.
-This intended to be used by a
-.Em user
-with regular privileges who wants to preserve all aspects of the file other
-than the ownership.
-The file times are preserved by default, but two other flags are offered to
-disable this and use the time of extraction instead.
+«Сохранять» биты режима файла.
+Предназначен для использования
+.Em пользователем
+с обычными привилегиями, который хочет сохранить все аспекты файла, кроме владения.
+Время файла сохраняется по умолчанию, но предлагаются два других флага,
+чтобы отключить это и вместо этого использовать время извлечения.
 .El
 .Pp
-In the preceding list,
-.Sq preserve
-indicates that an attribute stored in the archive is given to the
-extracted file, subject to the permissions of the invoking
-process.
-Otherwise the attribute of the extracted file is determined as
-part of the normal file creation action.
-If neither the
-.Cm e
-nor the
-.Cm o
-specification character is specified, or the user ID and group ID are not
-preserved for any reason,
+В приведённом списке «сохранять» означает, что атрибут, сохранённый в архиве,
+присваивается извлечённому файлу с учётом разрешений вызывающего процесса.
+В противном случае атрибут извлечённого файла определяется в рамках обычного действия по созданию файла.
+Если не указан ни символ спецификации
+.Cm e ,
+ни
+.Cm o ,
+или идентификатор пользователя и группы не сохраняются по какой-либо причине,
 .Nm
-will not set the
+не будет устанавливать биты
 .Dv S_ISUID
 .Em ( setuid )
-and
+и
 .Dv S_ISGID
 .Em ( setgid )
-bits of the file mode.
-If the preservation of any of these items fails for any reason,
+режима файла.
+Если сохранение любого из этих элементов по какой-либо причине не удаётся,
 .Nm
-will write a diagnostic message to
-.Dv standard error .
-Failure to preserve these items will affect the final exit status,
-but will not cause the extracted file to be deleted.
-If the file characteristic letters in any of the string option-arguments are
-duplicated or conflict with each other, the one(s) given last will take
-precedence.
-For example, if
-.Dl Fl p Ar eme
-is specified, file modification times are still preserved.
+запишет диагностическое сообщение в
+.Dv стандартный поток ошибок .
+Сбой при сохранении этих элементов повлияет на конечный код возврата,
+но не приведёт к удалению извлечённого файла.
+Если символы характеристик файла в любой из строк-аргументов дублируются или конфликтуют друг с другом,
+последний(ие) имеет преимущество.
+Например, если задано
+.Dl Fl p Ar eme ,
+время модификации файлов всё равно сохраняется.
 .Pp
-File flags set by
-.Xr chflags 1
-are not understood by
+Флаги файлов, установленные
+.Xr chflags 1 ,
+не распознаются
 .Nm ,
-however
+однако
 .Xr tar 1
-and
+и
 .Xr dump 8
-will preserve these.
+сохраняют их.
 .It Fl s Ar replstr
-Modify the file or archive member names specified by the
-.Ar pattern
-or
-.Ar file
-operands according to the substitution expression
+Изменить имена файлов или членов архива, указанные операндами
+.Ar шаблон
+или
+.Ar файл ,
+в соответствии с выражением замены
 .Ar replstr ,
-using the syntax of the
-.Xr ed 1
-utility regular expressions.
-The format of these regular expressions are:
-.Dl /old/new/[gp]
-As in
+используя синтаксис регулярных выражений утилиты
+.Xr ed 1 .
+Формат этих регулярных выражений:
+.Dl /старое/новое/[gp]
+Как в
 .Xr ed 1 ,
-.Cm old
-is a basic regular expression and
-.Cm new
-can contain an ampersand (&), \\n (where n is a digit) back-references,
-or subexpression matching.
-The
-.Cm old
-string may also contain
-.Dv <newline>
-characters.
-Any non-null character can be used as a delimiter (/ is shown here).
-Multiple
-.Fl s
-expressions can be specified.
-The expressions are applied in the order they are specified on the
-command line, terminating with the first successful substitution.
-The optional trailing
+.Cm старое
+— это базовое регулярное выражение, а
+.Cm новое
+может содержать амперсанд (&), обратные ссылки \\n (где n — цифра)
+или соответствие подвыражениям.
+Строка
+.Cm старое
+может также содержать символы
+.Dv <newline> .
+В качестве разделителя может использоваться любой символ, отличный от нуля (здесь показан /).
+Может быть указано несколько выражений
+.Fl s .
+Выражения применяются в порядке их указания в командной строке,
+завершаясь первой успешной заменой.
+Необязательный завершающий
 .Cm g
-continues to apply the substitution expression to the pathname substring
-which starts with the first character following the end of the last successful
-substitution.
-The first unsuccessful substitution stops the operation of the
-.Cm g
-option.
-The optional trailing
+продолжает применять выражение замены к подстроке пути,
+которая начинается с первого символа после конца последней успешной замены.
+Первая неудачная замена останавливает действие опции
+.Cm g .
+Необязательный завершающий
 .Cm p
-will cause the final result of a successful substitution to be written to
-.Dv standard error
-in the following format:
-.Dl <original pathname> >> <new pathname>
-File or archive member names that substitute to the empty string
-are not selected and will be skipped.
+приведёт к тому, что конечный результат успешной замены будет записан в
+.Dv стандартный поток ошибок
+в следующем формате:
+.Dl <исходный путь> >> <новый путь>
+Имена файлов или членов архива, которые заменяются на пустую строку,
+не выбираются и пропускаются.
 .It Fl t
-Reset the access times of any file or directory read or accessed by
-.Nm
-to be the same as they were before being read or accessed by
+Сбросить время доступа любого файла или каталога, прочитанного или использованного
+.Nm ,
+в то же значение, которое было до чтения или использования
 .Nm .
 .It Fl u
-Ignore files that are older (having a less recent file modification time)
-than a pre-existing file or archive member with the same name.
-During
-.Em read ,
-an archive member with the same name as a file in the file system will be
-extracted if the archive member is newer than the file.
-During
-.Em write ,
-a file system member with the same name as an archive member will be
-written to the archive if it is newer than the archive member.
-During
-.Em copy ,
-the file in the destination hierarchy is replaced by the file in the source
-hierarchy or by a link to the file in the source hierarchy if the file in
-the source hierarchy is newer.
+Игнорировать файлы, которые старше (имеют менее позднее время модификации),
+чем уже существующий файл или член архива с тем же именем.
+Во время
+.Em чтения
+член архива с тем же именем, что и файл в файловой системе, извлекается,
+если член архива новее файла.
+Во время
+.Em записи
+член файловой системы с тем же именем, что и член архива, записывается в архив,
+если он новее члена архива.
+Во время
+.Em копирования
+файл в целевой иерархии заменяется файлом из исходной иерархии или ссылкой на файл из исходной иерархии,
+если файл в исходной иерархии новее.
 .It Fl v
-During a
-.Em list
-operation, produce a verbose table of contents using the format of the
+Во время операции
+.Em вывода списка
+выдавать подробную таблицу содержимого, используя формат утилиты
 .Xr ls 1
-utility with the
-.Fl l
-option.
-For pathnames representing a hard link to a previous member of the archive,
-the output has the format:
-.Dl <ls -l listing> == <link name>
-For pathnames representing a symbolic link, the output has the format:
-.Dl <ls -l listing> => <link name>
-Where <ls -l listing> is the output format specified by the
+с параметром
+.Fl l .
+Для путей, представляющих жёсткую ссылку на предыдущий член архива,
+вывод имеет формат:
+.Dl <вывод ls -l> == <имя ссылки>
+Для путей, представляющих символическую ссылку, вывод имеет формат:
+.Dl <вывод ls -l> => <имя ссылки>
+Где <вывод ls -l> — это формат вывода, заданный утилитой
 .Xr ls 1
-utility when used with the
-.Fl l
-option.
-Otherwise for all the other operational modes
-.Em ( read , write ,
-and
-.Em copy ) ,
-pathnames are written and flushed to
-.Dv standard error
-without a trailing
+при использовании с параметром
+.Fl l .
+В противном случае, для всех остальных режимов работы
+.Em (чтение, запись
+и
+.Em копирование) ,
+имена путей записываются и сбрасываются в
+.Dv стандартный поток ошибок
+без завершающего
 .Dv <newline>
-as soon as processing begins on that file or
-archive member.
-The trailing
-.Dv <newline> ,
-is not buffered, and is written only after the file has been read or written.
-.It Fl x Ar format
-Specify the output archive format, with the default format being
+сразу после начала обработки этого файла или члена архива.
+Завершающий
+.Dv <newline>
+не буферизируется и записывается только после того, как файл был прочитан или записан.
+.It Fl x Ar формат
+Указать выходной формат архива; формат по умолчанию —
 .Ar ustar .
-The
+Утилита
 .Nm
-utility currently supports the following formats:
+в настоящее время поддерживает следующие форматы:
 .Bl -tag -width "sv4cpio"
 .It Ar cpio
-The extended cpio interchange format specified in the
-.St -p1003.2
-standard.
-The default blocksize for this format is 5120 bytes.
-Inode and device information about a file (used for detecting file hard links
-by this format) which may be truncated by this format is detected by
+Расширенный формат обмена cpio, указанный в стандарте
+.St -p1003.2 .
+Размер блока по умолчанию для этого формата — 5120 байт.
+Информация об inode и устройстве файла (используемая этим форматом для обнаружения жёстких ссылок),
+которая может быть усечена этим форматом, обнаруживается
 .Nm
-and is repaired.
+и восстанавливается.
 .It Ar bcpio
-The old binary cpio format.
-The default blocksize for this format is 5120 bytes.
-This format is not very portable and should not be used when other formats
-are available.
-Inode and device information about a file (used for detecting file hard links
-by this format) which may be truncated by this format is detected by
+Старый двоичный формат cpio.
+Размер блока по умолчанию для этого формата — 5120 байт.
+Этот формат не очень переносим, и его не следует использовать, когда доступны другие форматы.
+Информация об inode и устройстве файла (используемая этим форматом для обнаружения жёстких ссылок),
+которая может быть усечена этим форматом, обнаруживается
 .Nm
-and is repaired.
+и восстанавливается.
 .It Ar sv4cpio
-The System V release 4 cpio.
-The default blocksize for this format is 5120 bytes.
-Inode and device information about a file (used for detecting file hard links
-by this format) which may be truncated by this format is detected by
+Формат cpio System V release 4.
+Размер блока по умолчанию для этого формата — 5120 байт.
+Информация об inode и устройстве файла (используемая этим форматом для обнаружения жёстких ссылок),
+которая может быть усечена этим форматом, обнаруживается
 .Nm
-and is repaired.
+и восстанавливается.
 .It Ar sv4crc
-The System V release 4 cpio with file crc checksums.
-The default blocksize for this format is 5120 bytes.
-Inode and device information about a file (used for detecting file hard links
-by this format) which may be truncated by this format is detected by
+Формат cpio System V release 4 с контрольными суммами crc файлов.
+Размер блока по умолчанию для этого формата — 5120 байт.
+Информация об inode и устройстве файла (используемая этим форматом для обнаружения жёстких ссылок),
+которая может быть усечена этим форматом, обнаруживается
 .Nm
-and is repaired.
+и восстанавливается.
 .It Ar tar
-The old
+Старый формат
 .Bx
-tar format as found in
+tar, как он используется в
 .Bx 4.3 .
-The default blocksize for this format is 10240 bytes.
-Pathnames stored by this format must be 100 characters or less in length.
-Only
-.Em regular
-files,
-.Em hard links , soft links ,
-and
-.Em directories
-will be archived (other file system types are not supported).
-For backwards compatibility with even older tar formats, a
+Размер блока по умолчанию для этого формата — 10240 байт.
+Пути, сохраняемые этим форматом, должны иметь длину 100 символов или меньше.
+Будут архивироваться только
+.Em обычные файлы,
+.Em жёсткие ссылки, символические ссылки
+и
+.Em каталоги
+(другие типы файловых систем не поддерживаются).
+Для обратной совместимости с ещё более старыми форматами tar при записи архива можно использовать параметр
 .Fl o
-option can be used when writing an archive to omit the storage of directories.
-This option takes the form:
+для пропуска сохранения каталогов.
+Этот параметр имеет вид:
 .Dl Fl o Cm write_opt=nodir
 .It Ar ustar
-The extended tar interchange format specified in the
-.St -p1003.2
-standard.
-The default blocksize for this format is 10240 bytes.
-Pathnames stored by this format must be 255 characters or less in length.
-The directory part may be at most 155 characters and each path component
-must be less than 100 characters.
+Расширенный формат обмена tar, указанный в стандарте
+.St -p1003.2 .
+Размер блока по умолчанию для этого формата — 10240 байт.
+Пути, сохраняемые этим форматом, должны иметь длину 255 символов или меньше.
+Часть каталога может быть не более 155 символов, и каждый компонент пути должен быть короче 100 символов.
 .El
 .Pp
-The
+Утилита
 .Nm
-utility will detect and report any file that it is unable to store or extract
-as the result of any specific archive format restrictions.
-The individual archive formats may impose additional restrictions on use.
-Typical archive format restrictions include (but are not limited to):
-file pathname length, file size, link pathname length and the type of the file.
+обнаружит и сообщит о любом файле, который она не может сохранить или извлечь
+в результате ограничений конкретного формата архива.
+Отдельные форматы архивов могут накладывать дополнительные ограничения на использование.
+Типичные ограничения форматов архивов включают (но не ограничиваются):
+длину пути к файлу, размер файла, длину пути к ссылке и тип файла.
 .It Fl z
-Use
+Использовать
 .Xr gzip 1
-to compress (decompress) the archive while writing (reading).
-Incompatible with
+для сжатия (распаковки) архива при записи (чтении).
+Несовместимо с
 .Fl a .
-.It Fl B Ar bytes
-Limit the number of bytes written to a single archive volume to
-.Ar bytes .
-The
-.Ar bytes
-limit can end with
+.It Fl B Ar байты
+Ограничить количество байт, записываемых в один том архива, значением
+.Ar байты .
+Лимит
+.Ar байты
+может заканчиваться на
 .Li m ,
-.Li k ,
-or
+.Li k
+или
 .Li b
-to specify multiplication by 1048576 (1M), 1024 (1K) or 512, respectively.
-A pair of
-.Ar bytes
-limits can be separated by
+для указания умножения на 1048576 (1M), 1024 (1K) или 512 соответственно.
+Пара лимитов
+.Ar байты
+может быть разделена
 .Li x
-to indicate a product.
+для указания произведения.
 .Pp
-Note that the specified size is for the uncompressed pax image itself.
-If the
-.Fl z
-option is also used, the resulting file may contain fewer
-.Ar bytes ,
-according to the compressibility of the archive contents.
-See
-.Xr zip 1 Pq Pa ports/archivers/zip
-if compressed volumes of predictable size are required.
+Обратите внимание, что указанный размер относится к самому несжатому образу pax.
+Если также используется параметр
+.Fl z ,
+результирующий файл может содержать меньше
+.Ar байт
+в зависимости от сжимаемости содержимого архива.
+См.
+.Xr zip 1 Pq Pa ports/archivers/zip ,
+если требуются сжатые тома предсказуемого размера.
 .Pp
-.Em Warning :
-Only use this option when writing an archive to a device which supports
-an end of file read condition based on last (or largest) write offset
-(such as a regular file or a tape drive).
-The use of this option with a floppy or hard disk is not recommended.
+.Em Внимание:
+Используйте этот параметр только при записи архива на устройство, которое поддерживает
+условие конца файла при чтении на основе последнего (или самого большого) смещения записи
+(например, обычный файл или ленточный накопитель).
+Использование этого параметра с дискетой или жёстким диском не рекомендуется.
 .It Fl D
-This option is the same as the
-.Fl u
-option, except that the file inode change time is checked instead of the
-file modification time.
-The file inode change time can be used to select files whose inode information
-(e.g., uid, gid, etc.) is newer than a copy of the file in the destination
-.Ar directory .
-.It Fl E Ar limit
-Limit the number of consecutive read faults while trying to read a flawed
-archives to
-.Ar limit .
-With a positive
-.Ar limit ,
+Этот параметр аналогичен параметру
+.Fl u ,
+за исключением того, что проверяется время изменения inode файла вместо времени модификации файла.
+Время изменения inode файла можно использовать для выбора файлов, чья информация об inode
+(например, uid, gid и т.д.) новее, чем копия файла в целевом
+.Ar каталоге .
+.It Fl E Ar лимит
+Ограничить количество последовательных ошибок чтения при попытке чтения повреждённого архива
+значением
+.Ar лимит .
+При положительном
+.Ar лимите
 .Nm
-will attempt to recover from an archive read error and will
-continue processing starting with the next file stored in the archive.
-A
-.Ar limit
-of 0 will cause
+будет пытаться восстановиться после ошибки чтения архива и продолжит обработку,
+начиная со следующего файла, сохранённого в архиве.
+.Ar Лимит
+0 приведёт к остановке
 .Nm
-to stop operation after the first read error is detected on an archive volume.
-A
-.Ar limit
-of
+после обнаружения первой ошибки чтения на томе архива.
+.Ar Лимит
 .Li NONE
-will cause
+приведёт к тому, что
 .Nm
-to attempt to recover from read errors forever.
-The default
-.Ar limit
-is a small positive number of retries.
+будет пытаться восстанавливаться после ошибок чтения бесконечно.
+.Ar Лимит
+по умолчанию — небольшое положительное количество попыток.
 .Pp
-.Em Warning :
-Using this option with
+.Em Внимание:
+Использование этого параметра с
 .Li NONE
-should be used with extreme caution as
+следует применять с особой осторожностью, так как
 .Nm
-may get stuck in an infinite loop on a very badly flawed archive.
-.It Fl G Ar group
-Select a file based on its
-.Ar group
-name, or when starting with a
+может попасть в бесконечный цикл на очень сильно повреждённом архиве.
+.It Fl G Ar группа
+Выбирать файл на основе его имени
+.Ar группы
+или, если начинается с
 .Cm # ,
-a numeric gid.
-A '\\' can be used to escape the
+числового gid.
+Символ '\\' можно использовать для экранирования
 .Cm # .
-Multiple
-.Fl G
-options may be supplied and checking stops with the first match.
+Может быть указано несколько параметров
+.Fl G ,
+и проверка останавливается при первом совпадении.
 .It Fl H
-Follow only command line symbolic links while performing a physical file
-system traversal.
+Переходить только по символическим ссылкам командной строки при выполнении
+физического обхода файловой системы.
 .It Fl L
-Follow all symbolic links to perform a logical file system traversal.
+Переходить по всем символическим ссылкам для выполнения логического обхода файловой системы.
 .It Fl O
-Force the archive to be one volume.
-If a volume ends prematurely,
+Принудительно считать архив однотомным.
+Если том заканчивается преждевременно,
 .Nm
-will not prompt for a new volume.
-This option can be useful for
-automated tasks where error recovery cannot be performed by a human.
+не будет запрашивать новый том.
+Этот параметр может быть полезен для автоматизированных задач,
+где восстановление после ошибок не может быть выполнено человеком.
 .It Fl P
-Do not follow symbolic links, perform a physical file system traversal.
-This is the default mode.
-.It Fl T Ar [from_date][,to_date][/[c][m]]
-Allow files to be selected based on a file modification or inode change
-time falling within a specified time range of
-.Ar from_date
-to
-.Ar to_date
-(the dates are inclusive).
-If only a
-.Ar from_date
-is supplied, all files with a modification or inode change time
-equal to or younger are selected.
-If only a
-.Ar to_date
-is supplied, all files with a modification or inode change time
-equal to or older will be selected.
-When the
-.Ar from_date
-is equal to the
-.Ar to_date ,
-only files with a modification or inode change time of exactly that
-time will be selected.
+Не переходить по символическим ссылкам, выполнять физический обход файловой системы.
+Это режим по умолчанию.
+.It Fl T Ar [дата_от][,дата_до][/[c][m]]
+Разрешить выбор файлов на основе времени модификации файла или изменения inode,
+попадающего в указанный временной диапазон от
+.Ar дата_от
+до
+.Ar дата_до
+(даты включаются).
+Если указана только
+.Ar дата_от ,
+выбираются все файлы с временем модификации или изменения inode,
+равным или более поздним.
+Если указана только
+.Ar дата_до ,
+выбираются все файлы с временем модификации или изменения inode,
+равным или более ранним.
+Если
+.Ar дата_от
+равна
+.Ar дата_до ,
+будут выбраны только файлы с временем модификации или изменения inode,
+точно совпадающим с этим временем.
 .Pp
-When
+Когда
 .Nm
-is in the
-.Em write
-or
-.Em copy
-mode, the optional trailing field
+находится в режиме
+.Em записи
+или
+.Em копирования ,
+необязательное завершающее поле
 .Ar [c][m]
-can be used to determine which file time (inode change, file modification or
-both) are used in the comparison.
-If neither is specified, the default is to use file modification time only.
-The
+может использоваться для определения, какое время файла (изменение inode, модификация файла или оба)
+используется при сравнении.
+Если не указано ни одно, по умолчанию используется только время модификации файла.
 .Ar m
-specifies the comparison of file modification time (the time when
-the file was last written).
-The
+указывает на сравнение времени модификации файла (время, когда файл был последний раз записан).
 .Ar c
-specifies the comparison of inode change time (the time when the file
-inode was last changed; e.g., a change of owner, group, mode, etc).
-When
-.Ar c
-and
-.Ar m
-are both specified, then the modification and inode change times are
-both compared.
-The inode change time comparison is useful in selecting files whose
-attributes were recently changed or selecting files which were recently
-created and had their modification time reset to an older time (as what
-happens when a file is extracted from an archive and the modification time
-is preserved).
-Time comparisons using both file times is useful when
+указывает на сравнение времени изменения inode (время, когда inode файла был последний раз изменён;
+например, изменение владельца, группы, режима и т.д.).
+Если указаны и
+.Ar c ,
+и
+.Ar m ,
+то сравниваются оба времени: модификации и изменения inode.
+Сравнение по времени изменения inode полезно для выбора файлов,
+чьи атрибуты недавно изменились, или для выбора файлов, которые были недавно созданы,
+а их время модификации было сброшено на более раннее (как происходит при извлечении файла из архива
+с сохранением времени модификации).
+Сравнение времени с использованием обоих времён файла полезно, когда
 .Nm
-is used to create a time based incremental archive (only files that were
-changed during a specified time range will be archived).
+используется для создания инкрементного архива на основе времени
+(будут архивироваться только файлы, изменённые в течение указанного временного диапазона).
 .Pp
-A time range is made up of six different fields and each field must contain two
-digits.
-The format is:
+Временной диапазон состоит из шести различных полей, и каждое поле должно содержать две цифры.
+Формат:
 .Pp
 .Dl [[[[[cc]yy]mm]dd]HH]MM[.SS]
 .Pp
-Where
+Где
 .Ar cc
-is the first two digits of the year (the century),
+— первые две цифры года (век),
 .Ar yy
-is the last two digits of the year,
-the first
+— последние две цифры года,
+первая
 .Ar mm
-is the month (from 01 to 12),
+— месяц (от 01 до 12),
 .Ar dd
-is the day of the month (from 01 to 31),
+— день месяца (от 01 до 31),
 .Ar HH
-is the hour of the day (from 00 to 23),
+— час дня (от 00 до 23),
 .Ar MM
-is the minute (from 00 to 59),
-and
+— минута (от 00 до 59),
+и
 .Ar SS
-is the seconds (from 00 to 59).
-The minute field
+— секунды (от 00 до 59).
+Поле минут
 .Ar MM
-is required, while the other fields are optional and must be added in the
-following order:
+обязательно, в то время как другие поля необязательны и должны добавляться в следующем порядке:
 .Ar HH , dd , mm , yy , cc .
-The
+Поле
 .Cm ss
-field may be added independently of the other fields.
-Time ranges are relative to the current time, so
+может быть добавлено независимо от других полей.
+Временные диапазоны задаются относительно текущего времени, поэтому
 .Dl Fl T Ar 1234/cm
-would select all files with a modification or inode change time
-of 12:34 PM today or later.
-Multiple
-.Fl T
-time range can be supplied and checking stops with the first match.
-.It Fl U Ar user
-Select a file based on its
-.Ar user
-name, or when starting with a
+выбрало бы все файлы с временем модификации или изменения inode
+сегодня в 12:34 или позже.
+Может быть указано несколько временных диапазонов
+.Fl T ,
+и проверка останавливается при первом совпадении.
+.It Fl U Ar пользователь
+Выбирать файл на основе имени
+.Ar пользователя
+или, если начинается с
 .Cm # ,
-a numeric uid.
-A '\\' can be used to escape the
+числового uid.
+Символ '\\' можно использовать для экранирования
 .Cm # .
-Multiple
-.Fl U
-options may be supplied and checking stops with the first match.
+Может быть указано несколько параметров
+.Fl U ,
+и проверка останавливается при первом совпадении.
 .It Fl X
-When traversing the file hierarchy specified by a pathname,
-do not descend into directories that have a different device ID.
-See the
+При обходе иерархии файлов, заданной путём,
+не спускаться в каталоги, которые имеют другой идентификатор устройства.
+См. поле
 .Li st_dev
-field as described in
+в описании
 .Xr stat 2
-for more information about device ID's.
+для получения дополнительной информации об идентификаторах устройств.
 .It Fl Y
-This option is the same as the
-.Fl D
-option, except that the inode change time is checked using the
-pathname created after all the file name modifications have completed.
+Этот параметр аналогичен параметру
+.Fl D ,
+за исключением того, что время изменения inode проверяется с использованием
+пути, созданного после завершения всех модификаций имени файла.
 .It Fl Z
-This option is the same as the
-.Fl u
-option, except that the modification time is checked using the
-pathname created after all the file name modifications have completed.
+Этот параметр аналогичен параметру
+.Fl u ,
+за исключением того, что время модификации проверяется с использованием
+пути, созданного после завершения всех модификаций имени файла.
 .El
 .Pp
-The options that operate on the names of files or archive members
+Параметры, которые работают с именами файлов или членов архива
 .Fl ( c ,
 .Fl i ,
 .Fl n ,
@@ -1007,185 +945,180 @@ The options that operate on the names of files or archive members
 .Fl G ,
 .Fl T ,
 .Fl U ,
-.Fl Y ,
-and
+.Fl Y
+и
 .Fl Z )
-interact as follows.
+взаимодействуют следующим образом.
 .Pp
-When extracting files during a
-.Em read
-operation, archive members are
-.Sq selected ,
-based only on the user specified pattern operands as modified by the
+При извлечении файлов во время операции
+.Em чтения
+члены архива
+.Sq выбираются
+только на основе указанных пользователем операндов шаблона с учётом параметров
 .Fl c ,
 .Fl n ,
 .Fl u ,
 .Fl D ,
 .Fl G ,
 .Fl T ,
-.Fl U
-options.
-Then any
+.Fl U .
+Затем любые параметры
 .Fl s
-and
+и
 .Fl i
-options will modify in that order, the names of these selected files.
-Then the
+изменят в этом порядке имена этих выбранных файлов.
+Затем параметры
 .Fl Y
-and
+и
 .Fl Z
-options will be applied based on the final pathname.
-Finally the
+будут применены на основе конечного пути.
+Наконец, параметр
 .Fl v
-option will write the names resulting from these modifications.
+запишет имена, полученные в результате этих изменений.
 .Pp
-When archiving files during a
-.Em write
-operation, or copying files during a
-.Em copy
-operation, archive members are
-.Sq selected ,
-based only on the user specified pathnames as modified by the
+При архивировании файлов во время операции
+.Em записи
+или копировании файлов во время операции
+.Em копирования
+члены архива
+.Sq выбираются
+только на основе указанных пользователем путей с учётом параметров
 .Fl n ,
 .Fl u ,
 .Fl D ,
 .Fl G ,
-.Fl T ,
-and
+.Fl T
+и
 .Fl U
-options (the
+(параметр
 .Fl D
-option only applies during a copy operation).
-Then any
+применяется только во время операции копирования).
+Затем любые параметры
 .Fl s
-and
+и
 .Fl i
-options will modify in that order, the names of these selected files.
-Then during a
-.Em copy
-operation the
+изменят в этом порядке имена этих выбранных файлов.
+Затем во время операции
+.Em копирования
+параметры
 .Fl Y
-and the
+и
 .Fl Z
-options will be applied based on the final pathname.
-Finally the
+будут применены на основе конечного пути.
+Наконец, параметр
 .Fl v
-option will write the names resulting from these modifications.
+запишет имена, полученные в результате этих изменений.
 .Pp
-When one or both of the
+Когда один или оба из параметров
 .Fl u
-or
+или
 .Fl D
-options are specified along with the
-.Fl n
-option, a file is not considered selected unless it is newer
-than the file to which it is compared.
-.Sh EXIT STATUS
-The
+указаны вместе с параметром
+.Fl n ,
+файл считается выбранным только в том случае, если он новее файла, с которым он сравнивается.
+.Sh КОД ЗАВЕРШЕНИЯ
+Утилита
 .Nm
-utility will exit with one of the following values:
+завершится с одним из следующих значений:
 .Bl -tag -width 2n
 .It 0
-All files were processed successfully.
+Все файлы были обработаны успешно.
 .It 1
-An error occurred.
+Произошла ошибка.
 .El
-.Sh EXAMPLES
-The command:
+.Sh ПРИМЕРЫ
+Команда:
 .Dl "pax -w -f /dev/sa0 ."
-copies the contents of the current directory to the device
+копирует содержимое текущего каталога на устройство
 .Pa /dev/sa0 .
 .Pp
-The command:
+Команда:
 .Dl pax -v -f filename
-gives the verbose table of contents for an archive stored in
+выдаёт подробную таблицу содержимого для архива, сохранённого в
 .Pa filename .
 .Pp
-The following commands:
+Следующие команды:
 .Dl mkdir /tmp/to
 .Dl cd /tmp/from
 .Dl pax -rw .\ /tmp/to
-will copy the entire
+скопируют всю иерархию каталогов
 .Pa /tmp/from
-directory hierarchy to
+в
 .Pa /tmp/to .
 .Pp
-The command:
+Команда:
 .Dl pax -r -s ',^//*usr//*,,' -f a.pax
-reads the archive
+читает архив
 .Pa a.pax ,
-with all files rooted in ``/usr'' into the archive extracted relative to the
-current directory.
+при этом все файлы с корнем в ``/usr'' извлекаются относительно текущего каталога.
 .Pp
-The command:
+Команда:
 .Dl pax -rw -i .\ dest_dir
-can be used to interactively select the files to copy from the current
-directory to
+может использоваться для интерактивного выбора файлов для копирования из текущего
+каталога в
 .Pa dest_dir .
 .Pp
-The command:
+Команда:
 .Dl pax -r -pe -U root -G bin -f a.pax
-will extract all files from the archive
+извлечёт из архива
 .Pa a.pax
-which are owned by
+все файлы, принадлежащие
 .Em root
-with group
-.Em bin
-and will preserve all file permissions.
+с группой
+.Em bin ,
+и сохранит все права доступа к файлам.
 .Pp
-The command:
+Команда:
 .Dl pax -r -w -v -Y -Z home /backup
-will update (and list) only those files in the destination directory
-.Pa /backup
-which are older (less recent inode change or file modification times) than
-files with the same name found in the source file tree
+обновит (и выведет список) только те файлы в целевом каталоге
+.Pa /backup ,
+которые старше (имеют менее позднее время изменения inode или модификации),
+чем файлы с теми же именами в исходном дереве файлов
 .Pa home .
-.Sh DIAGNOSTICS
-Whenever
+.Sh ДИАГНОСТИКА
+Всякий раз, когда
 .Nm
-cannot create a file or a link when reading an archive or cannot
-find a file when writing an archive, or cannot preserve the user ID,
-group ID, or file mode when the
-.Fl p
-option is specified, a diagnostic message is written to
-.Dv standard error
-and a non-zero exit status will be returned, but processing will continue.
-In the case where pax cannot create a link to a file,
+не может создать файл или ссылку при чтении архива, или не может найти файл при записи архива,
+или не может сохранить идентификатор пользователя, идентификатор группы или режим файла,
+когда указан параметр
+.Fl p ,
+диагностическое сообщение записывается в
+.Dv стандартный поток ошибок ,
+и будет возвращён ненулевой код возврата, но обработка продолжится.
+В случае, когда
 .Nm
-will not create a second copy of the file.
+не может создать ссылку на файл,
+.Nm
+не будет создавать вторую копию файла.
 .Pp
-If the extraction of a file from an archive is prematurely terminated by
-a signal or error,
+Если извлечение файла из архива преждевременно прервано сигналом или ошибкой,
 .Nm
-may have only partially extracted a file the user wanted.
-Additionally, the file modes of extracted files and directories
-may have incorrect file bits, and the modification and access times may be
-wrong.
+может извлечь только часть файла, который хотел пользователь.
+Кроме того, режимы файлов извлечённых файлов и каталогов могут иметь неверные биты,
+а время модификации и доступа может быть неверным.
 .Pp
-If the creation of an archive is prematurely terminated by a signal or error,
+Если создание архива преждевременно прервано сигналом или ошибкой,
 .Nm
-may have only partially created the archive which may violate the specific
-archive format specification.
+может создать только частичный архив, что может нарушить спецификацию конкретного формата архива.
 .Pp
-If while doing a
-.Em copy ,
+Если во время выполнения
+.Em копирования
 .Nm
-detects a file is about to overwrite itself, the file is not copied,
-a diagnostic message is written to
-.Dv standard error
-and when
+обнаруживает, что файл собирается перезаписать сам себя, файл не копируется,
+диагностическое сообщение записывается в
+.Dv стандартный поток ошибок ,
+и когда
 .Nm
-completes it will exit with a non-zero exit status.
-.Sh SEE ALSO
+завершится, он выйдет с ненулевым кодом возврата.
+.Sh СМ. ТАКЖЕ
 .Xr cpio 1 ,
 .Xr tar 1
-.Sh STANDARDS
-The
+.Sh СТАНДАРТЫ
+Утилита
 .Nm
-utility is a superset of the
-.St -p1003.2
-standard.
-The options
+является надмножеством стандарта
+.St -p1003.2 .
+Параметры
 .Fl z ,
 .Fl B ,
 .Fl D ,
@@ -1199,35 +1132,34 @@ The options
 .Fl U ,
 .Fl Y ,
 .Fl Z ,
-the archive formats
+форматы архивов
 .Ar bcpio ,
 .Ar sv4cpio ,
 .Ar sv4crc ,
 .Ar tar ,
-and the flawed archive handling during
-.Ar list
-and
-.Ar read
-operations are extensions to the
-.Tn POSIX
-standard.
-.Sh HISTORY
-The
+а также обработка повреждённых архивов во время операций
+.Ar вывода списка
+и
+.Ar чтения
+являются расширениями стандарта
+.Tn POSIX .
+.Sh ИСТОРИЯ
+Утилита
 .Nm
-utility appeared in
+появилась в
 .Bx 4.4 .
-.Sh AUTHORS
+.Sh АВТОРЫ
 .An Keith Muller
-at the University of California, San Diego
-.Sh BUGS
-The
+в Калифорнийском университете, Сан-Диего
+.Sh ОШИБКИ (BUGS)
+Утилита
 .Nm
-utility does not recognize multibyte characters.
+не распознаёт многобайтовые символы.
 .Pp
-File flags set by
-.Xr chflags 1
-are not preserved by
+Флаги файлов, установленные
+.Xr chflags 1 ,
+не сохраняются
 .Nm .
-The BUGS section of
+В разделе BUGS страницы руководства
 .Xr chflags 1
-has a list of utilities that are unaware of flags.
+приведён список утилит, которые не «знают» о флагах.

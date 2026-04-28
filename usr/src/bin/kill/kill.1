@@ -32,107 +32,98 @@
 .Dd October 3, 2016
 .Dt KILL 1
 .Os
-.Sh NAME
+.Sh ИМЯ
 .Nm kill
-.Nd terminate or signal a process
-.Sh SYNOPSIS
+.Nd завершить процесс или отправить ему сигнал
+.Sh СИНТАКСИС
 .Nm
-.Op Fl s Ar signal_name
+.Op Fl s Ar имя_сигнала
 .Ar pid ...
 .Nm
 .Fl l
-.Op Ar exit_status
+.Op Ar код_завершения
 .Nm
-.Fl Ar signal_name
+.Fl Ar имя_сигнала
 .Ar pid ...
 .Nm
-.Fl Ar signal_number
+.Fl Ar номер_сигнала
 .Ar pid ...
-.Sh DESCRIPTION
-The
+.Sh ОПИСАНИЕ
+Утилита
 .Nm
-utility sends a signal to the processes specified by the
-.Ar pid
-operands.
+отправляет сигнал процессам, указанным операндами
+.Ar pid .
 .Pp
-Only the super-user may send signals to other users' processes.
+Только суперпользователь может отправлять сигналы процессам других пользователей.
 .Pp
-The options are as follows:
+Доступны следующие параметры:
 .Bl -tag -width indent
-.It Fl s Ar signal_name
-A symbolic signal name specifying the signal to be sent instead of the
-default
+.It Fl s Ar имя_сигнала
+Символическое имя сигнала, указывающее, какой сигнал отправить вместо сигнала по умолчанию
 .Dv TERM .
-.It Fl l Op Ar exit_status
-If no operand is given, list the signal names; otherwise, write
-the signal name corresponding to
-.Ar exit_status .
-.It Fl Ar signal_name
-A symbolic signal name specifying the signal to be sent instead of the
-default
+.It Fl l Op Ar код_завершения
+Если операнд не указан, вывести список имён сигналов; в противном случае вывести
+имя сигнала, соответствующее
+.Ar коду_завершения .
+.It Fl Ar имя_сигнала
+Символическое имя сигнала, указывающее, какой сигнал отправить вместо сигнала по умолчанию
 .Dv TERM .
-.It Fl Ar signal_number
-A non-negative decimal integer, specifying the signal to be sent instead
-of the default
+.It Fl Ar номер_сигнала
+Неотрицательное десятичное целое число, указывающее, какой сигнал отправить вместо сигнала по умолчанию
 .Dv TERM .
 .El
 .Pp
-The following PIDs have special meanings:
+Следующие значения PID имеют особый смысл:
 .Bl -tag -width indent
 .It 0
-The signal is sent to all processes whose group ID is equal to the process
-group ID of the sender, and for which the process has permission.
+Сигнал отправляется всем процессам, чей идентификатор группы равен идентификатору группы процесса-отправителя и для которых процесс имеет разрешение.
 .It -1
-If superuser, broadcast the signal to all processes; otherwise broadcast
-to all processes belonging to the user.
+Если суперпользователь, широковещательно отправить сигнал всем процессам; в противном случае — отправить широковещательно всем процессам, принадлежащим пользователю.
 .It - Ns Ar PGID
-The signal is sent to all processes that belong to the specified
-process group ID (PGID).
+Сигнал отправляется всем процессам, принадлежащим указанному идентификатору группы процессов (PGID).
 .El
 .Pp
-Some of the more commonly used signals:
+Некоторые из наиболее часто используемых сигналов:
 .Pp
 .Bl -tag -width indent -compact
 .It 1
-HUP (hang up)
+HUP (hang up — сброс)
 .It 2
-INT (interrupt)
+INT (interrupt — прерывание)
 .It 3
-QUIT (quit)
+QUIT (quit — выход)
 .It 6
-ABRT (abort)
+ABRT (abort — аварийное завершение)
 .It 9
-KILL (non-catchable, non-ignorable kill)
+KILL (неперехватываемый, неигнорируемый сигнал завершения)
 .It 14
-ALRM (alarm clock)
+ALRM (alarm clock — будильник)
 .It 15
-TERM (software termination signal)
+TERM (software termination signal — сигнал завершения)
 .El
 .Pp
-Some shells may provide a builtin
-.Nm
-command which is similar or identical to this utility.
-Consult the
-.Xr builtin 1
-manual page.
-.Sh EXIT STATUS
+Некоторые оболочки могут предоставлять встроенную команду
+.Nm ,
+которая похожа или идентична этой утилите.
+Обратитесь к странице руководства
+.Xr builtin 1 .
+.Sh КОД ЗАВЕРШЕНИЯ
 .Ex -std
-.Sh EXAMPLES
-Terminate
-the processes with PIDs 142 and 157:
+.Sh ПРИМЕРЫ
+Завершить процессы с PID 142 и 157:
 .Pp
 .Dl "kill 142 157"
 .Pp
-Send the hangup signal
+Отправить сигнал hangup
 .Pq Dv SIGHUP
-to the process with PID 507:
+процессу с PID 507:
 .Pp
 .Dl "kill -s HUP 507"
 .Pp
-Terminate the process group with PGID 117:
+Завершить группу процессов с PGID 117:
 .Pp
 .Dl "kill -- -117"
-.Sh SEE ALSO
+.Sh СМ. ТАКЖЕ
 .Xr builtin 1 ,
 .Xr csh 1 ,
 .Xr killall 1 ,
@@ -140,21 +131,19 @@ Terminate the process group with PGID 117:
 .Xr sh 1 ,
 .Xr kill 2 ,
 .Xr sigaction 2
-.Sh STANDARDS
-The
+.Sh СТАНДАРТЫ
+Утилита
 .Nm
-utility is expected to be
-.St -p1003.2
-compatible.
-.Sh HISTORY
-A
+должна быть совместима со стандартом
+.St -p1003.2 .
+.Sh ИСТОРИЯ
+Команда
 .Nm
-command appeared in
+появилась в
 .At v3
-in section 8 of the manual.
-.Sh BUGS
-A replacement for the command
+в разделе 8 руководства.
+.Sh ОШИБКИ (BUGS)
+Должна быть предоставлена замена команды
 .Dq Li kill 0
-for
-.Xr csh 1
-users should be provided.
+для пользователей
+.Xr csh 1 .

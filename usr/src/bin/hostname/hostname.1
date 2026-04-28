@@ -29,64 +29,61 @@
 .Dd October 5, 2020
 .Dt HOSTNAME 1
 .Os
-.Sh NAME
+.Sh ИМЯ
 .Nm hostname
-.Nd set or print the name of current host system
-.Sh SYNOPSIS
+.Nd установка или вывод имени текущей хост-системы
+.Sh СИНТАКСИС
 .Nm
 .Op Fl f
 .Op Fl s | d
-.Op Ar name-of-host
-.Sh DESCRIPTION
-The
+.Op Ar имя-хоста
+.Sh ОПИСАНИЕ
+Утилита
 .Nm
-utility prints the name of the current host.
-The super-user can
-set the hostname by supplying an argument; this is usually done in the
-initialization script
+выводит имя текущего хоста.
+Суперпользователь может установить имя хоста, указав аргумент; обычно это делается в
+инициализационном скрипте
 .Pa /etc/rc.d/hostname ,
-normally run at boot
-time.
-This script uses the
+который запускается при загрузке системы.
+Этот скрипт использует переменную
 .Va hostname
-variable in
+в файле
 .Pa /etc/rc.conf .
 .Pp
-Options:
+Параметры:
 .Bl -tag -width flag
 .It Fl f
-Include domain information in the printed name.
-This is the default behavior.
+Включать доменную информацию в выводимое имя.
+Это поведение по умолчанию.
 .It Fl s
-Trim off any domain information from the printed
-name.
+Отбросить любую доменную информацию из выводимого имени.
 .It Fl d
-Only print domain information.
+Выводить только доменную информацию.
 .El
-.Sh EXAMPLES
-Set the host name of the machine and check the result:
+.Sh ПРИМЕРЫ
+Установить имя хоста машины и проверить результат:
 .Bd -literal -offset indent
 $ hostname beastie.localdomain.org
 $ hostname
 beastie.localdomain.org
 .Ed
 .Pp
-Do not show domain information:
+Не показывать доменную информацию:
 .Bd -literal -offset indent
 $ hostname -s
 beastie
 .Ed
 .Pp
-Show only domain information:
+Показать только доменную информацию:
 .Bd -literal -offset indent
 $ hostname -d
 localdomain.org
 .Ed
-.Sh SEE ALSO
+.Sh СМ. ТАКЖЕ
 .Xr gethostname 3 ,
 .Xr rc.conf 5
-.Sh HISTORY
-The
+.Sh ИСТОРИЯ
+Команда
 .Nm
-command appeared in
+появилась в
 .Bx 4.2 .
