@@ -1,4 +1,4 @@
-.\"-
+.\" -
 .\" Copyright (c) 1989, 1990, 1993, 1994
 .\"	The Regents of the University of California.  All rights reserved.
 .\"
@@ -29,13 +29,13 @@
 .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 .\" SUCH DAMAGE.
 .\"
-.Dd July 9, 2025
+.Dd 9 июля 2025
 .Dt CP 1
 .Os
-.Sh NAME
+.Sh ИМЯ
 .Nm cp
-.Nd copy files
-.Sh SYNOPSIS
+.Nd копирует файлы
+.Sh СИНТАКСИС
 .Nm
 .Oo
 .Fl R
@@ -60,284 +60,271 @@
 .Op Fl f | i | n
 .Op Fl alNPpsvx
 .Ar source_file ... target_directory
-.Sh DESCRIPTION
-In the first synopsis form, the
+.Sh ОПИСАНИЕ
+В первом варианте синтаксиса утилита
 .Nm
-utility copies the contents of the
+копирует содержимое
 .Ar source_file
-to the
+в
 .Ar target_file .
-In the second synopsis form,
-the contents of each named
+Во втором варианте синтаксиса содержимое каждого указанного 
 .Ar source_file
-is copied to the destination
+копируется в
 .Ar target_directory .
-The names of the files themselves are not changed.
-If
+Имена самих файлов при этом не изменяются.
+Если
 .Nm
-detects an attempt to copy a file to itself, the copy will fail.
+обнаружит попытку копирования файла в самого себя, операция завершится ошибкой.
 .Pp
-The following options are available:
+Доступны следующие опции:
 .Bl -tag -width flag
 .It Fl H
-If the
-.Fl R
-option is specified, symbolic links on the command line are followed.
-(Symbolic links encountered in the tree traversal are not followed.)
+Если указана опция
+.Fl R ,
+утилита переходит по символическим ссылкам, заданным в командной строке,
+но не переходит по ссылкам, обнаруженным при обходе дерева каталогов во время копирования.
 .It Fl L , Fl -dereference
-If the
-.Fl R
-option is specified, all symbolic links are followed.
+Если указана опция
+.Fl R ,
+утилита переходит по всем символическим ссылкам.
 .It Fl P , Fl -no-dereference
-No symbolic links are followed.
-This is the default if the
-.Fl R
-option is specified.
+Символические ссылки не раскрываются (копируются как есть).
+Это поведение по умолчанию, если не указана опция
+.Fl R .
 .It Fl R , Fl -recursive
-If
+Если
 .Ar source_file
-designates a directory,
+является каталогом,
 .Nm
-copies the directory and the entire subtree connected at that point.
-If the
+копирует этот каталог и всё связанное с ним поддерево.
+Если
 .Ar source_file
-ends in a
+заканчивается на
 .Pa / ,
-the contents of the directory are copied rather than the
-directory itself.
-This option also causes symbolic links to be copied, rather than
-indirected through, and for
+вместо самого каталога копируется только его содержимое.
+Эта опция также указывает копировать символические ссылки вместо того,
+чтобы переходить по ним, и указывает
 .Nm
-to create special files rather than copying them as normal files.
-Created directories have the same mode as the corresponding source
-directory, unmodified by the process' umask.
+создавать специальные файлы вместо
+их копирования как обычных файлов.
+Созданные каталоги получают те же права доступа, что и соответствующие исходные каталоги, без учета umask вызывающего процесса.
 .Pp
-Note that
+Обратите внимание, что
 .Nm
-copies hard linked files as separate files.
-If you need to preserve hard links, consider using
+копирует жесткие ссылки как отдельные файлы.
+Для сохранения жестких ссылок используйте утилиты
 .Xr tar 1 ,
-.Xr cpio 1 ,
-or
-.Xr pax 1
-instead.
+.Xr cpio 1
+или
+.Xr pax 1 .
 .It Fl a , Fl -archive
-Archive mode.
-Same as
+Архивный режим.
+Эквивалентно
 .Fl RpP .
 .It Fl f , Fl -force
-For each existing destination pathname, remove it and
-create a new file, without prompting for confirmation
-regardless of its permissions.
-(The
+Для каждого существующего целевого пути удаляет целевой файл и
+создает новый без запроса подтверждения,
+независимо от прав доступа.
+(Опция
 .Fl f
-option overrides any previous
+отменяет действие ранее указанных опций
 .Fl i
-or
+и
 .Fl n
-options.)
+).
 .It Fl i , Fl -interactive
-Write a prompt to the standard error output before copying a file
-that would overwrite an existing file.
-If the response from the standard input begins with the character
+Выводит запрос в стандартный поток ошибок перед копированием файла,
+если это приведет к перезаписи существующего файла.
+Если ответ со стандартного ввода начинается с символа
 .Sq Li y
-or
+или
 .Sq Li Y ,
-the file copy is attempted.
-(The
+выполняется попытка копирования.
+(Опция
 .Fl i
-option overrides any previous
+отменяет действие ранее указанных опций
 .Fl f
-or
+и
 .Fl n
-options.)
+).
 .It Fl l , Fl -link
-Create hard links to regular files in a hierarchy instead of copying.
+Создает жесткие ссылки на обычные файлы в иерархии вместо их копирования.
 .It Fl N
-When used with
-.Fl p ,
-suppress copying file flags.
+При использовании совместно с
+.Fl p
+предотвращает копирование флагов файлов.
 .It Fl n , Fl -no-clobber
-Do not overwrite an existing file.
-(The
+Не перезаписывает существующие файлы.
+(Опция
 .Fl n
-option overrides any previous
+отменяет действие ранее указанных опций
 .Fl f
-or
+и
 .Fl i
-options.)
+).
 .It Fl p
-Preserve the following attributes of each source
-file in the copy: modification time, access time,
-file flags, file mode, ACL, user ID, and group ID, as allowed by permissions.
+Сохраняет в копии следующие атрибуты каждого исходного файла:
+время изменения, время доступа, флаги файла, права доступа (mode),
+списки контроля доступа (ACL), идентификатор пользователя (User ID) и идентификатор группы (Group ID), насколько это позволяют текущие права доступа.
 .Pp
-If the user ID and group ID cannot be preserved, no error message
-is displayed and the exit value is not altered.
+Если идентификаторы пользователя и группы сохранить не удалось, сообщение
+об ошибке не выводится, а статус завершения не изменяется.
 .Pp
-If the source file has its set-user-ID bit on and the user ID cannot
-be preserved, the set-user-ID bit is not preserved
-in the copy's permissions.
-If the source file has its set-group-ID bit on and the group ID cannot
-be preserved, the set-group-ID bit is not preserved
-in the copy's permissions.
-If the source file has both its set-user-ID and set-group-ID bits on,
-and either the user ID or group ID cannot be preserved, neither
-the set-user-ID nor set-group-ID bits are preserved in the copy's
-permissions.
+Если исходный файл имеет установленный бит set-user-ID, но идентификатор пользователя не может
+быть сохранен, бит set-user-ID очищается
+в правах доступа копии.
+Если исходный файл имеет установленный бит set-group-ID, но идентификатор группы не может
+быть сохранен, бит set-group-ID очищается
+в правах доступа копии.
+Если исходный файл имеет оба бита set-user-ID и set-group-ID,
+но идентификатор пользователя или группы не может быть сохранен, то оба бита
+set-user-ID и set-group-ID очищаются в правах доступа копии.
 .It Fl -sort
-Visit and traverse sources in (non-localized) lexicographical order.
-Normally,
+Сортирует исходные файлы в лексикографическом порядке
+(без учета локали).
+Обычно
 .Nm
-visits the sources in the order they were listed on the command line,
-and if recursing, traverses their contents in whichever order they
-were returned in by the kernel, which may be the order in which they
-were created, lexicographical order, or something else entirely.
-With
-.Fl -sort ,
-the sources are both visited and traversed in lexicographical order.
-This is mostly useful for testing.
+обрабатывает исходные файлы в том порядке, в котором они были указаны 
+в командной строке. При рекурсивном обходе содержимое каталогов 
+обрабатывается в том порядке, в котором его возвращает ядро: это может 
+быть порядок создания файлов, лексикографический порядок или любой другой. 
+При использовании опции
+.Fl -sort
+как исходные файлы, так и содержимое каталогов обрабатываются в лексикографическом порядке.
+Это в первую очередь полезно для тестирования.
 .It Fl s , Fl -symbolic-link
-Create symbolic links to regular files in a hierarchy instead of copying.
+Создает символические ссылки на обычные файлы в иерархии вместо их копирования.
 .It Fl v , Fl -verbose
-Be verbose, showing both the source and destination path of each file
-as is copied.
+Выводит подробную информацию, отображая исходный и целевой путь для каждого копируемого файла.
 .It Fl x , Fl -one-file-system
-Do not traverse file system mount points.
+Предотвращает переход через точки монтирования файловых систем.
 .El
 .Pp
-For each destination file that already exists, its contents are
-overwritten if permissions allow.
-Its mode, user ID, and group
-ID are unchanged unless the
-.Fl p
-option was specified.
+Если файл уже существует по целевому пути, его содержимое
+будет перезаписано, если это позволяют права доступа.
+Права доступа (mode), идентификатор пользователя и группы
+не изменяются, если не указана опция
+.Fl p .
 .Pp
-In the second synopsis form,
+Во втором варианте синтаксиса
 .Ar target_directory
-must exist unless there is only one named
+должен существовать, за исключением случая, когда
 .Ar source_file
-which is a directory and the
-.Fl R
-flag is specified.
+является каталогом и указана опция
+.Fl R .
 .Pp
-If the destination file does not exist, the mode of the source file is
-used as modified by the file mode creation mask
+Если целевой файл не существует, применяются права
+доступа исходного файла, модифицированные маской создания файлов
 .Pf ( Ic umask ,
-see
+см.
 .Xr csh 1 ) .
-If the source file has its set-user-ID bit on, that bit is removed
-unless both the source file and the destination file are owned by the
-same user.
-If the source file has its set-group-ID bit on, that bit is removed
-unless both the source file and the destination file are in the same
-group and the user is a member of that group.
-If both the set-user-ID and set-group-ID bits are set, all of the above
-conditions must be fulfilled or both bits are removed.
+Если исходный файл имеет установленный бит set-user-ID, этот бит удаляется,
+если исходный и целевой файлы не принадлежат одному и тому же пользователю.
+Если исходный файл имеет установленный бит set-group-ID, этот бит удаляется,
+если исходный и целевой файлы не принадлежат к одной и той же группе, в которой состоит выполняющий копирование пользователь.
+Если файл имеет оба бита set-user-ID и set-group-ID, оба вышеуказанных
+условия должны выполняться, иначе оба бита удаляются.
 .Pp
-Appropriate permissions are required for file creation or overwriting.
+Для создания или перезаписи файлов требуются соответствующие права доступа.
 .Pp
-Symbolic links are always followed unless the
-.Fl R
-flag is set, in which case symbolic links are not followed, by default.
-The
+Переход по символическим ссылкам выполняется всегда, за исключением случаев, когда указана опция
+.Fl R ;
+при её наличии по умолчанию переход по символическим ссылкам
+не выполняется.
+Опции
 .Fl H
-or
+или
 .Fl L
-flags (in conjunction with the
-.Fl R
-flag) cause symbolic links to be followed as described above.
-The
+(в сочетании с опцией
+.Fl R )
+инициируют переход по символическим ссылкам, как описано выше. 
+Опции
 .Fl H ,
 .Fl L
-and
+и
 .Fl P
-options are ignored unless the
-.Fl R
-option is specified.
-In addition, these options override each other and the
-command's actions are determined by the last one specified.
+игнорируются, если не указана опция
+.Fl R .
+Кроме того, эти опции отменяют друг друга,
+и поведение утилиты определяется последней указанной опцией.
 .Pp
-If
+Если утилита
 .Nm
-receives a
+получает сигнал
 .Dv SIGINFO
-(see the
+(см. аргумент
 .Cm status
-argument for
-.Xr stty 1 )
-signal, the current input and output file and the percentage complete
-will be written to the standard output.
-.Sh EXIT STATUS
-.Ex -std
-.Sh EXAMPLES
-Make a copy of file
+утилиты
+.Xr stty 1 ) ,
+в стандартный поток вывода будут
+выведены текущий копируемый файл, целевой файл, а также процент
+выполнения операции.
+.Sh СТАТУС ЗАВЕРШЕНИЯ
+Утилита
+.Nm
+завершает работу с кодом 0 при успешном выполнении и >0 при возникновении ошибки.
+.Sh ПРИМЕРЫ
+Создает копию файла
 .Pa foo
-named
+с именем
 .Pa bar :
 .Pp
 .Dl $ cp foo bar
 .Pp
-Copy a group of files to the
-.Pa /tmp
-directory:
+Копирует группу файлов в каталог
+.Pa /tmp :
 .Pp
 .Dl $ cp *.txt /tmp
 .Pp
-Copy the directory
+Копирует каталог
 .Pa junk
-and all of its contents (including any subdirectories) to the
-.Pa /tmp
-directory:
+и всё его содержимое (включая все подкаталоги) в каталог
+.Pa /tmp :
 .Pp
 .Dl $ cp -R junk /tmp
-.Sh COMPATIBILITY
-Historic versions of the
+.Sh СОВМЕСТИМОСТЬ
+Исторические версии утилиты
 .Nm
-utility had a
-.Fl r
-option.
-This implementation supports that option, however, its behavior
-is different from historical
+имели опцию
+.Fl r .
+Текущая реализация поддерживает данную опцию, но её поведение
+отличается от исторического поведения
+.Fx .
+Использование этой опции категорически не рекомендуется,
+поскольку её поведение зависит от реализации.
+В
 .Fx
-behavior.
-Use of this option
-is strongly discouraged as the behavior is
-implementation-dependent.
-In
-.Fx ,
+опция
 .Fl r
-is a synonym for
+является синонимом
 .Fl RL
-and works the same unless modified by other flags.
-Historical implementations
-of
+и работает аналогичным образом, если не переопределена другими опциями.
+Исторические реализации опции
 .Fl r
-differ as they copy special files as normal
-files while recreating a hierarchy.
+отличаются тем, что при воссоздании иерархии они копируют специальные файлы как обычные.
 .Pp
-The
+Опции
 .Fl a ,
 .Fl l ,
 .Fl N ,
 .Fl n ,
 .Fl s ,
-.Fl v ,
-and
+.Fl v
+и
 .Fl x
-options are non-standard and their use in scripts is not recommended.
-.Sh SEE ALSO
+являются нестандартными, и их использование в скриптах не рекомендуется.
+.Sh СМ. ТАКЖЕ
 .Xr mv 1 ,
 .Xr umask 2 ,
 .Xr fts 3 ,
 .Xr symlink 7
-.Sh STANDARDS
-The
+.Sh СТАНДАРТЫ
+Утилита
 .Nm
-command is expected to be
-.St -p1003.2
-compatible.
-.Sh HISTORY
-A
+соответствует стандарту
+.St -p1003.2 .
+.Sh ИСТОРИЯ
+Утилита
 .Nm
-command appeared in
+появилась в
 .At v1 .
