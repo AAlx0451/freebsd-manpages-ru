@@ -1,6 +1,7 @@
+
 .\"-
 .\" Copyright (c) 1989, 1990, 1993, 1994
-.\"	The Regents of the University of California.  All rights reserved.
+.\"        The Regents of the University of California.  All rights reserved.
 .\"
 .\" This code is derived from software contributed to Berkeley by
 .\" the Institute of Electrical and Electronics Engineers, Inc.
@@ -29,155 +30,152 @@
 .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 .\" SUCH DAMAGE.
 .\"
-.Dd January 7, 2017
+.Dd 7 января 2017
 .Dt CHMOD 1
 .Os
-.Sh NAME
+.Sh ИМЯ
 .Nm chmod
-.Nd change file modes
-.Sh SYNOPSIS
+.Nd изменяет биты режима файлов
+.Sh СИНТАКСИС
 .Nm
 .Op Fl fhv
 .Op Fl R Op Fl H | L | P
 .Ar mode
 .Ar
-.Sh DESCRIPTION
-The
+.Sh ОПИСАНИЕ
+Утилита
 .Nm
-utility modifies the file mode bits of the listed files
-as specified by the
-.Ar mode
-operand.
+изменяет биты режима перечисленных файлов
+в соответствии с операндом
+.Ar mode .
 .Pp
-The options are as follows:
+Доступны следующие опции:
 .Bl -tag -width indent
 .It Fl f
-Do not display a diagnostic message if
+Не выводит диагностическое сообщение, если
 .Nm
-could not modify the mode for
-.Va file ,
-nor modify the exit status to reflect such failures.
+не смогла изменить режим для
+.Va файла ,
+а также не изменяет статус завершения для отражения таких ошибок.
 .It Fl H
-If the
-.Fl R
-option is specified, symbolic links on the command line are followed
-and hence unaffected by the command.
-(Symbolic links encountered during tree traversal are not followed.)
+Если указана опция
+.Fl R ,
+выполняется переход по символическим ссылкам, указанным в командной строке,
+и поэтому команда на них не влияет.
+(Переход по символическим ссылкам, встречающимся при обходе дерева, не выполняется.)
 .It Fl h
-If the file is a symbolic link, change the mode of the link itself
-rather than the file that the link points to.
+Если файл является символической ссылкой, изменяет режим самой ссылки,
+а не файла, на который она указывает.
 .It Fl L
-If the
-.Fl R
-option is specified, all symbolic links are followed.
+Если указана опция
+.Fl R ,
+выполняется переход по всем символическим ссылкам.
 .It Fl P
-If the
-.Fl R
-option is specified, no symbolic links are followed.
-This is the default.
+Если указана опция
+.Fl R ,
+переход по символическим ссылкам не выполняется.
+Это поведение по умолчанию.
 .It Fl R
-Change the modes of the file hierarchies rooted in the files,
-instead of just the files themselves.
-Beware of unintentionally matching the
+Изменяет режимы иерархий файлов, корнем которых являются указанные файлы,
+а не только самих файлов.
+Остерегайтесь непреднамеренного совпадения с жесткой ссылкой
 .Dq Pa ".."
-hard link to the parent directory when using wildcards like
+на родительский каталог при использовании подстановочных знаков, таких как
 .Dq Li ".*" .
 .It Fl v
-Cause
+Заставляет
 .Nm
-to be verbose, showing filenames as the mode is modified.
-If the
+выводить подробную информацию, отображая имена файлов по мере изменения режима.
+Если флаг
 .Fl v
-flag is specified more than once, the old and new modes of the file
-will also be printed, in both octal and symbolic notation.
+указан более одного раза, также будут выведены старый и новый режимы файла
+как в восьмеричном, так и в символьном представлении.
 .El
 .Pp
-The
+Опции
 .Fl H ,
 .Fl L
-and
+и
 .Fl P
-options are ignored unless the
-.Fl R
-option is specified.
-In addition, these options override each other and the
-command's actions are determined by the last one specified.
+игнорируются, если не указана опция
+.Fl R .
+Кроме того, эти опции переопределяют друг друга, и
+действия команды определяются последней указанной опцией.
 .Pp
-If
+Если
 .Nm
-receives a
+получает сигнал
 .Dv SIGINFO
-signal (see the
+(см. аргумент
 .Cm status
-argument for
+в
 .Xr stty 1 ) ,
-then the current filename as well as the old and new modes are displayed.
+отображаются текущее имя файла, а также старый и новый режимы.
 .Pp
-Only the owner of a file or the super-user is permitted to change
-the mode of a file.
-.Sh EXIT STATUS
+Изменять режим файла разрешено только владельцу файла или суперпользователю.
+.Sh СТАТУС ЗАВЕРШЕНИЯ
 .Ex -std
-.Sh MODES
-Modes may be absolute or symbolic.
-An absolute mode is an octal number constructed from the sum of
-one or more of the following values:
+.Sh РЕЖИМЫ
+Режимы могут быть абсолютными или символьными.
+Абсолютный режим — это восьмеричное число, составленное из суммы
+одного или нескольких следующих значений:
 .Pp
 .Bl -tag -width 6n -compact -offset indent
 .It Li 4000
-(the setuid bit).
-Executable files with this bit set
-will run with effective uid set to the uid of the file owner.
-Directories with this bit set will force all files and
-sub-directories created in them to be owned by the directory owner
-and not by the uid of the creating process, if the underlying file
-system supports this feature: see
+(бит setuid).
+Исполняемые файлы с установленным этим битом
+будут запускаться с эффективным uid, равным uid владельца файла.
+Каталоги с установленным этим битом будут принудительно назначать владельцем всех файлов и
+подкаталогов, созданных в них, владельца каталога,
+а не uid создающего процесса, если базовая файловая
+система поддерживает эту функцию: см.
 .Xr chmod 2
-and the
+и опцию
 .Cm suiddir
-option to
+для
 .Xr mount 8 .
 .It Li 2000
-(the setgid bit).
-Executable files with this bit set
-will run with effective gid set to the gid of the file owner.
+(бит setgid).
+Исполняемые файлы с установленным этим битом
+будут запускаться с эффективным gid, равным gid владельца файла.
 .It Li 1000
-(the sticky bit).
-See
+(sticky-бит).
+См.
 .Xr chmod 2
-and
+и
 .Xr sticky 7 .
 .It Li 0400
-Allow read by owner.
+Разрешает чтение владельцу.
 .It Li 0200
-Allow write by owner.
+Разрешает запись владельцу.
 .It Li 0100
-For files, allow execution by owner.
-For directories, allow the owner to
-search in the directory.
+Для файлов разрешает выполнение владельцу.
+Для каталогов разрешает владельцу
+поиск в каталоге.
 .It Li 0040
-Allow read by group members.
+Разрешает чтение членам группы.
 .It Li 0020
-Allow write by group members.
+Разрешает запись членам группы.
 .It Li 0010
-For files, allow execution by group members.
-For directories, allow
-group members to search in the directory.
+Для файлов разрешает выполнение членам группы.
+Для каталогов разрешает
+членам группы поиск в каталоге.
 .It Li 0004
-Allow read by others.
+Разрешает чтение остальным.
 .It Li 0002
-Allow write by others.
+Разрешает запись остальным.
 .It Li 0001
-For files, allow execution by others.
-For directories allow others to
-search in the directory.
+Для файлов разрешает выполнение остальным.
+Для каталогов разрешает остальным
+поиск в каталоге.
 .El
 .Pp
-For example, the absolute mode that permits read, write and execute by
-the owner, read and execute by group members, read and execute by
-others, and no set-uid or set-gid behaviour is 755
+Например, абсолютный режим, разрешающий чтение, запись и выполнение
+владельцу, чтение и выполнение членам группы, чтение и выполнение
+остальным, без поведения set-uid или set-gid, равен 755
 (400+200+100+040+010+004+001).
 .Pp
-The symbolic mode is described by the following grammar:
+Символьный режим описывается следующей грамматикой:
 .Bd -literal -offset indent
 mode         ::= clause [, clause ...]
 clause       ::= [who ...] [action ...] action
@@ -187,147 +185,142 @@ op           ::= + | \- | =
 perm         ::= r | s | t | w | x | X | u | g | o
 .Ed
 .Pp
-The
+Символы
 .Ar who
-symbols ``u'', ``g'', and ``o'' specify the user, group, and other parts
-of the mode bits, respectively.
-The
+``u'', ``g'' и ``o'' задают биты режима для пользователя, группы и остальных соответственно.
+Символ
 .Ar who
-symbol ``a'' is equivalent to ``ugo''.
+``a'' эквивалентен ``ugo''.
 .Pp
-The
+Символы
 .Ar perm
-symbols represent the portions of the mode bits as follows:
+представляют части битов режима следующим образом:
 .Pp
 .Bl -tag -width Ds -compact -offset indent
 .It r
-The read bits.
+Биты чтения.
 .It s
-The set-user-ID-on-execution and set-group-ID-on-execution bits.
+Биты set-user-ID-on-execution и set-group-ID-on-execution.
 .It t
-The sticky bit.
+Sticky-бит.
 .It w
-The write bits.
+Биты записи.
 .It x
-The execute/search bits.
+Биты выполнения/поиска.
 .It X
-The execute/search bits if the file is a directory or any of the
-execute/search bits are set in the original (unmodified) mode.
-Operations with the
+Биты выполнения/поиска, если файл является каталогом или любой из
+битов выполнения/поиска установлен в исходном (неизмененном) режиме.
+Операции с символом
 .Ar perm
-symbol ``X'' are only meaningful in conjunction with the
+``X'' имеют смысл только в сочетании с символом
 .Ar op
-symbol ``+'', and are ignored in all other cases.
+``+'' и игнорируются во всех остальных случаях.
 .It u
-The user permission bits in the original mode of the file.
+Биты прав пользователя в исходном режиме файла.
 .It g
-The group permission bits in the original mode of the file.
+Биты прав группы в исходном режиме файла.
 .It o
-The other permission bits in the original mode of the file.
+Биты прав остальных в исходном режиме файла.
 .El
 .Pp
-The
+Символы
 .Ar op
-symbols represent the operation performed, as follows:
+представляют выполняемую операцию следующим образом:
 .Bl -tag -width 4n
 .It +
-If no value is supplied for
+Если значение для
+.Ar perm
+не указано, операция ``+'' не имеет эффекта.
+Если значение для
+.Ar who
+не указано, устанавливается каждый бит прав, указанный в
 .Ar perm ,
-the ``+'' operation has no effect.
-If no value is supplied for
-.Ar who ,
-each permission bit specified in
-.Ar perm ,
-for which the corresponding bit in the file mode creation mask
-(see
+для которого соответствующий бит в маске создания режима файла
+(см.
 .Xr umask 2 )
-is clear, is set.
-Otherwise, the mode bits represented by the specified
+сброшен.
+В противном случае устанавливаются биты режима, представленные указанными значениями
 .Ar who
-and
-.Ar perm
-values are set.
+и
+.Ar perm .
 .It \&\-
-If no value is supplied for
-.Ar perm ,
-the ``\-'' operation has no effect.
-If no value is supplied for
-.Ar who ,
-each permission bit specified in
-.Ar perm ,
-for which the corresponding bit in the file mode creation mask
-is set, is cleared.
-Otherwise, the mode bits represented by the specified
-.Ar who
-and
+Если значение для
 .Ar perm
-values are cleared.
+не указано, операция ``\-'' не имеет эффекта.
+Если значение для
+.Ar who
+не указано, сбрасывается каждый бит прав, указанный в
+.Ar perm ,
+для которого установлен соответствующий бит в маске создания режима файла.
+В противном случае сбрасываются биты режима, представленные указанными значениями
+.Ar who
+и
+.Ar perm .
 .It =
-The mode bits specified by the
-.Ar who
-value are cleared, or, if no
-.Ar who
-value is specified, the owner, group
-and other mode bits are cleared.
-Then, if no value is supplied for
+Биты режима, указанные значением
 .Ar who ,
-each permission bit specified in
-.Ar perm ,
-for which the corresponding bit in the file mode creation mask
-is clear, is set.
-Otherwise, the mode bits represented by the specified
+сбрасываются, или, если значение
 .Ar who
-and
-.Ar perm
-values are set.
+не указано, сбрасываются биты режима владельца, группы
+и остальных.
+Затем, если значение для
+.Ar who
+не указано, устанавливается каждый бит прав, указанный в
+.Ar perm ,
+для которого соответствующий бит в маске создания режима файла
+сброшен.
+В противном случае устанавливаются биты режима, представленные указанными значениями
+.Ar who
+и
+.Ar perm .
 .El
 .Pp
-Each
+Каждое
 .Ar clause
-specifies one or more operations to be performed on the mode
-bits, and each operation is applied to the mode bits in the
-order specified.
+задает одну или несколько операций, выполняемых над битами
+режима, и каждая операция применяется к битам режима в
+указанном порядке.
 .Pp
-Operations upon the other permissions only (specified by the symbol
-``o'' by itself), in combination with the
+Операции только над правами остальных (заданные одним лишь символом
+``o''), в сочетании с символами
 .Ar perm
-symbols ``s'' or ``t'', are ignored.
+``s'' или ``t'', игнорируются.
 .Pp
-The ``w'' permission on directories will permit file creation, relocation,
-and copy into that directory.
-Files created within the directory itself will inherit its group ID.
-.Sh EXAMPLES
+Право ``w'' для каталогов разрешает создание файлов, перемещение
+и копирование в этот каталог.
+Файлы, созданные внутри самого каталога, унаследуют его идентификатор группы.
+.Sh ПРИМЕРЫ
 .Bl -tag -width "u=rwx,go=u-w" -compact
 .It Li 644
-make a file readable by anyone and writable by the owner only.
+делает файл доступным для чтения всем и доступным для записи только владельцу.
 .Pp
 .It Li go-w
-deny write permission to group and others.
+запрещает право записи группе и остальным.
 .Pp
 .It Li =rw,+X
-set the read and write permissions to the usual defaults, but
-retain any execute permissions that are currently set.
+устанавливает права чтения и записи на обычные значения по умолчанию, но
+сохраняет любые права на выполнение, которые установлены в данный момент.
 .Pp
 .It Li +X
-make a directory or file searchable/executable by everyone if it is
-already searchable/executable by anyone.
+делает каталог или файл доступным для поиска/выполнения всем, если он
+уже доступен для поиска/выполнения кому-либо.
 .Pp
 .It Li 755
 .It Li u=rwx,go=rx
 .It Li u=rwx,go=u-w
-make a file readable/executable by everyone and writable by the owner only.
+делает файл доступным для чтения/выполнения всем и доступным для записи только владельцу.
 .Pp
 .It Li go=
-clear all mode bits for group and others.
+сбрасывает все биты режима для группы и остальных.
 .Pp
 .It Li g=u-w
-set the group bits equal to the user bits, but clear the group write bit.
+устанавливает биты группы равными битам пользователя, но сбрасывает бит записи группы.
 .El
-.Sh COMPATIBILITY
-The
+.Sh СОВМЕСТИМОСТЬ
+Опция
 .Fl v
-option is non-standard and its use in scripts is not recommended.
-.Sh SEE ALSO
+является нестандартной, и ее использование в скриптах не рекомендуется.
+.Sh СМ. ТАКЖЕ
 .Xr chflags 1 ,
 .Xr install 1 ,
 .Xr setfacl 1 ,
@@ -340,22 +333,21 @@ option is non-standard and its use in scripts is not recommended.
 .Xr symlink 7 ,
 .Xr chown 8 ,
 .Xr mount 8
-.Sh STANDARDS
-The
+.Sh СТАНДАРТЫ
+Ожидается, что утилита
 .Nm
-utility is expected to be
-.St -p1003.2
-compatible with the exception of the
+будет совместима со стандартом
+.St -p1003.2 ,
+за исключением символа
 .Ar perm
-symbol
-.Dq t
-which is not included in that standard.
-.Sh HISTORY
-A
+.Dq t ,
+который не включен в этот стандарт.
+.Sh ИСТОРИЯ
+Команда
 .Nm
-command appeared in
+появилась в
 .At v1 .
-.Sh BUGS
-There is no
+.Sh ОШИБКИ
+Не существует опции
 .Ar perm
-option for the naughty bits of a horse.
+для пикантных частей лошади.
