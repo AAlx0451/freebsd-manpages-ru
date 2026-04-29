@@ -3,58 +3,66 @@
 .\"
 .\" * SPDX-License-Identifier: BSD-2-Clause
 .\"
-.Dd June 2, 2023
+.Dd 2 июня 2023
 .Dt NPROC 1
 .Os
-.Sh NAME
+.Sh ИМЯ
 .Nm nproc
-.Nd print the number of processors
-.Sh SYNOPSIS
+.Nd вывод количества процессоров
+.Sh СИНТАКСИС
 .Nm
 .Op Fl -all
 .Op Fl -ignore Ns = Ns Ar count
 .Nm Fl -help
 .Nm Fl -version
-.Sh DESCRIPTION
-The
+.Sh ОПИСАНИЕ
+Утилита
 .Nm
-utility is used to print the number of processors limited to the
-.Xr cpuset 2
-of the current process, unless the
-.Fl -all
-flag is specified.
+используется для вывода количества процессоров, доступных текущему процессу
+(ограниченных через
+.Xr cpuset 2 ),
+если не указан флаг
+.Fl -all .
 .Pp
-The available flags are:
+Доступны следующие флаги:
 .Bl -tag -width Ds
 .It Fl -all
-Count all processors currently online.
+Подсчитать все процессоры, находящиеся в данный момент в сети (online).
 .It Fl -ignore Ns = Ns Ar count
-The result is decreased by
+Результат уменьшается на значение
 .Ar count ,
-but never below 1.
+но не может быть меньше 1.
 .It Fl -version
-Print the current program version and exit.
-Do not use this option.
+Вывести текущую версию программы и выйти.
+Не используйте эту опцию.
 .It Fl -help
-Print usage information and exit.
+Вывести справочную информацию об использовании и выйти.
 .El
-.Sh COMPATIBILITY
-This program is intended to be compatible with nproc as found in GNU coreutils.
-.Sh BUGS
-If HyperThreading is enabled in BIOS and disabled in the kernel, the
-.Fl -all
-option on Linux will still report all possible CPU threads.
-On FreeBSD only active threads will be reported.
-.Sh SEE ALSO
-.Xr cpuset 1
-.Sh HISTORY
-The
+.Sh СОВМЕСТИМОСТЬ
+Эта программа предназначена для обеспечения совместимости с
+.Nm nproc
+из состава GNU coreutils.
+.Sh СТАТУС ЗАВЕРШЕНИЯ
+Утилита
 .Nm
-utility first appeared in
+завершает работу с кодом 0 при успешном выполнении и >0 при возникновении ошибки.
+.Sh ОШИБКИ
+Если технология HyperThreading включена в BIOS, но отключена в ядре, опция
+.Fl -all
+в Linux всё равно сообщит о всех возможных потоках процессора.
+В
+.Fx
+будут отображены только активные потоки.
+.Sh СМ. ТАКЖЕ
+.Xr cpuset 1
+.Sh ИСТОРИЯ
+Утилита
+.Nm
+впервые появилась в
 .Fx 13.2 .
-.Sh AUTHORS
+.Sh АВТОРЫ
 .An -nosplit
 .An Mateusz Guzik Aq Mt mjg@FreeBSD.org
-wrote the program and
+написал программу, а
 .An Piotr Paweł Stefaniak Aq Mt pstef@FreeBSD.org
-wrote this page.
+написал эту страницу.
