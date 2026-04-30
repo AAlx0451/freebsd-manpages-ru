@@ -30,54 +30,54 @@
 .\" SUCH DAMAGE.
 .\" From: src/bin/pwd/pwd.1,v 1.11 2000/11/20 11:39:39 ru Exp
 .\"
-.Dd June 21, 2011
+.Dd 21 июня 2011
 .Dt REALPATH 1
 .Os
-.Sh NAME
+.Sh ИМЯ
 .Nm realpath
-.Nd return resolved physical path
-.Sh SYNOPSIS
+.Nd возврат разрешенного физического пути
+.Sh СИНТАКСИС
 .Nm
 .Op Fl q
 .Op Ar path ...
-.Sh DESCRIPTION
-The
+.Sh ОПИСАНИЕ
+Утилита
 .Nm
-utility uses the
+использует функцию
 .Xr realpath 3
-function to resolve all symbolic links, extra
+для разрешения всех символических ссылок, лишних символов
 .Ql /
-characters and references to
+и ссылок на
 .Pa /./
-and
+и
 .Pa /../
-in
+в пути
 .Ar path .
-If
+Если
 .Ar path
-is absent, the current working directory
-.Pq Sq Pa .\&
-is assumed.
+отсутствует, подразумевается текущий рабочий каталог
+.Pq Sq Pa .\& .
 .Pp
-If
-.Fl q
-is specified, warnings will not be printed when
-.Xr realpath 3
-fails.
-.Sh EXIT STATUS
-.Ex -std
-.Sh EXAMPLES
-Show the physical path of the
-.Pa /dev/log
-directory silencing warnings if any:
+Если указана опция
+.Fl q ,
+предупреждения не будут выводиться в случае ошибки
+.Xr realpath 3 .
+.Sh СТАТУС ЗАВЕРШЕНИЯ
+Утилита
+.Nm
+завершает работу с кодом 0 при успешном выполнении и >0 при возникновении ошибки.
+.Sh ПРИМЕРЫ
+Отобразить физический путь к каталогу
+.Pa /dev/log ,
+подавляя предупреждения, если они есть:
 .Bd -literal -offset indent
 $ realpath -q /dev/log
 /var/run/log
 .Ed
-.Sh SEE ALSO
+.Sh СМ. ТАКЖЕ
 .Xr realpath 3
-.Sh HISTORY
-The
+.Sh ИСТОРИЯ
+Утилита
 .Nm
-utility first appeared in
+впервые появилась в
 .Fx 4.3 .
