@@ -29,13 +29,13 @@
 .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 .\" SUCH DAMAGE.
 .\"
-.Dd January 16, 2025
+.Dd 16 января 2025
 .Dt LS 1
 .Os
-.Sh NAME
+.Sh ИМЯ
 .Nm ls
-.Nd list directory contents
-.Sh SYNOPSIS
+.Nd вывод содержимого каталогов
+.Sh СИНТАКСИС
 .Nm
 .Op Fl ABCFGHILPRSTUWZabcdfghiklmnopqrstuvwxy1\&,
 .Op Fl -color Ns = Ns Ar when
@@ -43,861 +43,769 @@
 .Op Fl -group-directories-first
 .Op Fl D Ar format
 .Op Ar
-.Sh DESCRIPTION
-For each operand that names a
-.Ar file
-of a type other than
-directory,
+.Sh ОПИСАНИЕ
+Для каждого операнда, представляющего собой
+.Ar файл
+типа, отличного от каталога,
 .Nm
-displays its name as well as any requested,
-associated information.
-For each operand that names a
-.Ar file
-of type directory,
+отображает его имя, а также любую запрошенную сопутствующую информацию.
+Для каждого операнда, представляющего собой
+.Ar файл
+типа каталог,
 .Nm
-displays the names of files contained
-within that directory, as well as any requested, associated
-information.
+отображает имена файлов, содержащихся в этом каталоге, а также любую
+запрошенную сопутствующую информацию.
 .Pp
-If no operands are given, the contents of the current
-directory are displayed.
-If more than one operand is given,
-non-directory operands are displayed first; directory
-and non-directory operands are sorted separately and in
-lexicographical order.
+Если операнды не указаны, отображается содержимое текущего каталога.
+Если указано более одного операнда, сначала отображаются операнды,
+не являющиеся каталогами; операнды-каталоги и операнды-не-каталоги
+сортируются отдельно и в лексикографическом порядке.
 .Pp
-The following options are available:
+Доступны следующие опции:
 .Bl -tag -width indent
 .It Fl A
-Include directory entries whose names begin with a
-dot
-.Pq Sq Pa \&.
-except for
+Включать записи каталога, имена которых начинаются с точки
+.Pq Sq Pa \&. ,
+за исключением
 .Pa \&.
-and
+и
 .Pa .. .
-Automatically set for the super-user unless
-.Fl I
-is specified.
+Устанавливается автоматически для суперпользователя, если не указана опция
+.Fl I .
 .It Fl B
-Force printing of non-printable characters (as defined by
+Принудительно выводить непечатные символы (согласно определению в
 .Xr ctype 3
-and current locale settings) in file names as
+и текущим настройкам локали) в именах файлов в виде
 .Li \e Ns Va xxx ,
-where
+где
 .Va xxx
-is the numeric value of the character in octal.
-This option is not defined in
+— восьмеричное числовое значение символа.
+Эта опция не определена в стандарте
 .St -p1003.1-2008 .
 .It Fl C
-Force multi-column output; this is the default when output is to a terminal.
+Принудительный многоколоночный вывод; это поведение по умолчанию, если
+вывод осуществляется в терминал.
 .It Fl D Ar format
-When printing in the long
-.Pq Fl l
-format, use
+При выводе в длинном формате
+.Pq Fl l ,
+использовать
 .Ar format
-to format the date and time output.
-The argument
+для форматирования даты и времени.
+Аргумент
 .Ar format
-is a string used by
+является строкой, используемой функцией
 .Xr strftime 3 .
-Depending on the choice of format string, this may result in a
-different number of columns in the output.
-This option overrides the
-.Fl T
-option.
-This option is not defined in
+В зависимости от выбранной строки формата, это может привести к изменению
+количества колонок в выводе. Эта опция переопределяет опцию
+.Fl T .
+Эта опция не определена в стандарте
 .St -p1003.1-2008 .
 .It Fl F
-Display a slash
+Отображать косую черту
 .Pq Ql /
-immediately after each pathname that is a directory,
-an asterisk
+сразу после каждого пути, который является каталогом, звездочку
 .Pq Ql *
-after each that is executable,
-an at sign
+после каждого исполняемого файла, знак «at»
 .Pq Ql @
-after each symbolic link,
-an equals sign
+после каждой символической ссылки, знак равенства
 .Pq Ql =
-after each socket,
-a percent sign
+после каждого сокета, знак процента
 .Pq Ql %
-after each whiteout,
-and a vertical bar
+после каждой whiteout-записи и вертикальную черту
 .Pq Ql \&|
-after each that is a
+после каждого
 .Tn FIFO .
 .It Fl G
-Enable colorized output.
-This option is equivalent to defining
+Включить цветной вывод. Эта опция эквивалентна определению переменной
 .Ev CLICOLOR
-or
+или
 .Ev COLORTERM
-in the environment and setting
+в окружении и установке
 .Fl -color Ns = Ns Ar auto .
-(See below.)
-This functionality can be compiled out by removing the definition of
+(См. ниже). Эта функциональность может быть исключена при компиляции путем
+удаления определения
 .Ev COLORLS .
-This option is not defined in
+Эта опция не определена в стандарте
 .St -p1003.1-2008 .
 .It Fl H
-Symbolic links on the command line are followed.
-This option is assumed if
-none of the
-.Fl F , d ,
-or
-.Fl l
-options are specified.
+Следовать по символическим ссылкам, указанным в командной строке.
+Эта опция подразумевается, если не указаны опции
+.Fl F , d
+или
+.Fl l .
 .It Fl I
-Prevent
+Предотвратить автоматическую установку опции
 .Fl A
-from being automatically set for the super-user.
-This option is not defined in
+для суперпользователя.
+Эта опция не определена в стандарте
 .St -p1003.1-2008 .
 .It Fl L
-If argument is a symbolic link, list the file or directory the link references
-rather than the link itself.
-This option cancels the
-.Fl P
-option.
+Если аргумент является символической ссылкой, выводить файл или каталог,
+на который ссылается ссылка, а не саму ссылку.
+Эта опция отменяет действие опции
+.Fl P .
 .It Fl P
-If argument is a symbolic link, list the link itself rather than the
-object the link references.
-This option cancels the
+Если аргумент является символической ссылкой, выводить саму ссылку, а не
+объект, на который она ссылается.
+Эта опция отменяет действие опций
 .Fl H
-and
-.Fl L
-options.
+и
+.Fl L .
 .It Fl R
-Recursively list subdirectories encountered.
+Рекурсивно выводить встреченные подкаталоги.
 .It Fl S
-Sort by size (largest file first) before sorting the operands in
-lexicographical order.
+Сортировать по размеру (сначала самые большие файлы) перед сортировкой
+операндов в лексикографическом порядке.
 .It Fl T
-When printing in the long
+При выводе в длинном формате
 .Pq Fl l
-format, display complete time information for the file, including
-month, day, hour, minute, second, and year.
-The
+отображать полную информацию о времени для файла, включая месяц, день,
+час, минуту, секунду и год. Опция
 .Fl D
-option gives even more control over the output format.
-This option is not defined in
+дает еще больший контроль над форматом вывода.
+Эта опция не определена в стандарте
 .St -p1003.1-2008 .
 .It Fl U
-Use time when file was created for sorting or printing.
-This option is not defined in
+Использовать время создания файла для сортировки или вывода.
+Эта опция не определена в стандарте
 .St -p1003.1-2008 .
 .It Fl W
-Display whiteouts when scanning directories.
-This option is not defined in
+Отображать whiteout-записи при сканировании каталогов.
+Эта опция не определена в стандарте
 .St -p1003.1-2008 .
 .It Fl Z
-Display each file's MAC label; see
+Отображать метку MAC для каждого файла; см.
 .Xr maclabel 7 .
-This option is not defined in
+Эта опция не определена в стандарте
 .St -p1003.1-2008 .
 .It Fl a
-Include directory entries whose names begin with a
-dot
+Включать записи каталогов, имена которых начинаются с точки
 .Pq Sq Pa \&. .
 .It Fl b
-As
+Аналогично
 .Fl B ,
-but use
-.Tn C
-escape codes whenever possible.
-This option is not defined in
+но использовать управляющие коды
+.Tn C ,
+где это возможно.
+Эта опция не определена в стандарте
 .St -p1003.1-2008 .
 .It Fl c
-Use time when file status was last changed for sorting or printing.
+Использовать время последнего изменения статуса файла для сортировки или вывода.
 .It Fl -color Ns = Ns Ar when
-Output colored escape sequences based on
+Выводить цветные управляющие последовательности в зависимости от значения
 .Ar when ,
-which may be set to either
+которое может принимать значения
 .Cm always ,
-.Cm auto ,
-or
+.Cm auto
+или
 .Cm never .
 .Pp
 .Cm always
-will make
+заставляет
 .Nm
-always output color.
-If
+всегда выводить цвета. Если
 .Ev TERM
-is unset or set to an invalid terminal, then
+не установлена или установлена в недопустимый терминал, то
 .Nm
-will fall back to explicit
+вернется к явным управляющим последовательностям
 .Tn ANSI
-escape sequences without the help of
+без помощи
 .Xr termcap 5 .
+Значение
 .Cm always
-is the default if
+используется по умолчанию, если
 .Fl -color
-is specified without an argument.
+указана без аргумента.
 .Pp
 .Cm auto
-will make
+заставляет
 .Nm
-output escape sequences based on
+выводить управляющие последовательности на основе
 .Xr termcap 5 ,
-but only if
+но только если
 .Dv stdout
-is a tty and either the
-.Fl G
-flag is specified or one of the environment variables
+является терминалом (tty) и либо указан флаг
+.Fl G ,
+либо установлена и не пуста одна из переменных окружения
 .Ev COLORTERM
-or
-.Ev CLICOLOR
-is set and not empty.
+или
+.Ev CLICOLOR .
 .Pp
 .Cm never
-will disable color regardless of environment variables.
+отключает цвет независимо от переменных окружения.
+Значение
 .Cm never
-is the default when neither
-.Fl -color
-nor
-.Fl G
-is specified.
+используется по умолчанию, когда не указаны ни
+.Fl -color ,
+ни
+.Fl G .
 .Pp
-For compatibility with GNU coreutils,
+Для совместимости с GNU coreutils,
 .Nm
-supports
+поддерживает
 .Cm yes
-or
+или
 .Cm force
-as equivalent to
+как эквивалент
 .Cm always ,
 .Cm no
-or
+или
 .Cm none
-as equivalent to
+как эквивалент
 .Cm never ,
-and
+и
 .Cm tty
-or
+или
 .Cm if-tty
-as equivalent to
+как эквивалент
 .Cm auto .
 .It Fl d
-Directories are listed as plain files (not searched recursively).
+Выводить каталоги как обычные файлы (без рекурсивного поиска).
 .It Fl f
-Output is not sorted.
-This option turns on
+Вывод не сортируется. Эта опция включает
 .Fl a .
-It also negates the effect of the
+Она также отменяет действие опций
 .Fl r ,
 .Fl S
-and
-.Fl t
-options.
-As allowed by
+и
+.Fl t .
+Как разрешено стандартом
 .St -p1003.1-2008 ,
-this option has no effect on the
+эта опция не влияет на опции
 .Fl d ,
 .Fl l ,
 .Fl R
-and
-.Fl s
-options.
+и
+.Fl s .
 .It Fl g
-Display the long
+Выводить результат в длинном формате
 .Pq Fl l
-format output without the file owner's name or number.
+без имени или номера владельца файла.
 .It Fl -group-directories Ns = Ns Ar order
-Within results for each operand,
-group directories together and print them either
-.Cm first
-or
-.Cm last.
+В результатах для каждого операнда группировать каталоги вместе и выводить
+их либо в начале
+.Pq Cm first ,
+либо в конце
+.Pq Cm last .
 .It Fl -group-directories-first
-Equivalent to
+Эквивалентно
 .Fl -group-directories Ns = Ns Ar first .
-Implemented for compatibility with GNU coreutils.
+Реализовано для совместимости с GNU coreutils.
 .It Fl h
-When used with the
-.Fl l
-option, use unit suffixes: Byte, Kilobyte, Megabyte, Gigabyte, Terabyte
-and Petabyte in order to reduce the number of digits to four or fewer
-using base 2 for sizes.
-This option is not defined in
+При использовании с опцией
+.Fl l ,
+использовать суффиксы единиц измерения: байт, килобайт, мегабайт, гигабайт,
+терабайт и петабайт, чтобы сократить количество цифр до четырех или менее,
+используя основание 2 для размеров.
+Эта опция не определена в стандарте
 .St -p1003.1-2008 .
 .It Fl i
-For each file, print the file's file serial number (inode number).
+Для каждого файла выводить серийный номер файла (номер inode).
 .It Fl k
-This has the same effect as setting environment variable
+Имеет тот же эффект, что и установка переменной окружения
 .Ev BLOCKSIZE
-to 1024, except that it also nullifies any
+в значение 1024, за исключением того, что это также отменяет любые опции
 .Fl h
-options to its left.
+слева от неё.
 .It Fl l
-(The lowercase letter
+(Строчная буква
 .Dq ell . )
-List files in the long format, as described in the
-.Sx The Long Format
-subsection below.
+Выводить файлы в длинном формате, как описано в подразделе
+.Sx Длинный формат
+ниже.
 .It Fl m
-Stream output format; list files across the page, separated by commas.
+Формат потокового вывода; список файлов через запятую по всей ширине страницы.
 .It Fl n
-Display user and group IDs numerically rather than converting to a user
-or group name in a long
-.Pq Fl l
-output.
+Отображать идентификаторы пользователя и группы в числовом виде вместо
+преобразования в имена в длинном формате
+.Pq Fl l .
 .It Fl o
-Include the file flags in a long
-.Pq Fl l
-output.
-This option is incompatible with
+Включать флаги файлов в вывод длинного формата
+.Pq Fl l .
+Эта опция несовместима со стандартом
 .St -p1003.1-2008 .
-See
+См.
 .Xr chflags 1
-for a list of file flags and their meanings.
+для получения списка флагов файлов и их значений.
 .It Fl p
-Write a slash
+Писать косую черту
 .Pq Ql /
-after each filename if that file is a directory.
+после каждого имени файла, если этот файл является каталогом.
 .It Fl q
-Force printing of non-graphic characters in file names as
-the character
+Принудительно выводить неграфические символы в именах файлов как символ
 .Ql \&? ;
-this is the default when output is to a terminal.
+это поведение по умолчанию, если вывод осуществляется в терминал.
 .It Fl r
-Reverse the order of the sort.
+Изменить порядок сортировки на обратный.
 .It Fl s
-Display the number of blocks used in the file system by each file.
-Block sizes and directory totals are handled as described in
-.Sx The Long Format
-subsection below, except (if the long format is not also requested)
-the directory totals are not output when the output is in a
-single column, even if multi-column output is requested.
+Отображать количество блоков, используемых в файловой системе каждым файлом.
+Размеры блоков и итоги по каталогам обрабатываются так, как описано в
+подразделе
+.Sx Длинный формат
+ниже, за исключением случаев (если длинный формат не запрошен), когда итоги
+по каталогам не выводятся при одноколоночном выводе, даже если запрошен
+многоколоночный вывод.
 .It Fl t
-Sort by descending time modified (most recently modified first).
-If two files have the same modification timestamp, sort their names
-in ascending lexicographical order.
-The
+Сортировать по убыванию времени изменения (самые свежие изменения первыми).
+Если два файла имеют одинаковую метку времени изменения, сортировать их
+имена в восходящем лексикографическом порядке. Опция
 .Fl r
-option reverses both of these sort orders.
+инвертирует оба этих порядка сортировки.
 .Pp
-Note that these sort orders are contradictory: the time sequence is in
-descending order, the lexicographical sort is in ascending order.
-This behavior is mandated by
+Обратите внимание, что эти порядки сортировки противоречивы: последовательность
+времени идет по убыванию, а лексикографическая сортировка — по возрастанию.
+Такое поведение предписано стандартом
 .St -p1003.2 .
-This feature can cause problems listing files stored with sequential names on
-FAT file systems, such as from digital cameras, where it is possible to have
-more than one image with the same timestamp.
-In such a case, the photos cannot be listed in the sequence in which
-they were taken.
-To ensure the same sort order for time and for lexicographical sorting, set the
-environment variable
+Эта особенность может вызвать проблемы при выводе файлов с последовательными
+именами на файловых системах FAT (например, с цифровых камер), где возможно
+наличие нескольких изображений с одинаковой меткой времени. В таком случае
+фотографии не могут быть выведены в той последовательности, в которой они были сняты.
+Чтобы обеспечить одинаковый порядок сортировки для времени и лексики, установите
+переменную окружения
 .Ev LS_SAMESORT
-or use the
-.Fl y
-option.
-This causes
+или используйте опцию
+.Fl y .
+Это заставляет
 .Nm
-to reverse the lexicographical sort order when sorting files with the
-same modification timestamp.
+инвертировать лексикографический порядок сортировки при сортировке файлов
+с одинаковой меткой времени изменения.
 .It Fl u
-Use time of last access,
-instead of time of last modification
-of the file for sorting
+Использовать время последнего доступа вместо времени последнего изменения
+файла для сортировки
 .Pq Fl t
-or printing
+или вывода
 .Pq Fl l .
 .It Fl v
-Sort following a natural ordering, using
+Сортировать в естественном порядке, используя
 .Xr strverscmp 3
-instead of
+вместо
 .Xr strcoll 3
-as the comparison function.
-E.g., files lexicographically ordered
-"bloem1", "bloem10", and "bloem9" would instead be ordered
-"bloem1", "bloem9", and "bloem10", as one would perhaps expect.
+в качестве функции сравнения. Например, файлы, лексикографически
+отсортированные как "bloem1", "bloem10" и "bloem9", будут вместо этого
+отсортированы как "bloem1", "bloem9" и "bloem10", как и следовало ожидать.
 .It Fl w
-Force raw printing of non-printable characters.
-This is the default
-when output is not to a terminal.
-This option is not defined in
+Принудительно выводить непечатные символы «как есть» (raw). Это поведение
+по умолчанию, если вывод не в терминал.
+Эта опция не определена в стандарте
 .St -p1003.1-2001 .
 .It Fl x
-The same as
+То же, что и
 .Fl C ,
-except that the multi-column output is produced with entries sorted
-across, rather than down, the columns.
+за исключением того, что многоколоночный вывод формируется с сортировкой
+записей по горизонтали, а не по вертикали.
 .It Fl y
-When the
-.Fl t
-option is set, sort the alphabetical output in the same order as the time output.
-This has the same effect as setting
+Когда установлена опция
+.Fl t ,
+сортировать алфавитный вывод в том же порядке, что и вывод по времени.
+Это имеет тот же эффект, что и установка
 .Ev LS_SAMESORT .
-See the description of the
+См. описание опции
 .Fl t
-option for more details.
-This option is not defined in
+для более подробной информации.
+Эта опция не определена в стандарте
 .St -p1003.1-2001 .
 .It Fl 1
-(The numeric digit
-.Dq one . )
-Force output to be
-one entry per line.
-This is the default when
-output is not to a terminal.
+(Цифра
+.Dq один . )
+Принудительно выводить по одной записи на строку. Это поведение по умолчанию,
+если вывод не в терминал.
 .It Fl ,
-(Comma) When the
+(Запятая) Когда установлена опция
 .Fl l
-or
-.Fl s
-option is set, print file sizes grouped and separated by thousands using the
-non-monetary separator returned by
+или
+.Fl s ,
+выводить размеры файлов, сгруппированные и разделенные по тысячам с использованием
+неденежного разделителя, возвращаемого функцией
 .Xr localeconv 3 ,
-typically a comma or period.
-If no locale is set, or the locale does not have a non-monetary separator, this
-option has no effect.
-This option is not defined in
+обычно это запятая или точка. Если локаль не установлена или в локали нет
+неденежного разделителя, эта опция не имеет эффекта.
+Эта опция не определена в стандарте
 .St -p1003.1-2001 .
 .El
 .Pp
-The
-.Fl 1 , C , x ,
-and
+Опции
+.Fl 1 , C , x
+и
 .Fl l
-options all override each other; the last one specified determines
-the format used.
+переопределяют друг друга; последняя указанная определяет используемый формат.
 .Pp
-The
-.Fl c , u ,
-and
+Опции
+.Fl c , u
+и
 .Fl U
-options all override each other; the last one specified determines
-the file time used.
+переопределяют друг друга; последняя указанная определяет используемое время файла.
 .Pp
-The
+Опции
 .Fl S , t
-and
+и
 .Fl v
-options override each other; the last one specified determines
-the sort order used.
+переопределяют друг друга; последняя указанная определяет используемый порядок
+сортировки.
 .Pp
-The
-.Fl B , b , w ,
-and
+Опции
+.Fl B , b , w
+и
 .Fl q
-options all override each other; the last one specified determines
-the format used for non-printable characters.
+переопределяют друг друга; последняя указанная определяет формат, используемый
+для непечатных символов.
 .Pp
-The
+Опции
 .Fl H , L
-and
+и
 .Fl P
-options all override each other (either partially or fully); they
-are applied in the order specified.
+переопределяют друг друга (частично или полностью); они применяются в порядке
+их указания.
 .Pp
-By default,
+По умолчанию
 .Nm
-lists one entry per line to standard
-output; the exceptions are to terminals or when the
+выводит по одной записи на строку в стандартный поток вывода; исключениями
+являются терминалы или случаи, когда указаны опции
 .Fl C
-or
-.Fl x
-options are specified.
+или
+.Fl x .
 .Pp
-File information is displayed with one or more
-.Ao blank Ac Ns s
-separating the information associated with the
-.Fl i , s ,
-and
-.Fl l
-options.
-.Ss The Long Format
-If the
-.Fl l
-option is given, the following information
-is displayed for each file:
-file mode,
-number of links, owner name, group name,
-MAC label,
-number of bytes in the file, abbreviated
-month, day-of-month file was last modified,
-hour file last modified, minute file last
-modified, and the pathname.
+Информация о файлах отображается с одним или несколькими пробелами
+.Pq Ao blank Ac Ns s ,
+разделяющими информацию, связанную с опциями
+.Fl i , s
+и
+.Fl l .
+.Ss Длинный формат
+Если указана опция
+.Fl l ,
+для каждого файла отображается следующая информация: режим доступа к файлу,
+количество ссылок, имя владельца, имя группы, метка MAC, количество байтов
+в файле, сокращенное название месяца, день месяца последнего изменения,
+час последнего изменения, минута последнего изменения и путь.
 .Pp
-If the modification time of the file is more than 6 months
-in the past or future, and the
+Если время изменения файла более чем на 6 месяцев в прошлом или будущем,
+и опции
 .Fl D
-or
+или
 .Fl T
-are not specified,
-then the year of the last modification
-is displayed in place of the hour and minute fields.
+не указаны, то год последнего изменения отображается вместо полей часа и минуты.
 .Pp
-If the owner or group names are not a known user or group name,
-or the
-.Fl n
-option is given,
-the numeric ID's are displayed.
+Если имена владельца или группы не являются известными именами пользователя
+или группы, или указана опция
+.Fl n ,
+отображаются числовые идентификаторы.
 .Pp
-If the file is a character special or block special file,
-the device number for the file is displayed in the size field.
-If the file is a symbolic link the pathname of the
-linked-to file is preceded by
+Если файл является специальным файлом устройства (символьным или блочным),
+в поле размера отображается номер устройства. Если файл является символической
+ссылкой, пути к файлу, на который указывает ссылка, предшествует строка
 .Dq Li -> .
 .Pp
-The listing of a directory's contents is preceded
-by a labeled total number of blocks used in the file system by the files
-which are listed as the directory's contents
-(which may or may not include
-.Pa \&.
-and
+Списку содержимого каталога предшествует строка с общим количеством блоков,
+используемых в файловой системе файлами, которые перечислены как содержимое
+каталога (которое может включать или не включать
+.Pa \&. ,
 .Pa ..
-and other files which start with a dot, depending on other options).
-If the
-.Fl h
-option is given,
-the total size is displayed as the number of bytes.
+и другие файлы, начинающиеся с точки, в зависимости от других опций).
+Если указана опция
+.Fl h ,
+общий размер отображается в байтах.
 .Pp
-The default block size is 512 bytes.
-The block size may be set with option
+Размер блока по умолчанию составляет 512 байт. Размер блока может быть установлен
+с помощью опции
 .Fl k
-or environment variable
+или переменной окружения
 .Ev BLOCKSIZE .
-Numbers of blocks in the output will have been rounded up so the
-numbers of bytes is at least as many as used by the corresponding
-file system blocks (which might have a different size).
+Количество блоков в выводе будет округлено в большую сторону, чтобы количество
+байтов было не меньше того, которое используется соответствующими блоками файловой
+системы (которые могут иметь другой размер).
 .Pp
-The file mode printed under the
-.Fl l
-option consists of the
-entry type and the permissions.
-The entry type character describes the type of file, as
-follows:
+Режим доступа к файлу, выводимый при опции
+.Fl l ,
+состоит из типа записи и прав доступа. Символ типа записи описывает тип файла
+следующим образом:
 .Pp
 .Bl -tag -width 4n -offset indent -compact
 .It Sy \-
-Regular file.
+Обычный файл.
 .It Sy b
-Block special file.
+Блочный специальный файл.
 .It Sy c
-Character special file.
+Символьный специальный файл.
 .It Sy d
-Directory.
+Каталог.
 .It Sy l
-Symbolic link.
+Символическая ссылка.
 .It Sy p
 .Tn FIFO .
 .It Sy s
-Socket.
+Сокет.
 .It Sy w
-Whiteout.
+Whiteout-запись.
 .El
 .Pp
-The next three fields
-are three characters each:
-owner permissions,
-group permissions, and
-other permissions.
-Each field has three character positions:
+Следующие три поля состоят из трех символов каждое: права владельца,
+права группы и права остальных пользователей. Каждое поле имеет три позиции
+для символов:
 .Bl -enum -offset indent
 .It
-If
+Если
 .Sy r ,
-the file is readable; if
+файл доступен для чтения; если
 .Sy \- ,
-it is not readable.
+недоступен для чтения.
 .It
-If
+Если
 .Sy w ,
-the file is writable; if
+файл доступен для записи; если
 .Sy \- ,
-it is not writable.
+недоступен для записи.
 .It
-The first of the following that applies:
+Первое из применимых:
 .Bl -tag -width 4n -offset indent
 .It Sy S
-If in the owner permissions, the file is not executable and
-set-user-ID mode is set.
-If in the group permissions, the file is not executable
-and set-group-ID mode is set.
+Если в правах владельца: файл не является исполняемым и установлен бит set-user-ID.
+Если в правах группы: файл не является исполняемым и установлен бит set-group-ID.
 .It Sy s
-If in the owner permissions, the file is executable
-and set-user-ID mode is set.
-If in the group permissions, the file is executable
-and setgroup-ID mode is set.
+Если в правах владельца: файл является исполняемым и установлен бит set-user-ID.
+Если в правах группы: файл является исполняемым и установлен бит set-group-ID.
 .It Sy x
-The file is executable or the directory is
-searchable.
+Файл является исполняемым или в каталоге разрешен поиск.
 .It Sy \-
-The file is neither readable, writable, executable,
-nor set-user-ID nor set-group-ID mode, nor sticky.
-(See below.)
+Файл не является ни читаемым, ни записываемым, ни исполняемым, не имеет
+битов set-user-ID или set-group-ID, а также sticky-бита. (См. ниже).
 .El
 .Pp
-These next two apply only to the third character in the last group
-(other permissions).
+Следующие два применяются только к третьему символу в последней группе
+(права остальных).
 .Bl -tag -width 4n -offset indent
 .It Sy T
-The sticky bit is set
-(mode
-.Li 1000 ) ,
-but not execute or search permission.
-(See
+Установлен sticky-бит
+.Pq режим Li 1000 ,
+но нет прав на выполнение или поиск. (См.
 .Xr chmod 1
-or
+или
 .Xr sticky 7 . )
 .It Sy t
-The sticky bit is set (mode
-.Li 1000 ) ,
-and is searchable or executable.
-(See
+Установлен sticky-бит
+.Pq режим Li 1000 ,
+и разрешен поиск или выполнение. (См.
 .Xr chmod 1
-or
+или
 .Xr sticky 7 . )
 .El
 .El
 .Pp
-The next field contains a
-plus
-.Pq Ql +
-character if the file has an ACL, or a
-space
-.Pq Ql " "
-if it does not.
-The
+Следующее поле содержит символ «плюс»
+.Pq Ql + ,
+если у файла есть ACL, или пробел
+.Pq Ql " " ,
+если его нет. Утилита
 .Nm
-utility does not show the actual ACL;
-use
-.Xr getfacl 1
-to do this.
-.Sh ENVIRONMENT
-The following environment variables affect the execution of
+не показывает сам ACL; для этого используйте
+.Xr getfacl 1 .
+.Sh ОКРУЖЕНИЕ
+Следующие переменные окружения влияют на выполнение
 .Nm :
 .Bl -tag -width ".Ev CLICOLOR_FORCE"
 .It Ev BLOCKSIZE
-If this is set, its value, rounded up to 512 or down to a
-multiple of 512, will be used as the block size in bytes by the
+Если установлена, её значение, округленное до 512 в большую сторону или
+до кратного 512 в меньшую сторону, будет использоваться в качестве размера
+блока в байтах для опций
 .Fl l
-and
-.Fl s
-options.
-See
-.Sx The Long Format
-subsection for more information.
+и
+.Fl s .
+См. подраздел
+.Sx Длинный формат
+для получения дополнительной информации.
 .It Ev CLICOLOR
-Use
+Использовать цветовые последовательности
 .Tn ANSI
-color sequences to distinguish file types.
-See
+для различения типов файлов. См.
 .Ev LSCOLORS
-below.
-In addition to the file types mentioned in the
-.Fl F
-option some extra attributes (setuid bit set, etc.) are also displayed.
-The colorization is dependent on a terminal type with the proper
-.Xr termcap 5
-capabilities.
-The default
+ниже. В дополнение к типам файлов, упомянутым в опции
+.Fl F ,
+также отображаются некоторые дополнительные атрибуты (установленный бит setuid и т. д.).
+Раскрашивание зависит от типа терминала с соответствующими возможностями
+.Xr termcap 5 .
+Стандартная консоль
 .Dq Li cons25
-console has the proper capabilities,
-but to display the colors in an
+обладает необходимыми возможностями, но для отображения цветов в
 .Xr xterm 1 Pq Pa ports/x11/xterm ,
-for example,
-the
+например, переменная
 .Ev TERM
-variable must be set to
+должна быть установлена в
 .Dq Li xterm-color .
-Other terminal types may require similar adjustments.
-Colorization
-is silently disabled if the output is not directed to a terminal
-unless the
+Другие типы терминалов могут потребовать аналогичных настроек. Раскрашивание
+молча отключается, если вывод направлен не в терминал, если только не определена
+переменная
 .Ev CLICOLOR_FORCE
-variable is defined or
+или
 .Fl -color
-is set to
+не установлена в значение
 .Dq always .
 .It Ev CLICOLOR_FORCE
-Color sequences are normally disabled if the output is not directed to
-a terminal.
-This can be overridden by setting this variable.
-The
+Цветовые последовательности обычно отключаются, если вывод направлен не в терминал.
+Это можно переопределить, установив данную переменную. Переменная
 .Ev TERM
-variable still needs to reference a color capable terminal however
-otherwise it is not possible to determine which color sequences to
-use.
+все равно должна ссылаться на терминал с поддержкой цвета, иначе невозможно
+определить, какие цветовые последовательности использовать.
 .It Ev COLORTERM
-See description for
+См. описание для
 .Ev CLICOLOR
-above.
+выше.
 .It Ev COLUMNS
-If this variable contains a string representing a
-decimal integer, it is used as the
-column position width for displaying
-multiple-text-column output.
-The
+Если эта переменная содержит строку, представляющую десятичное целое число,
+она используется как ширина позиции столбца для отображения многоколоночного
+текстового вывода. Утилита
 .Nm
-utility calculates how
-many pathname text columns to display
-based on the width provided.
-(See
+вычисляет, сколько колонок текста пути отображать на основе предоставленной ширины.
+(См.
 .Fl C
-and
+и
 .Fl x . )
 .It Ev LANG
-The locale to use when determining the order of day and month in the long
-.Fl l
-format output.
-See
+Локаль, используемая при определении порядка дня и месяца в выводе длинного формата
+.Fl l .
+См.
 .Xr environ 7
-for more information.
+для получения дополнительной информации.
 .It Ev LSCOLORS
-The value of this variable describes what color to use for which
-attribute when colors are enabled with
+Значение этой переменной описывает, какой цвет использовать для какого атрибута,
+когда цвета включены с помощью
 .Ev CLICOLOR
-or
+или
 .Ev COLORTERM .
-This string is a concatenation of pairs of the format
+Эта строка представляет собой конкатенацию пар формата
 .Ar f Ns Ar b ,
-where
+где
 .Ar f
-is the foreground color and
+— это цвет текста (foreground), а
 .Ar b
-is the background color.
-When the background color is capitalized, the text is underlined.
+— цвет фона (background). Если буква цвета фона заглавная, текст подчеркивается.
 .Pp
-The color designators are as follows:
+Обозначения цветов следующие:
 .Pp
 .Bl -tag -width 4n -offset indent -compact
 .It Sy a
-black
+черный
 .It Sy b
-red
+красный
 .It Sy c
-green
+зеленый
 .It Sy d
-brown
+коричневый
 .It Sy e
-blue
+синий
 .It Sy f
-magenta
+пурпурный
 .It Sy g
-cyan
+голубой
 .It Sy h
-light grey
+светло-серый
 .It Sy A
-bold or underlined black, usually shows up as dark grey
+жирный или подчеркнутый черный, обычно выглядит как темно-серый
 .It Sy B
-bold or underlined red
+жирный или подчеркнутый красный
 .It Sy C
-bold or underlined green
+жирный или подчеркнутый зеленый
 .It Sy D
-bold or underlined brown, usually shows up as yellow
+жирный или подчеркнутый коричневый, обычно выглядит как желтый
 .It Sy E
-bold or underlined blue
+жирный или подчеркнутый синий
 .It Sy F
-bold or underlined magenta
+жирный или подчеркнутый пурпурный
 .It Sy G
-bold or underlined cyan
+жирный или подчеркнутый голубой
 .It Sy H
-bold or underlined light grey; looks like bright white
+жирный или подчеркнутый светло-серый; выглядит как ярко-белый
 .It Sy x
-default foreground or background
+цвет текста или фона по умолчанию
 .It Sy X
-default foreground or background, with an underline or bold
+цвет текста или фона по умолчанию с подчеркиванием или жирным шрифтом
 .El
 .Pp
-Note that the above are standard
-.Tn ANSI
-colors.
-The actual display may differ
-depending on the color capabilities of the terminal in use.
+Обратите внимание, что вышеуказанные цвета являются стандартными цветами
+.Tn ANSI .
+Фактическое отображение может отличаться в зависимости от цветовых возможностей
+используемого терминала.
 .Pp
-The order of the attributes are as follows:
+Порядок атрибутов следующий:
 .Pp
 .Bl -enum -offset indent -compact
 .It
-directory
+каталог
 .It
-symbolic link
+символическая ссылка
 .It
-socket
+сокет
 .It
-pipe
+канал (pipe)
 .It
-executable
+исполняемый файл
 .It
-block special
+блочный специальный файл
 .It
-character special
+символьный специальный файл
 .It
-executable with setuid bit set
+исполняемый файл с установленным битом setuid
 .It
-executable with setgid bit set
+исполняемый файл с установленным битом setgid
 .It
-directory writable to others, with sticky bit
+каталог, доступный для записи остальным пользователям, со sticky-битом
 .It
-directory writable to others, without sticky bit
+каталог, доступный для записи остальным пользователям, без sticky-бита
 .El
 .Pp
-The default is
+Значение по умолчанию —
 .Qq "exfxcxdxbxegedabagacad" ,
-i.e., blue foreground and
-default background for regular directories, black foreground and red
-background for setuid executables, etc.
+т. е. синий текст и фон по умолчанию для обычных каталогов, черный текст и
+красный фон для исполняемых файлов с setuid и т. д.
 .It Ev LS_COLWIDTHS
-If this variable is set, it is considered to be a
-colon-delimited list of minimum column widths.
-Unreasonable
-and insufficient widths are ignored (thus zero signifies
-a dynamically sized column).
-Not all columns have changeable widths.
-The fields are,
-in order: inode, block count, number of links, user name,
-group name, flags, file size, file name.
+Если эта переменная установлена, она считается списком минимальных ширин
+столбцов, разделенных двоеточием. Необоснованные и недостаточные ширины
+игнорируются (таким образом, ноль означает динамически изменяемый размер столбца).
+Не у всех столбцов можно изменить ширину. Поля в порядке следования:
+inode, количество блоков, количество ссылок, имя пользователя, имя группы,
+флаги, размер файла, имя файла.
 .It Ev LS_SAMESORT
-If this variable is set, the
+Если эта переменная установлена, опция
 .Fl t
-option sorts the names of files with the same modification timestamp in the same
-sense as the time sort.
-See the description of the
+сортирует имена файлов с одинаковой меткой времени изменения в том же направлении,
+что и сортировка по времени. См. описание опции
 .Fl t
-option for more details.
+для более подробной информации.
 .It Ev TERM
-The
+Функциональность
 .Ev CLICOLOR
-and
+и
 .Ev COLORTERM
-functionality depends on a terminal type with color capabilities.
+зависит от типа терминала с поддержкой цвета.
 .It Ev TZ
-The timezone to use when displaying dates.
-See
+Часовой пояс, используемый при отображении дат. См.
 .Xr environ 7
-for more information.
+для получения дополнительной информации.
 .El
-.Sh EXIT STATUS
-.Ex -std
-.Sh EXAMPLES
-List the contents of the current working directory in long format:
+.Sh СТАТУС ЗАВЕРШЕНИЯ
+Утилита
+.Nm
+завершает работу с кодом 0 при успешном выполнении и >0 при возникновении ошибки.
+.Sh ПРИМЕРЫ
+Вывести содержимое текущего рабочего каталога в длинном формате:
 .Pp
 .Dl $ ls -l
 .Pp
-In addition to listing the contents of the current working directory in
-long format, show inode numbers, file flags (see
-.Xr chflags 1 ) ,
-and suffix each filename with a symbol representing its file type:
+В дополнение к выводу содержимого текущего рабочего каталога в длинном формате,
+показать номера inode, флаги файлов (см.
+.Xr chflags 1 )
+и добавить к каждому имени файла символ, представляющий его тип:
 .Pp
 .Dl $ ls -lioF
 .Pp
-List the files in
+Вывести файлы в
 .Pa /var/log ,
-sorting the output such that the mostly recently modified entries are
-printed first:
+отсортировав вывод так, чтобы самые последние измененные записи выводились первыми:
 .Pp
 .Dl $ ls -lt /var/log
-.Sh COMPATIBILITY
-The group field is now automatically included in the long listing for
-files in order to be compatible with the
-.St -p1003.2
-specification.
-.Sh SEE ALSO
+.Sh СОВМЕСТИМОСТЬ
+Поле группы теперь автоматически включается в длинный список файлов для
+совместимости со спецификацией
+.St -p1003.2 .
+.Sh СМ. ТАКЖЕ
 .Xr chflags 1 ,
 .Xr chmod 1 ,
 .Xr getfacl 1 ,
@@ -913,57 +821,56 @@ specification.
 .Xr sticky 7 ,
 .Xr symlink 7 ,
 .Xr getfmac 8
-.Sh STANDARDS
-With the exception of options
+.Sh СТАНДАРТЫ
+За исключением опций
 .Fl g , n
-and
+и
 .Fl o ,
-the
+утилита
 .Nm
-utility conforms to
+соответствует стандартам
 .St -p1003.1-2001
-and
+и
 .St -p1003.1-2008 .
-The options
+Опции
 .Fl B , D , G , I , T , U , W , Z , b , h , v , w , y
 ,
 .Fl ,
 .Fl -color
-and
+и
 .Fl -group-directories Ns =
-(including
+(включая
 .Fl -group-directories-first )
-are non-standard extensions.
+являются нестандартными расширениями.
 .Pp
-The ACL support is compatible with
+Поддержка ACL совместима с проектом
 .Tn IEEE
 Std\~1003.2c
 .Pq Dq Tn POSIX Ns .2c
 Draft\~17
-(withdrawn).
-.Sh HISTORY
-An
+(отозван).
+.Sh ИСТОРИЯ
+Команда
 .Nm
-command appeared in
+появилась в
 .At v1 .
 .Pp
-The
+Опция
 .Fl v
-option was added in
+была добавлена в
 .Fx 13.2 .
-.Sh BUGS
-To maintain backward compatibility, the relationships between the many
-options are quite complex.
+.Sh ОШИБКИ
+Для поддержания обратной совместимости отношения между многочисленными опциями
+весьма сложны.
 .Pp
-The exception mentioned in the
-.Fl s
-option description might be a feature that was
-based on the fact that single-column output
-usually goes to something other than a terminal.
-It is debatable whether this is a design bug.
+Исключение, упомянутое в описании опции
+.Fl s ,
+может быть особенностью, основанной на том факте, что одноколоночный вывод
+обычно направляется не в терминал. Является ли это ошибкой проектирования —
+вопрос спорный.
 .Pp
+Стандарт
 .St -p1003.2
-mandates opposite sort orders for files with the same timestamp when
-sorting with the
-.Fl t
-option.
+предписывает противоположные порядки сортировки для файлов с одинаковой меткой
+времени при сортировке с использованием опции
+.Fl t .
