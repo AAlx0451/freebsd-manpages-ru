@@ -1,4 +1,4 @@
-.\"
+".\"
 .\" Copyright (c) 2004-2009, Jilles Tjoelker
 .\" All rights reserved.
 .\"
@@ -33,67 +33,67 @@
 .Dd October 22, 2025
 .Dt PWAIT 1
 .Os
-.Sh NAME
+.Sh НАЗВАНИЕ
 .Nm pwait
-.Nd wait for processes to terminate
-.Sh SYNOPSIS
+.Nd ожидание завершения работы процессов
+.Sh СИНТАКСИС
 .Nm
 .Op Fl t Ar duration
 .Op Fl opv
 .Ar pid
 \&...
-.Sh DESCRIPTION
-The
+.Sh ОПИСАНИЕ
+Утилита
 .Nm
-utility will wait until each of the given processes has terminated.
+ожидает завершения работы каждого из указанных процессов.
 .Pp
-The following option is available:
+Доступны следующие опции:
 .Bl -tag -width indent
 .It Fl o
-Exit when any of the given processes has terminated.
+Завершить работу, когда завершится любой из указанных процессов.
 .It Fl p
-On exit, print a list of processes that have not terminated.
+При выходе вывести список процессов, которые ещё не завершились.
 .It Fl t Ar duration
-If any process is still running after
+Если какой-либо процесс всё ещё выполняется по истечении времени
 .Ar duration ,
 .Nm
-will exit.
-The
+завершит работу.
+Значение
 .Ar duration
-value can be integer or decimal numbers.
-Values without unit symbols are interpreted as seconds.
+может быть целым или десятичным числом.
+Значения без указания единиц измерения интерпретируются в секундах.
 .Pp
-Supported unit symbols are:
+Поддерживаемые единицы измерения:
 .Bl -tag -width indent -compact
 .It s
-seconds
+секунды
 .It m
-minutes
+минуты
 .It h
-hours
+часы
 .El
 .It Fl v
-Print the exit status when each process terminates or
-.Ql timeout
-if the timer goes off earlier.
+Выводить статус выхода каждого процесса при его завершении или
+.Ql timeout ,
+если таймер истечёт раньше.
 .El
-.Sh EXIT STATUS
-The
+.Sh СТАТУС ВЫХОДА
+Утилита
 .Nm
-utility exits 0 on success, and >0 if an error occurs.
+возвращает статус 0 в случае успешного завершения и >0 при возникновении ошибки.
 .Pp
-If the
+Если указан флаг
 .Fl t
-flag is specified and a timeout occurs, the exit status will be 124.
+и происходит превышение времени ожидания (тайм-аут), статус выхода будет равен 124.
 .Pp
-Invalid pids elicit a warning message but are otherwise ignored.
-.Sh EXAMPLES
-Start two
+Некорректные идентификаторы процессов (pid) вызывают предупреждающее сообщение, но в остальном игнорируются.
+.Sh ПРИМЕРЫ
+Запустить два процесса
 .Xr sleep 1
-processes in the background.
-The first one will sleep for 30 seconds and the second one for one hour.
-Wait for any of them to finish but no more than 5 seconds.
-Since a timeout occurs the exit status is 124:
+в фоновом режиме.
+Первый будет ожидать 30 секунд, а второй — один час.
+Ожидать завершения любого из них, но не более 5 секунд.
+Так как произойдёт тайм-аут, статус выхода будет равен 124:
 .Bd -literal -offset indent
 $ sleep 30 & sleep 3600 &
 [1] 1646
@@ -103,10 +103,10 @@ $ echo $?
 124
 .Ed
 .Pp
-Same as above but try to obtain the exit status of the processes.
-In this case
-.Ql timeout
-is shown and the exit status is 124:
+То же, что и выше, но с попыткой получить статус выхода процессов.
+В этом случае выводится
+.Ql timeout ,
+а статус выхода равен 124:
 .Bd -literal -offset indent
 $ sleep 30 & sleep 3600 &
 [1] 1652
@@ -117,10 +117,10 @@ $ echo $?
 124
 .Ed
 .Pp
-Start two
+Запустить в фоновом режиме два процесса
 .Xr sleep 1
-processes in the background sleeping for 30 and 40 seconds respectively.
-Wait 60 seconds for any of them to finish and get their exit codes:
+длительностью 30 и 40 секунд соответственно.
+Ожидать в течение 60 секунд завершения любого из них и получить их коды выхода:
 .Bd -literal -offset indent
 $ sleep 30 & sleep 40 &
 [1] 1674
@@ -133,23 +133,22 @@ $ pwait -v -t 60 1674 1675
 $ echo $?
 0
 .Ed
-.Sh SEE ALSO
+.Sh СМ. ТАКЖЕ
 .Xr kill 1 ,
 .Xr pkill 1 ,
 .Xr ps 1 ,
 .Xr wait 1 ,
 .Xr kqueue 2
-.Sh NOTES
+.Sh ПРИМЕЧАНИЯ
 .Nm
-is not a substitute for the
-.Xr wait 1
-builtin
-as it will not clean up any zombies or state in the parent process.
+не заменяет встроенную команду
+.Xr wait 1 ,
+так как она не очищает процессы-зомби и не освобождает ресурсы в родительском процессе.
 .Pp
-To avoid deadlock,
+Во избежание взаимной блокировки (deadlock)
 .Nm
-will ignore its own pid, if it is provided as a process id to wait for.
-.Sh HISTORY
-A
+игнорирует собственный pid, если он передан в качестве идентификатора процесса для ожидания.
+.Sh ИСТОРИЯ
+Команда
 .Nm
-command first appeared in SunOS 5.8.
+впервые появилась в SunOS 5.8.
