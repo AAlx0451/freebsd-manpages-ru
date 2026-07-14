@@ -28,10 +28,10 @@
 .Dd April 11, 2026
 .Dt TIMEOUT 1
 .Os
-.Sh NAME
+.Sh НАЗВАНИЕ
 .Nm timeout
-.Nd run a command with a time limit
-.Sh SYNOPSIS
+.Nd запуск команды с ограничением по времени
+.Sh СИНТАКСИС
 .Nm
 .Op Fl f | Fl -foreground
 .Op Fl k Ar time | Fl -kill-after Ar time
@@ -41,202 +41,198 @@
 .Ar duration
 .Ar command
 .Op Ar arg ...
-.Sh DESCRIPTION
+.Sh ОПИСАНИЕ
+Утилита
 .Nm Timeout
-starts the
+запускает команду
 .Ar command
-with its
-.Ar arg
-list.
-If the
+с указанным списком аргументов
+.Ar arg .
+Если команда
 .Ar command
-is still running after
+всё ещё выполняется по истечении времени
 .Ar duration ,
-it is killed by sending the
-.Ar signal ,
-or
-.Dv SIGTERM
-if the
+она принудительно завершается путём отправки сигнала
+.Ar signal
+(или
+.Dv SIGTERM ,
+если опция
 .Fl s
-option is unspecified.
-The special
+не указана).
+Специальное значение
 .Ar duration ,
-zero, signifies no limit.
-Therefore, a signal is never sent if
+равное нулю, означает отсутствие ограничений.
+Таким образом, если значение
 .Ar duration
-is 0.
+равно 0, сигнал никогда не отправляется.
 .Pp
-The signal dispositions inherited by the
-.Ar command
-are the same as the dispositions that
-.Nm
-inherited, except for the signal that will be sent upon timeout,
-which is reset to take the default action and should terminate
-the process.
-.Pp
-If
-.Nm
-receives the
-.Dv SIGALRM
-signal, it will behave as if the time limit has been reached
-and send the specified signal to
-.Ar command .
-For any other signals delivered to
-.Nm ,
-it will propagate them to
+Способы обработки сигналов, унаследованные командой
 .Ar command ,
-with the exception of
+совпадают с теми, которые унаследовала утилита
+.Nm ,
+за исключением сигнала, который будет отправлен по истечении времени ожидания;
+обработчик этого сигнала сбрасывается на действие по умолчанию, которое должно завершить
+процесс.
+.Pp
+Если утилита
+.Nm
+получает сигнал
+.Dv SIGALRM ,
+она ведёт себя так, как будто ограничение по времени было достигнуто,
+и отправляет указанный сигнал команде
+.Ar command .
+Все остальные сигналы, доставленные утилите
+.Nm ,
+она передаёт дальше команде
+.Ar command ,
+за исключением сигналов
 .Dv SIGKILL
-and
+и
 .Dv SIGSTOP .
-If you want to prevent the
+Если вы хотите предотвратить завершение команды
 .Ar command
-from being timed out, send
+по тайм-ауту, отправьте сигнал
 .Dv SIGKILL
-to
+утилите
 .Nm .
 .Pp
-The options are as follows:
+Доступны следующие опции:
 .Bl -tag -width indent
 .It Fl f , Fl -foreground
-Only time out the
-.Ar command
-itself, but do not propagate signals to its descendants.
-See the
-.Sx IMPLEMENTATION NOTES
-section for more details.
-.It Fl k Ar time , Fl -kill-after Ar time
-Send a
-.Dv SIGKILL
-signal if
-.Ar command
-is still running after
-.Ar time
-since the first signal was sent.
-.It Fl p , Fl -preserve-status
-Always exit with the same status as
+Ограничивать по времени только саму команду
 .Ar command ,
-even if the timeout was reached.
-.It Fl s Ar signal , Fl -signal Ar signal
-Specify the signal to send on timeout.
-By default,
-.Dv SIGTERM
-is sent.
-.It Fl v , Fl -verbose
-Show information to
-.Xr stderr 4
-about timeouts, signals to be sent, and the
+но не передавать сигналы её дочерним процессам (потомкам).
+Для получения подробной информации см. раздел
+.Sx ПРИМЕЧАНИЯ ПО РЕАЛИЗАЦИИ .
+.It Fl k Ar time , Fl -kill-after Ar time
+Отправить сигнал
+.Dv SIGKILL ,
+если команда
 .Ar command
-exits.
-.El
-.Ss Duration Format
-The
-.Ar duration
-and
+всё ещё выполняется по истечении времени
 .Ar time
-are non-negative integer or real (decimal) numbers, with an optional
-suffix specifying the unit.
-Values without an explicit unit are interpreted as seconds.
+после отправки первого сигнала.
+.It Fl p , Fl -preserve-status
+Всегда завершать работу с тем же статусом выхода, что и у команды
+.Ar command ,
+даже если время ожидания истекло.
+.It Fl s Ar signal , Fl -signal Ar signal
+Указать сигнал, отправляемый при истечении времени ожидания.
+По умолчанию отправляется сигнал
+.Dv SIGTERM .
+.It Fl v , Fl -verbose
+Выводить в стандартный поток ошибок
+.Xr stderr 4
+информацию о превышении времени ожидания, отправляемых сигналах и о
+завершении работы команды
+.Ar command .
+.El
+.Ss Формат длительности
+Параметры
+.Ar duration
+и
+.Ar time
+представляют собой неотрицательные целые или вещественные (десятичные) числа с необязательным
+суффиксом, указывающим единицу измерения.
+Значения без явного указания единицы измерения интерпретируются как секунды.
 .Pp
-Supported unit suffixes are:
+Поддерживаемые суффиксы единиц измерения:
 .Bl -tag -offset indent -width indent -compact
 .It Cm s
-seconds
+секунды
 .It Cm m
-minutes
+минуты
 .It Cm h
-hours
+часы
 .It Cm d
-days
+дни
 .El
-.Sh IMPLEMENTATION NOTES
-If the
+.Sh ПРИМЕЧАНИЯ ПО РЕАЛИЗАЦИИ
+Если опция
 .Fl -foreground
-option is not specified,
+не указана, утилита
 .Nm
-runs as the reaper (see also
+работает в режиме «жнеца» (reaper, см. также
 .Xr procctl 2 )
-of the
+для команды
 .Ar command
-and its descendants, and will wait for all the descendants to terminate.
-This behavior might cause surprises if there are descendants running
-in the background, because they will ignore
+и её потомков, и будет ожидать завершения работы всех дочерних процессов.
+Такое поведение может преподнести сюрпризы, если дочерние процессы выполняются
+в фоновом режиме, поскольку они будут игнорировать сигналы
 .Dv SIGINT
-and
-.Dv SIGQUIT
-signals.
-For example, the following command that sends a
-.Dv SIGTERM
-signal will complete in 2 seconds:
+и
+.Dv SIGQUIT .
+Например, следующая команда, отправляющая сигнал
+.Dv SIGTERM ,
+завершится за 2 секунды:
 .Dl $ timeout -s TERM 2 sh -c 'sleep 4 & sleep 5'
-However, this command that sends a
-.Dv SIGINT
-signal will complete in 4 seconds:
+Однако эта же команда, отправляющая сигнал
+.Dv SIGINT ,
+завершится за 4 секунды:
 .Dl $ timeout -s INT 2 sh -c 'sleep 4 & sleep 5'
-.Sh EXIT STATUS
-If the time limit was reached and the
+.Sh СТАТУС ВЫХОДА
+Если ограничение по времени было достигнуто и опция
 .Fl -preserve-status
-option is not specified, the exit status is 124.
-Otherwise,
+не указана, статус выхода равен 124.
+В противном случае утилита
 .Nm
-exits with the same exit status as the
+завершает работу с тем же статусом выхода, что и команда
 .Ar command .
-For example,
+Например, утилита
 .Nm
-will terminate itself with the same signal if the
+завершит свою работу по тому же сигналу, если работа команды
 .Ar command
-is terminated by a signal.
+была прервана сигналом.
 .Pp
-If an error occurred, the following exit values are returned:
+В случае возникновения ошибки возвращаются следующие коды выхода:
 .Bl -tag -offset indent -width indent -compact
 .It 125
-An error other than the two described below occurred.
-For example, an invalid duration or signal was specified.
+Произошла ошибка, отличная от двух описанных ниже.
+Например, указана неверная длительность или неверный сигнал.
 .It 126
-The
+Команда
 .Ar command
-was found but could not be executed.
+найдена, но не может быть выполнена.
 .It 127
-The
+Команда
 .Ar command
-could not be found.
+не найдена.
 .El
-.Sh EXAMPLES
-Run
+.Sh ПРИМЕРЫ
+Запустить команду
 .Xr sleep 1
-with a time limit of 4 seconds.
-Since the command completes in 2 seconds, the exit status is 0:
+с ограничением времени в 4 секунды.
+Поскольку команда выполняется за 2 секунды, статус выхода будет равен 0:
 .Bd -literal -offset indent
 $ timeout 4 sleep 2
 $ echo $?
 0
 .Ed
 .Pp
-Run
+Запустить команду
 .Xr sleep 1
-for 4 seconds and terminate process after 2 seconds.
-The exit status is 124 since
+на 4 секунды и завершить работу процесса через 2 секунды.
+Статус выхода равен 124, так как опция
 .Fl -preserve-status
-is not used:
+не используется:
 .Bd -literal -offset indent
 $ timeout 2 sleep 4
 $ echo $?
 124
 .Ed
 .Pp
-Same as above but preserving status.
-The exit status is 128 + signal number (15 for
-.Dv SIGTERM )
-for most shells:
+То же, что и выше, но с сохранением статуса.
+Для большинства командных оболочек статус выхода будет равен 128 + номер сигнала (15 для
+.Dv SIGTERM ) :
 .Bd -literal -offset indent
 $ timeout --preserve-status 2 sleep 4
 $ echo $?
 143
 .Ed
 .Pp
-Same as above but sending
+То же, что и выше, но с отправкой сигнала
 .Dv SIGALRM
-(signal number 14) instead of
+(номер сигнала 14) вместо
 .Dv SIGTERM :
 .Bd -literal -offset indent
 $ timeout --preserve-status -s SIGALRM 2 sleep 4
@@ -244,53 +240,51 @@ $ echo $?
 142
 .Ed
 .Pp
-Try to
+Попытаться загрузить с помощью
 .Xr fetch 1
-the PDF version of the
-.Fx
-Handbook.
-Send a
+PDF-версию Руководства
+.Fx .
+Отправить сигнал
 .Dv SIGTERM
-signal after 1 minute and send a
+через 1 минуту, и отправить сигнал
 .Dv SIGKILL
-signal 5 seconds later if the process refuses to stop:
+через 5 секунд после этого, если процесс откажется останавливаться:
 .Bd -literal -offset indent
 $ timeout -k 5s 1m fetch \\
 > https://download.freebsd.org/ftp/doc/en/books/handbook/book.pdf
 .Ed
-.Sh SEE ALSO
+.Sh СМ. ТАКЖЕ
 .Xr kill 1 ,
 .Xr nohup 1 ,
 .Xr signal 3 ,
 .Xr daemon 8
-.Sh STANDARDS
-The
+.Sh СТАНДАРТЫ
+Ожидается, что утилита
 .Nm
-utility is expected to conform to the
-.St -p1003.1-2024
-specification.
+будет соответствовать спецификации
+.St -p1003.1-2024 .
 .Pp
-The
+Опция
 .Fl v
-option and long option names are extensions to that specification.
-.Sh HISTORY
-The
+и длинные имена опций являются расширениями этой спецификации.
+.Sh ИСТОРИЯ
+Команда
 .Nm
-command first appeared in
+впервые появилась в
 .Fx 10.3 .
 .Pp
-The initial
+Первоначальная реализация в
 .Fx
-work was compatible with GNU
+была совместима с утилитой GNU
 .Nm
-by
+за авторством
 .An Padraig Brady ,
-from GNU Coreutils 8.21.
-The
+выпущенной в составе GNU Coreutils 8.21.
+Утилита
 .Nm
-utility first appeared in GNU Coreutils 7.0.
-.Sh AUTHORS
+впервые появилась в GNU Coreutils 7.0.
+.Sh АВТОРЫ
 .An Baptiste Daroussin Aq Mt bapt@FreeBSD.org ,
 .An Vsevolod Stakhov Aq Mt vsevolod@FreeBSD.org
-and
+и
 .An Aaron LI Aq Mt aly@aaronly.me
