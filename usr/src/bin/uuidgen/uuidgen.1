@@ -28,58 +28,57 @@
 .Dd August 27, 2025
 .Dt UUIDGEN 1
 .Os
-.Sh NAME
+.Sh НАЗВАНИЕ
 .Nm uuidgen
-.Nd generate universally unique identifiers
-.Sh SYNOPSIS
+.Nd генерация универсально уникальных идентификаторов
+.Sh СИНТАКСИС
 .Nm
 .Op Fl 1cr
 .Op Fl n Ar count
 .Op Fl o Ar filename
-.Sh DESCRIPTION
-The
+.Sh ОПИСАНИЕ
+Утилита
 .Nm
-utility by default generates a single DCE version 1
-universally unique identifier (UUID),
-also known as a globally unique identifier (GUID).
-The UUID is written to stdout by default.
-The following options can be used to change the behaviour of
-.Nm :
+по умолчанию генерирует один универсально уникальный идентификатор (UUID) версии 1 DCE,
+также известный как глобально уникальный идентификатор (GUID).
+По умолчанию UUID записывается в стандартный поток вывода (stdout).
+Для изменения поведения
+.Nm
+можно использовать следующие опции:
 .Bl -tag -width indent
 .It Fl 1
-This option only has effect if multiple identifiers are to be generated and
-instructs
+Эта опция имеет эффект только в том случае, если должно быть сгенерировано несколько
+идентификаторов, и предписывает
 .Nm
-to not generate them in batch, but one at a time.
+генерировать их не пакетом, а по одному за раз.
 .It Fl c
-This option controls creation of compact UUID (without hyphen).
+Эта опция управляет созданием компактного UUID (без дефисов).
 .It Fl n
-This option controls the number of identifiers generated.
-By default, multiple identifiers are generated in batch.
+Эта опция управляет количеством генерируемых идентификаторов.
+По умолчанию несколько идентификаторов генерируются пакетом.
 .It Fl o
-Redirect output to
+Перенаправить вывод в файл
 .Ar filename
-instead of stdout.
+вместо стандартного потока вывода (stdout).
 .It Fl r
-This option controls creation of random UUID (version 4).
+Эта опция управляет созданием случайного UUID (версии 4).
 .El
 .Pp
-Batched generation yields a dense set of identifiers in such a way that there
-is no identifier that is larger than the smallest identifier in the set and
-smaller than the largest identifier in the set and that is not already in the
-set.
+Пакетная генерация создаёт плотный набор идентификаторов таким образом, что в диапазоне
+между наименьшим и наибольшим идентификаторами набора не существует идентификатора, который
+уже не входил бы в этот набор.
 .Pp
-When generating the identifiers one at a time, the identifiers will be close
-to each other, but operating system latency and processing time will be
-reflected in the distance between two successive identifiers.
-.Sh EXIT STATUS
+При генерации идентификаторов по одному они будут близки друг к другу,
+однако задержки операционной системы и время обработки будут отражаться на
+интервале между двумя последовательными идентификаторами.
+.Sh СТАТУС ВЫХОДА
 .Ex -std
-.Sh EXAMPLES
-Generate a batch of three UUIDs.
-Notice the similarity of the string before the first hyphen of the UUID
-.Po known as
+.Sh ПРИМЕРЫ
+Сгенерировать пакет из трёх UUID.
+Обратите внимание на сходство части строки до первого дефиса в UUID
+.Po известной как
 .Em time_low
-in
+в стандарте
 .Em rfc4122
 .Pc :
 .Bd -literal -offset indent
@@ -89,7 +88,7 @@ $ uuidgen -n3
 8bc44347-4d90-11ee-88c7-b42e991fc52e
 .Ed
 .Pp
-Generate a batch of random UUIDs without hyphens:
+Сгенерировать пакет случайных UUID без дефисов:
 .Bd -literal -offset indent
 $ uuidgen -r -c -n3
 5ad8b60a0f4e41f59c82d273202275f9
@@ -97,12 +96,4 @@ $ uuidgen -r -c -n3
 8144fdab63f648a1812d12453f975313
 .Ed
 .Pp
-Notice that the UUIDs are not similar to each other.
-.Sh SEE ALSO
-.Xr uuidgen 2 ,
-.Xr uuid 3
-.Sh HISTORY
-The
-.Nm
-command first appeared in
-.Fx 5.0 .
+Обратите внимание,
