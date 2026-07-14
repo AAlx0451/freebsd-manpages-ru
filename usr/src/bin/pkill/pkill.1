@@ -30,10 +30,10 @@
 .Dd June 24, 2025
 .Dt PKILL 1
 .Os
-.Sh NAME
+.Sh НАЗВАНИЕ
 .Nm pgrep , pkill
-.Nd find or signal processes by name
-.Sh SYNOPSIS
+.Nd поиск процессов или отправка им сигналов по имени
+.Sh СИНТАКСИС
 .Nm pgrep
 .Op Fl LSafilnoqvx
 .Op Fl F Ar pidfile
@@ -66,241 +66,228 @@
 .Op Fl t Ar tty
 .Op Fl u Ar euid
 .Ar pattern ...
-.Sh DESCRIPTION
-The
+.Sh ОПИСАНИЕ
+Команда
 .Nm pgrep
-command searches the process table on the running system and prints the
-process IDs of all processes that match the criteria given on the command
-line, excluding itself and all direct ancestors unless the
-.Fl a
-option is specified.
+выполняет поиск в таблице процессов работающей системы и выводит
+идентификаторы (PID) всех процессов, соответствующих критериям, указанным в командной
+строке. Сама утилита и её прямые предки исключаются из результатов поиска, если только не
+указана опция
+.Fl a .
 .Pp
-The
+Команда
 .Nm pkill
-command searches the process table on the running system and signals all
-processes that match the criteria given on the command line, excluding itself
-and all direct ancestors unless the
-.Fl a
-option is specified.
+выполняет поиск в таблице процессов работающей системы и отправляет сигнал всем
+процессам, соответствующим критериям, указанным в командной строке. Сама утилита
+и её прямые предки исключаются из результатов поиска, если только не указана опция
+.Fl a .
 .Pp
-The following options are available:
+Доступны следующие опции:
 .Bl -tag -width ".Fl F Ar pidfile"
 .It Fl F Ar pidfile
-Restrict matches to a process whose PID is stored in the
-.Ar pidfile
-file.
+Ограничить поиск процессами, чей PID сохранён в файле
+.Ar pidfile .
 .It Fl G Ar gid
-Restrict matches to processes with a real group ID in the comma-separated
-list
-.Ar gid .
+Ограничить поиск процессами с реальным идентификатором группы (GID) из списка
+.Ar gid
+(значения разделяются запятыми).
 .It Fl I
-Request confirmation before attempting to signal each process.
+Запрашивать подтверждение перед попыткой отправить сигнал каждому процессу.
 .It Fl L
-The
-.Ar pidfile
-file given for the
-.Fl F
-option must be locked with the
+Файл
+.Ar pidfile ,
+переданный опции
+.Fl F ,
+должен быть заблокирован с помощью системного вызова
 .Xr flock 2
-syscall or created with
+или создан с помощью
 .Xr pidfile 3 .
 .It Fl M Ar core
-Extract values associated with the name list from the specified core
-instead of the currently running system.
+Извлечь значения, связанные со списком имён, из указанного файла дампа памяти
+.Ar core
+вместо текущей работающей системы.
 .It Fl N Ar system
-Extract the name list from the specified system instead of the default,
-which is the kernel image the system has booted from.
+Извлечь список имён из указанного файла
+.Ar system
+вместо системы по умолчанию (образа ядра, с которого была загружена система).
 .It Fl P Ar ppid
-Restrict matches to processes with a parent process ID in the
-comma-separated list
-.Ar ppid .
+Ограничить поиск процессами, чей идентификатор родительского процесса (PPID) указан в списке
+.Ar ppid
+(значения разделяются запятыми).
 .It Fl S
-Search also in system processes (kernel threads).
+Выполнять поиск также среди системных процессов (потоков ядра).
 .It Fl U Ar uid
-Restrict matches to processes with a real user ID in the comma-separated
-list
-.Ar uid .
+Ограничить поиск процессами с реальным идентификатором пользователя (UID) из списка
+.Ar uid
+(значения разделяются запятыми).
 .It Fl d Ar delim
-Specify a delimiter to be printed between each process ID.
-The default is a newline.
-This option can only be used with the
-.Nm pgrep
-command.
+Указать разделитель, выводимый между идентификаторами процессов.
+По умолчанию используется символ новой строки.
+Эту опцию можно использовать только с командой
+.Nm pgrep .
 .It Fl a
-Include process ancestors in the match list.
-By default, the current
+Включить предков процесса в список результатов.
+По умолчанию текущий процесс
 .Nm pgrep
-or
+или
 .Nm pkill
-process and all of its ancestors are excluded (unless
-.Fl v
-is used).
-Note that the
+и все его предки исключаются (если только не используется опция
+.Fl v ).
+Обратите внимание, что опция
 .Fl a
-option will not
-.Dq unhide
-the
+не сделает
+.Dq видимым
+сам процесс
 .Nm pgrep
-or
-.Nm pkill
-process itself, even with
+или
+.Nm pkill ,
+даже при использовании
 .Fl v .
 .It Fl c Ar class
-Restrict matches to processes running with specified login class
+Ограничить поиск процессами, запущенными с указанным классом входа в систему (login class)
 .Ar class .
 .It Fl f
-Match against full argument lists.
-The default is to match against process names.
+Выполнять сопоставление по полному списку аргументов запуска.
+По умолчанию сопоставление выполняется только по имени процесса.
 .It Fl g Ar pgrp
-Restrict matches to processes with a process group ID in the comma-separated
-list
-.Ar pgrp .
-The value zero is taken to mean the process group ID of the running
+Ограничить поиск процессами с идентификатором группы процессов (PGID) из списка
+.Ar pgrp
+(значения разделяются запятыми).
+Значение ноль означает идентификатор группы процессов выполняющейся команды
 .Nm pgrep
-or
-.Nm pkill
-command.
+или
+.Nm pkill .
 .It Fl i
-Ignore case distinctions in both the process table and the supplied pattern.
+Игнорировать регистр символов как в таблице процессов, так и в указанном шаблоне поиска.
 .It Fl j Ar jail
-Restrict matches to processes inside the specified jails.
-The argument
+Ограничить поиск процессами внутри указанных окружений jail.
+Аргумент
 .Ar jail
-may be
+может принимать значение
 .Dq Li any
-to match processes in any jail,
+для поиска процессов в любом jail,
 .Dq Li none
-to match processes not in jail,
-or a comma-separated list of jail IDs or names.
+для поиска процессов вне jail,
+или список идентификаторов либо имён окружений jail через запятую.
 .It Fl l
-Long output.
-For
-.Nm pgrep ,
-print the process name in addition to the process ID for each matching
-process.
-If used in conjunction with
-.Fl f ,
-print the process ID and the full argument list for each matching process.
-For
-.Nm pkill ,
-display the kill command used for each process killed.
-.It Fl n
-Select only the newest (most recently started) of the matching processes.
-.It Fl o
-Select only the oldest (least recently started) of the matching processes.
-.It Fl q
-For
-.Nm pgrep ,
-Do not write anything to standard output.
-.It Fl s Ar sid
-Restrict matches to processes with a session ID in the comma-separated
-list
-.Ar sid .
-The value zero is taken to mean the session ID of the running
+Длинный вывод.
+Для
 .Nm pgrep
-or
-.Nm pkill
-command.
-.It Fl t Ar tty
-Restrict matches to processes associated with a terminal in the
-comma-separated list
-.Ar tty .
-Terminal names may be of the form
-.Pa tty Ns Ar xx
-or the shortened form
-.Ar xx .
-A single dash
-.Pq Ql -
-matches processes not associated with a terminal.
-.It Fl u Ar euid
-Restrict matches to processes with an effective user ID in the
-comma-separated list
-.Ar euid .
-.It Fl v
-Reverse the sense of the matching; display processes that do not match the
-given criteria.
-.It Fl x
-Require an exact match of the process name, or argument list if
+выводит имя процесса в дополнение к его идентификатору (PID) для каждого совпадения.
+При использовании совместно с опцией
 .Fl f
-is given.
-The default is to match any substring.
+выводит идентификатор процесса и полный список аргументов для каждого совпадения.
+Для
+.Nm pkill
+отображает команду уничтожения, использованную для каждого завершённого процесса.
+.It Fl n
+Выбрать только самый новый (запущенный позже всех) из соответствующих процессов.
+.It Fl o
+Выбрать только самый старый (запущенный раньше всех) из соответствующих процессов.
+.It Fl q
+Для
+.Nm pgrep
+ничего не выводить в стандартный поток вывода.
+.It Fl s Ar sid
+Ограничить поиск процессами с идентификатором сессии (SID) из списка
+.Ar sid
+(значения разделяются запятыми).
+Значение ноль означает идентификатор сессии выполняющейся команды
+.Nm pgrep
+или
+.Nm pkill .
+.It Fl t Ar tty
+Ограничить поиск процессами, связанными с терминалом из списка
+.Ar tty
+(значения разделяются запятыми).
+Имена терминалов могут быть указаны в виде
+.Pa tty Ns Ar xx
+или в сокращённом виде
+.Ar xx .
+Одиночный дефис
+.Pq Ql -
+соответствует процессам, не связанным с терминалом.
+.It Fl u Ar euid
+Ограничить поиск процессами с эффективным идентификатором пользователя (EUID) из списка
+.Ar euid
+(значения разделяются запятыми).
+.It Fl v
+Инвертировать логику поиска; отображать процессы, которые *не* соответствуют заданным критериям.
+.It Fl x
+Требовать точного совпадения имени процесса (или списка аргументов, если указана опция
+.Fl f ).
+По умолчанию совпадение ищется по любой подстроке.
 .It Fl Ns Ar signal
-A non-negative decimal number or symbolic signal name specifying the signal
-to be sent instead of the default
+Неотрицательное десятичное число или символьное имя сигнала, указывающее, какой сигнал
+должен быть отправлен вместо сигнала по умолчанию
 .Dv TERM .
-This option is valid only when given as the first argument to
+Эта опция допустима только в качестве первого аргумента команды
 .Nm pkill .
 .El
 .Pp
-If any
-.Ar pattern
-operands are specified, they are used as extended regular expressions to match
-the command name or full argument list of each process.
-If the
+Если указаны какие-либо операнды
+.Ar pattern ,
+они используются как расширенные регулярные выражения для сопоставления
+с именем команды или полным списком аргументов каждого процесса.
+Если опция
 .Fl f
-option is not specified, then the
+не указана,
 .Ar pattern
-will attempt to match the command name.
-However, presently
+будет сопоставляться с именем команды.
+Однако на данный момент в
 .Fx
-will only keep track of the first 19 characters of the command
-name for each process.
-Attempts to match any characters after the first 19 of a command name
-will quietly fail.
+сохраняются только первые 19 символов имени команды для каждого процесса.
+Попытки сопоставления любых символов после первых 19 символов имени команды
+будут молча завершаться неудачей.
 .Pp
-Note that a running
+Обратите внимание, что выполняющийся процесс
 .Nm pgrep
-or
+или
 .Nm pkill
-process will never consider itself nor system processes (kernel threads) as
-a potential match.
-.Sh IMPLEMENTATION NOTES
-The Sun Solaris implementation utilised procfs to obtain process information.
-This implementation utilises
+никогда не рассматривает самого себя или системные процессы (потоки ядра) как
+потенциальные совпадения.
+.Sh ПРИМЕЧАНИЯ ПО РЕАЛИЗАЦИИ
+Реализация в Sun Solaris использовала procfs для получения информации о процессах.
+Данная реализация вместо этого использует
+.Xr kvm 3 .
+В работающей системе
 .Xr kvm 3
-instead.
-On a live system,
-.Xr kvm 3
-uses
+использует MIB-переменную
 .Va kern.proc
-MIB to obtain the list of processes, kernel memory through
+для получения списка процессов, при этом доступ к памяти ядра через
 .Pa /dev/kmem
-is not accessed.
-.Sh EXIT STATUS
-The
+не осуществляется.
+.Sh СТАТУС ВЫХОДА
+Утилиты
 .Nm pgrep
-and
+и
 .Nm pkill
-utilities
-return one of the following values upon exit:
+при завершении работы возвращают одно из следующих значений:
 .Bl -tag -width indent
 .It 0
-One or more processes were matched.
+Найдено одно или несколько совпадений с процессами.
 .It 1
-No processes were matched.
+Совпадений с процессами не найдено.
 .It 2
-Invalid options were specified on the command line.
+В командной строке указаны неверные опции.
 .It 3
-An internal error occurred.
+Произошла внутренняя ошибка.
 .El
-.Sh EXAMPLES
-Show the pid of the process holding the
-.Pa /tmp/.X0-lock
-pid file:
+.Sh ПРИМЕРЫ
+Показать PID процесса, владеющего pid-файлом
+.Pa /tmp/.X0-lock :
 .Bd -literal -offset indent
 $ pgrep -F /tmp/.X0-lock
 1211
 .Ed
 .Pp
-Show the pid and the name of the process including kernel threads in the
-search:
+Показать PID и имя процесса, включив потоки ядра в область поиска:
 .Bd -literal -offset indent
 $ pgrep -lS vnlru
 37 vnlru
 .Ed
 .Pp
-Search for processes including kernel threads that match the extended regular
-expression pattern:
+Искать процессы (включая потоки ядра), соответствующие шаблону расширенного регулярного выражения:
 .Bd -literal -offset indent
 $ pgrep -S 'crypto.*[2-3]'
 20
@@ -309,7 +296,7 @@ $ pgrep -S 'crypto.*[2-3]'
 5
 .Ed
 .Pp
-Show long output for firefox processes:
+Показать подробный вывод для процессов firefox:
 .Bd -literal -offset indent
 $ pgrep -l firefox
 1312 firefox
@@ -322,38 +309,37 @@ $ pgrep -l firefox
 1264 firefox
 .Ed
 .Pp
-Same as above but just showing the pid of the most recent process:
+То же, что и выше, но отобразить только PID самого последнего запущенного процесса:
 .Bd -literal -offset indent
 $ pgrep -n firefox
 1312
 .Ed
 .Pp
-Look for vim processes.
-Match against the full argument list:
+Найти процессы vim. Сопоставление выполнять по полному списку аргументов:
 .Bd -literal -offset indent
 $ pgrep -f vim
 44968
 30790
 .Ed
 .Pp
-Same as above but matching against the
+То же, что и выше, но с сопоставлением по слову
 .Ql list
-word and showing the full argument list:
+и выводом полного списка аргументов:
 .Bd -literal -offset indent
 $ pgrep -f -l list
 30790 vim list.txt
 .Ed
 .Pp
-Send
+Отправить сигнал
 .Va SIGSTOP
-signal to processes that are an exact match:
+процессам с точным совпадением:
 .Bd -literal -offset indent
 $ pkill -SIGSTOP -f -x "vim list.txt"
 .Ed
 .Pp
-Without
+Без опции
 .Fl f
-names over 19 characters will silently fail:
+поиск по именам длиннее 19 символов завершится неудачей без вывода ошибок:
 .Bd -literal -offset indent
 $ vim this_is_a_very_long_file_name &
 [1] 36689
@@ -364,23 +350,22 @@ $ pgrep "vim this"
 $
 .Ed
 .Pp
-Same as above using the
-.Fl f
-flag:
+То же, что и выше, но с использованием флага
+.Fl f :
 .Bd -literal -offset indent
 $ pgrep -f "vim this"
 36689
 .Ed
 .Pp
-Find the
-.Xr top 1
-command running in any jail:
+Найти команду
+.Xr top 1 ,
+выполняющуюся в любом окружении jail:
 .Bd -literal -offset indent
 $ pgrep -j any top
 34498
 .Ed
 .Pp
-Show all processes running in jail ID 58:
+Показать все процессы, запущенные в окружении jail с ID 58:
 .Bd -literal -offset indent
 $ pgrep -l -j58 '.*'
 28397 pkg-static
@@ -388,19 +373,19 @@ $ pgrep -l -j58 '.*'
 28255 sh
 28254 make
 .Ed
-.Sh COMPATIBILITY
-Historically the option
+.Sh СОВМЕСТИМОСТЬ
+Исторически опция
 .Dq Fl j Li 0
-means any jail, although in other utilities such as
-.Xr ps 1
-jail ID
+означала любое окружение jail, хотя в других утилитах, таких как
+.Xr ps 1 ,
+идентификатор jail
 .Li 0
-has the opposite meaning, not in jail.
-Therefore
+имеет противоположное значение (вне jail).
+Поэтому использование
 .Dq Fl j Li 0
-is deprecated, and its use is discouraged in favor of
+устарело, и вместо него рекомендуется использовать
 .Dq Fl j Li any .
-.Sh SEE ALSO
+.Sh СМ. ТАКЖЕ
 .Xr kill 1 ,
 .Xr killall 1 ,
 .Xr ps 1 ,
@@ -411,17 +396,16 @@ is deprecated, and its use is discouraged in favor of
 .Xr pidfile 3 ,
 .Xr re_format 7
 .\" Xr signal 7
-.Sh HISTORY
-The
+.Sh ИСТОРИЯ
+Утилиты
 .Nm pkill
-and
+и
 .Nm pgrep
-utilities
-first appeared in
+впервые появились в
 .Nx 1.6 .
-They are modelled after utilities of the same name that appeared in Sun
-Solaris 7.
-They made their first appearance in
-.Fx 5.3 .
-.Sh AUTHORS
+Они созданы по образцу одноимённых утилит, появившихся в Sun Solaris 7.
+В
+.Fx
+они впервые появились в версии 5.3.
+.Sh АВТОРЫ
 .An Andrew Doran Aq Mt ad@NetBSD.org
