@@ -32,11 +32,11 @@
 .Dd November 10, 2018
 .Dt RM 1
 .Os
-.Sh NAME
+.Sh НАЗВАНИЕ
 .Nm rm ,
 .Nm unlink
-.Nd remove directory entries
-.Sh SYNOPSIS
+.Nd удаление записей каталога
+.Sh СИНТАКСИС
 .Nm
 .Op Fl f | i
 .Op Fl dIRrvWx
@@ -44,170 +44,154 @@
 .Nm unlink
 .Op Fl -
 .Ar file
-.Sh DESCRIPTION
-The
+.Sh ОПИСАНИЕ
+Утилита
 .Nm
-utility attempts to remove the non-directory type files specified on the
-command line.
-If the permissions of the file do not permit writing, and the standard
-input device is a terminal, the user is prompted (on the standard error
-output) for confirmation.
+пытается удалить указанные в командной строке файлы, не являющиеся каталогами.
+Если права доступа к файлу не разрешают запись и стандартным устройством ввода
+является терминал, у пользователя запрашивается подтверждение (в стандартном потоке
+вывода ошибок).
 .Pp
-The options are as follows:
+Доступны следующие опции:
 .Bl -tag -width indent
 .It Fl d
-Attempt to remove directories as well as other types of files.
+Пытаться удалять каталоги так же, как и другие типы файлов.
 .It Fl f
-Attempt to remove the files without prompting for confirmation,
-regardless of the file's permissions.
-If the file does not exist, do not display a diagnostic message or modify
-the exit status to reflect an error.
-The
+Пытаться удалить файлы без запроса подтверждения, независимо от их прав доступа.
+Если файл не существует, диагностическое сообщение не выводится, а статус выхода не изменяется
+для отражения ошибки.
+Опция
 .Fl f
-option overrides any previous
-.Fl i
-options.
+отменяет действие любых ранее указанных опций
+.Fl i .
 .It Fl i
-Request confirmation before attempting to remove each file, regardless of
-the file's permissions, or whether or not the standard input device is a
-terminal.
-The
+Запрашивать подтверждение перед попыткой удаления каждого файла, независимо от его прав доступа
+или от того, является ли стандартное устройство ввода терминалом.
+Опция
 .Fl i
-option overrides any previous
-.Fl f
-options.
+отменяет действие любых ранее указанных опций
+.Fl f .
 .It Fl I
-Request confirmation once if more than three files are being removed or if a
-directory is being recursively removed.
-This is a far less intrusive option than
-.Fl i
-yet provides almost the same level of protection against mistakes.
+Запросить подтверждение один раз, если удаляется более трёх файлов или если каталог удаляется
+рекурсивно.
+Эта опция гораздо менее навязчива, чем опция
+.Fl i ,
+но при этом обеспечивает практически такой же уровень защиты от ошибок.
 .It Fl P
-This flag has no effect.
-It is kept only for backwards compatibility with
+Этот флаг не имеет эффекта.
+Он сохранён исключительно для обратной совместимости с
 .Bx 4.4 Lite2 .
 .It Fl R
-Attempt to remove the file hierarchy rooted in each
-.Ar file
-argument.
-The
+Пытаться удалить иерархию файлов, корнем которой является каждый указанный аргумент
+.Ar file .
+Опция
 .Fl R
-option implies the
-.Fl d
-option.
-If the
-.Fl i
-option is specified, the user is prompted for confirmation before
-each directory's contents are processed (as well as before the attempt
-is made to remove the directory).
-If the user does not respond affirmatively, the file hierarchy rooted in
-that directory is skipped.
+подразумевает использование опции
+.Fl d .
+Если указана опция
+.Fl i ,
+у пользователя запрашивается подтверждение перед обработкой содержимого каждого каталога
+(а также перед попыткой удаления самого каталога).
+Если пользователь не отвечает утвердительно, иерархия файлов, корнем которой является этот
+каталог, пропускается.
 .It Fl r
-Equivalent to
+Эквивалентно опции
 .Fl R .
 .It Fl v
-Be verbose when deleting files, showing them as they are removed.
+Выводить подробную информацию при удалении файлов, показывая их по мере удаления.
 .It Fl W
-Attempt to undelete the named files.
-Currently, this option can only be used to recover
-files covered by whiteouts in a union file system (see
+Попытаться восстановить (undelete) указанные файлы.
+В настоящее время эту опцию можно использовать только для восстановления файлов,
+скрытых маскировкой (whiteouts) в объединяющей файловой системе (union file system, см.
 .Xr undelete 2 ) .
 .It Fl x
-When removing a hierarchy, do not cross mount points.
+При удалении иерархии не переходить через точки монтирования.
 .El
 .Pp
-The
+Утилита
 .Nm
-utility removes symbolic links, not the files referenced by the links.
+удаляет символические ссылки, а не файлы, на которые эти ссылки указывают.
 .Pp
-It is an error to attempt to remove the files
+Попытка удаления файлов
 .Pa / ,
 .Pa .\&
-or
-.Pa .. .
+или
+.Pa ..
+приведёт к ошибке.
 .Pp
-When the utility is called as
+Когда утилита вызывается как
 .Nm unlink ,
-only one argument,
-which must not be a directory,
-may be supplied.
-No options may be supplied in this simple mode of operation,
-which performs an
+ей может быть передан только один аргумент,
+который не должен быть каталогом.
+В этом упрощённом режиме работы опции не поддерживаются; утилита просто выполняет операцию
 .Xr unlink 2
-operation on the passed argument.
-However, the usual option-end delimiter,
-.Fl - ,
-may optionally precede the argument.
-.Sh EXIT STATUS
-The
+над переданным аргументом.
+Тем не менее, перед аргументом может дополнительно указываться стандартный разделитель конца опций
+.Fl - .
+.Sh СТАТУС ВЫХОДА
+Утилита
 .Nm
-utility exits 0 if all of the named files or file hierarchies were removed,
-or if the
+завершает работу со статусом 0, если все указанные файлы или иерархии файлов были удалены,
+или если была указана опция
 .Fl f
-option was specified and all of the existing files or file hierarchies were
-removed.
-If an error occurs,
+и все существующие файлы или иерархии файлов были удалены.
+При возникновении ошибки
 .Nm
-exits with a value >0.
-.Sh NOTES
-The
+завершает работу со значением >0.
+.Sh ПРИМЕЧАНИЯ
+Команда
 .Nm
-command uses
+использует
 .Xr getopt 3
-to parse its arguments, which allows it to accept
-the
-.Sq Li --
-option which will cause it to stop processing flag options at that
-point.
-This will allow the removal of file names that begin
-with a dash
+для разбора своих аргументов, что позволяет ей принимать опцию
+.Sq Li -- ,
+которая прекращает обработку флагов опций в этой точке.
+Это позволяет удалять файлы, чьи имена начинаются с дефиса
 .Pq Sq - .
-For example:
+Например:
 .Pp
 .Dl "rm -- -filename"
 .Pp
-The same behavior can be obtained by using an absolute or relative
-path reference.
-For example:
+Такого же поведения можно добиться, используя абсолютные или относительные пути.
+Например:
 .Pp
 .Dl "rm /home/user/-filename"
 .Dl "rm ./-filename"
-.Sh EXAMPLES
-Recursively remove all files contained within the
-.Pa foobar
-directory hierarchy:
+.Sh ПРИМЕРЫ
+Рекурсивно удалить все файлы, содержащиеся в иерархии каталогов
+.Pa foobar :
 .Pp
 .Dl $ rm -rf foobar
 .Pp
-Any of these commands will remove the file
+Любая из этих команд удалит файл с именем
 .Pa -f :
 .Bd -literal -offset indent
 $ rm -- -f
 $ rm ./-f
 $ unlink -f
 .Ed
-.Sh COMPATIBILITY
-The
+.Sh СОВМЕСТИМОСТЬ
+Утилита
 .Nm
-utility differs from historical implementations in that the
+отличается от исторических реализаций тем, что опция
 .Fl f
-option only masks attempts to remove non-existent files instead of
-masking a large variety of errors.
-The
+маскирует только попытки удаления несуществующих файлов, а не широкий спектр разнообразных
+ошибок.
+Опция
 .Fl v
-option is non-standard and its use in scripts is not recommended.
+не является стандартной, и её использование в скриптах не рекомендуется.
 .Pp
-Also, historical
+Кроме того, исторические реализации
 .Bx
-implementations prompted on the standard output,
-not the standard error output.
+выводили запросы подтверждения в стандартный поток вывода,
+а не в стандартный поток вывода ошибок.
 .Pp
-The
+Опция
 .Fl P
-option does not have any effect as of
-.Fx 13
-and may be removed in the future.
-.Sh SEE ALSO
+не имеет никакого эффекта, начиная с
+.Fx 13 ,
+и может быть удалена в будущем.
+.Sh СМ. ТАКЖЕ
 .Xr chflags 1 ,
 .Xr rmdir 1 ,
 .Xr undelete 2 ,
@@ -215,18 +199,18 @@ and may be removed in the future.
 .Xr fts 3 ,
 .Xr getopt 3 ,
 .Xr symlink 7
-.Sh STANDARDS
-The
+.Sh СТАНДАРТЫ
+Команда
 .Nm
-command conforms to
+соответствует стандарту
 .St -p1003.1-2013 .
 .Pp
-The simplified
+Упрощённая команда
 .Nm unlink
-command conforms to
+соответствует стандарту
 .St -susv2 .
-.Sh HISTORY
-A
+.Sh ИСТОРИЯ
+Команда
 .Nm
-command appeared in
+появилась в
 .At v1 .
