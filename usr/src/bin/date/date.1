@@ -32,10 +32,10 @@
 .Dd November 10, 2025
 .Dt DATE 1
 .Os
-.Sh NAME
+.Sh НАЗВАНИЕ
 .Nm date
-.Nd display or set date and time
-.Sh SYNOPSIS
+.Nd вывод или установка даты и времени
+.Sh СИНТАКСИС
 .\" Display time.
 .Nm
 .Op Fl nRu
@@ -88,34 +88,32 @@
 .Fl f Ar input_fmt
 .Ar new_date
 .Op Cm + Ns Ar output_fmt
-.Sh DESCRIPTION
-When invoked without arguments, the
+.Sh ОПИСАНИЕ
+При вызове без аргументов утилита
 .Nm
-utility displays the current date and time.
-Otherwise, depending on the options specified,
+отображает текущие дату и время.
+В противном случае, в зависимости от указанных опций,
 .Nm
-will set the date and time or print it in a user-defined way.
+устанавливает дату и время или выводит их в заданном пользователем формате.
 .Pp
-The
+Утилита
 .Nm
-utility displays the date and time read from the kernel clock.
-When used to set the date and time,
-both the kernel clock and the hardware clock are updated.
+отображает дату и время, считанные из часов ядра.
+При использовании для установки даты и времени обновляются как часы ядра,
+так и аппаратные часы.
 .Pp
-Only the superuser may set the date,
-and if the system securelevel (see
+Только суперпользователь может устанавливать дату, и если уровень безопасности системы (см.
 .Xr securelevel 7 )
-is greater than 1,
-the time may not be changed by more than 1 second.
+больше 1, время не может быть изменено более чем на 1 секунду.
 .Pp
-The options are as follows:
+Доступны следующие опции:
 .Bl -tag -width Ds
 .It Fl f Ar input_fmt
-Use
+Использовать строку формата
 .Ar input_fmt
-as the format string to parse the
+для синтаксического анализа (парсинга) предоставленной новой даты
 .Ar new_date
-provided rather than using the default
+вместо формата по умолчанию
 .Sm off
 .Oo Oo Oo Oo Oo
 .Ar cc Oc
@@ -125,92 +123,88 @@ provided rather than using the default
 .Ar HH
 .Oc Ar MM Op Cm \&. Ar SS
 .Sm on
-format.
-Parsing is done using
+.Анализ выполняется с помощью функции
 .Xr strptime 3 .
 .It Fl I Ns Op Ar FMT
-Use extended
-.St -iso8601
-output format.
+Использовать расширенный формат вывода
+.St -iso8601 .
+Параметр
 .Ar FMT
-may be omitted, in which case the default is
+можно опустить, в этом случае по умолчанию используется значение
 .Cm date .
-Valid
+Допустимыми значениями
 .Ar FMT
-values are
+являются
 .Cm date ,
 .Cm hours ,
 .Cm minutes ,
-.Cm seconds ,
-and
+.Cm seconds
+и
 .Cm ns
-.Pq for nanoseconds .
-The date and time is formatted to the specified precision.
-When
+.Pq для наносекунд .
+Дата и время форматируются с указанной точностью.
+Если параметр
 .Ar FMT
-is
+имеет значение
 .Cm hours
-.Po or the more precise
+.Po или более точные
 .Cm minutes ,
-.Cm seconds ,
-or
+.Cm seconds
+или
 .Cm ns Pc ,
-the extended
+расширенный формат
 .St -iso8601
-format includes the timezone offset.
+включает смещение часового пояса.
 .It Fl j
-Do not try to set the date.
-This allows you to use the
+Не пытаться устанавливать системную дату.
+Это позволяет использовать флаг
 .Fl f
-flag in addition to the
+совместно с опцией
 .Cm +
-option to convert one date format to another.
-Note that any date or time components unspecified by the
-.Fl f
-format string take their values from the current time.
+для преобразования одного формата даты в другой.
+Обратите внимание, что любые компоненты даты или времени, не указанные в строке формата
+.Fl f ,
+принимают свои значения из текущего времени.
 .It Fl n
-Obsolete flag, accepted and ignored for compatibility.
+Устаревший флаг; принимается и игнорируется для совместимости.
 .It Fl R
-Use RFC 2822 date and time output format.
-This is equivalent to using
+Использовать формат вывода даты и времени RFC 2822.
+Это эквивалентно использованию строки
 .Ql %a, %d %b %Y \&%T %z
-as
-.Ar output_fmt
-while
+в качестве
+.Ar output_fmt ,
+когда переменная
 .Ev LC_TIME
-is set to the
-.Dq C
-locale .
+имеет значение локали
+.Dq C .
 .It Fl r Ar seconds
-Print the date and time represented by
+Вывести дату и время, представленные значением
 .Ar seconds ,
-where
+где
 .Ar seconds
-is the number of seconds since the Unix Epoch
-(00:00:00 UTC, January 1, 1970;
-see
-.Xr time 3 ) ,
-and can be specified in decimal, octal, or hex.
+— количество секунд, прошедших с начала Эпохи Unix
+(00:00:00 UTC, 1 января 1970 года; см.
+.Xr time 3 ) .
+Значение может быть указано в десятичной, восьмеричной или шестнадцатеричной системе счисления.
 .It Fl r Ar filename
-Print the date and time of the last modification of
+Вывести дату и время последнего изменения файла
 .Ar filename .
 .It Fl u
-Display or set the date in UTC (Coordinated Universal) time.
-By default
+Отобразить или установить дату по всемирному координированному времени (UTC).
+По умолчанию
 .Nm
-displays the time in the time zone described by
+отображает время в часовом поясе, описанном в файле
 .Pa /etc/localtime
-or the
-.Ev TZ
-environment variable.
+или переменной окружения
+.Ev TZ .
 .It Fl z Ar output_zone
-Just before printing the time, change to the specified timezone;
-see the description of
+Непосредственно перед выводом времени переключиться на указанный часовой пояс;
+см. описание переменной
 .Ev TZ
-below.
-This can be used with
+ниже.
+Это можно использовать совместно с опцией
 .Fl j
-to easily convert time specifications from one zone to another.
+для простого преобразования значений времени из одного часового пояса в другой.
 .It Xo
 .Fl v
 .Sm off
@@ -218,376 +212,322 @@ to easily convert time specifications from one zone to another.
 .Ar val Op Cm y | m | w | d | H | M | S
 .Sm on
 .Xc
-Adjust (i.e., take the current date and display the result of the
-adjustment; not actually set the date) the second, minute, hour, month
-day, week day, month or year according to
+Скорректировать (т. е. взять текущую дату и отобразить результат корректировки; при этом сама системная дата не изменяется) секунду, минуту, час, день месяца, день недели, месяц или год в соответствии со значением
 .Ar val .
-If
+Если перед значением
 .Ar val
-is preceded by a plus or minus sign,
-the date is adjusted forward or backward according to the remaining string,
-otherwise the relevant part of the date is set.
-The date can be adjusted as many times as required using these flags.
-Flags are processed in the order given.
+стоит знак «плюс» или «минус», дата корректируется вперёд или назад в соответствии с оставшейся частью строки, в противном случае соответствующая часть даты просто устанавливается в указанное значение.
+С помощью этих флагов дату можно корректировать столько раз, сколько требуется.
+Флаги обрабатываются в порядке их указания.
 .Pp
-When setting values
-(rather than adjusting them),
-seconds are in the range 0-59, minutes are in the range 0-59, hours are
-in the range 0-23, month days are in the range 1-31, week days are in the
-range 0-6 (Sun-Sat),
-months are in the range 1-12 (Jan-Dec)
-and years are in a limited range depending on the platform.
+При установке значений (в отличие от их корректировки): секунды должны быть в диапазоне 0–59, минуты — в диапазоне 0–59, часы — в диапазоне 0–23, дни месяца — в диапазоне 1–31, дни недели — в диапазоне 0–6 (вс–сб), месяцы — в диапазоне 1–12 (янв–дек), а годы — в ограниченном диапазоне в зависимости от платформы.
 .Pp
-On i386, years are in the range 69-38 representing 1969-2038.
-On every other platform, years 0-68 are accepted and represent 2000-2068, and
-69-99 are accepted and represent 1969-1999.
-In both cases, years between 100 and 1900 (both included) are accepted and
-interpreted as relative to 1900 of the Gregorian calendar with a limit of 138 on
-i386 and a much higher limit on every other platform.
-Years starting at 1901 are also accepted, and are interpreted as absolute years.
+На платформе i386 годы находятся в диапазоне 69–38, что соответствует 1969–2038 гг.
+На всех остальных платформах поддерживаются годы 0–68 (что соответствует 2000–2068 гг.) и 69–99 (что соответствует 1969–1999 гг.).
+В обоих случаях годы от 100 до 1900 включительно принимаются и интерпретируются относительно 1900 года по григорианскому календарю (с лимитом до 138 на i386 и гораздо более высоким лимитом на других платформах).
+Годы, начиная с 1901, также принимаются и интерпретируются как абсолютные значения лет.
 .Pp
-If
+Если значение
 .Ar val
-is numeric, one of either
+является числовым, необходимо использовать один из символов
 .Cm y ,
 .Cm m ,
 .Cm w ,
 .Cm d ,
 .Cm H ,
 .Cm M
-or
+или
 .Cm S
-must be used to specify which part of the date is to be adjusted.
+для указания того, какая часть даты подлежит корректировке.
 .Pp
-The week day or month may be specified using a name rather than a
-number.
-If a name is used with the plus
-(or minus)
-sign, the date will be put forwards
-(or backwards)
-to the next
-(previous)
-date that matches the given week day or month.
-This will not adjust the date,
-if the given week day or month is the same as the current one.
+День недели или месяц можно указать именем, а не числом.
+Если имя используется со знаком «плюс» (или «минус»), дата будет перенесена вперёд (или назад) на ближайшую следующую (предыдущую) дату, соответствующую указанному дню недели или месяцу.
+Если указанный день недели или месяц совпадает с текущим, дата изменена не будет.
 .Pp
-When a date is adjusted to a specific value or in units greater than hours,
-daylight savings time considerations are ignored.
-Adjustments in units of hours or less honor daylight saving time.
-So, assuming the current date is March 26, 0:30 and that the DST adjustment
-means that the clock goes forward at 01:00 to 02:00, using
+Когда дата корректируется до определённого значения или в единицах измерения крупнее часов, правила перехода на летнее время (DST) игнорируются.
+Корректировка в часах или более мелких единицах учитывает переход на летнее время.
+Таким образом, если текущая дата — 26 марта, 0:30, а переход на летнее время означает перевод стрелок часов вперёд с 01:00 на 02:00, использование опции
 .Fl v No +1H
-will adjust the date to March 26, 2:30.
-Likewise, if the date is October 29, 0:30 and the DST adjustment means that
-the clock goes back at 02:00 to 01:00, using
-.Fl v No +3H
-will be necessary to reach October 29, 2:30.
+скорректирует дату на 26 марта, 2:30.
+Аналогично, если дата — 29 октября, 0:30, а переход на зимнее время означает перевод стрелок часов назад с 02:00 на 01:00, для достижения значения 29 октября, 2:30 потребуется использовать опцию
+.Fl v No +3H .
 .Pp
-When the date is adjusted to a specific value that does not actually exist
-(for example March 26, 1:30 BST 2000 in the Europe/London timezone),
-the date will be silently adjusted forward in units of one hour until it
-reaches a valid time.
-When the date is adjusted to a specific value that occurs twice
-(for example October 29, 1:30 2000),
-the resulting timezone will be set so that the date matches the earlier of
-the two times.
+Если дата корректируется до конкретного значения, которого на самом деле не существует (например, 26 марта 2000 года, 1:30 BST в часовом поясе Europe/London), дата будет автоматически скорректирована вперёд с шагом в один час, пока не достигнет корректного времени.
+Если дата корректируется до значения, которое во время перевода часов происходит дважды (например, 29 октября 2000 года, 1:30), результирующий часовой пояс будет выбран так, чтобы дата соответствовала более раннему из этих двух моментов времени.
 .Pp
-It is not possible to adjust a date to an invalid absolute day, so using
-the switches
+Невозможно скорректировать дату до некорректного абсолютного дня, поэтому использование флагов
 .Fl v No 31d Fl v No 12m
-will simply fail five months of the year.
-It is therefore usual to set the month before setting the day; using
+приведёт к ошибке в пяти месяцах года.
+Из-за этого принято устанавливать месяц перед установкой дня: последовательность
 .Fl v No 12m Fl v No 31d
-always works.
+работает всегда.
 .Pp
-Adjusting the date by months is inherently ambiguous because
-a month is a unit of variable length depending on the current date.
-This kind of date adjustment is applied in the most intuitive way.
-First of all,
+Корректировка даты в месяцах по своей сути неоднозначна, поскольку месяц является единицей переменной длины в зависимости от текущей даты.
+Этот тип корректировки даты применяется наиболее интуитивным образом.
+Прежде всего, утилита
 .Nm
-tries to preserve the day of the month.
-If it is impossible because the target month is shorter than the present one,
-the last day of the target month will be the result.
-For example, using
+пытается сохранить число месяца.
+Если это невозможно из-за того, что целевой месяц короче текущего, результатом будет последний день целевого месяца.
+Например, использование опции
 .Fl v No +1m
-on May 31 will adjust the date to June 30, while using the same option
-on January 30 will result in the date adjusted to the last day of February.
-This approach is also believed to make the most sense for shell scripting.
-Nevertheless, be aware that going forth and back by the same number of
-months may take you to a different date.
+31 мая скорректирует дату на 30 июня, а использование той же опции 30 января приведёт к корректировке даты на последний день февраля.
+Считается, что такой подход наиболее логичен для написания сценариев командного процессора (скриптов).
+Тем не менее, помните, что переход вперёд и назад на одно и то же количество месяцев может привести вас к другой дате.
 .Pp
-Refer to the examples below for further details.
+Подробности см. в разделе примеров ниже.
 .El
 .Pp
-An operand with a leading plus
-.Pq Sq +
-sign specifies a user-defined format string
-which specifies the format in which to display the date and time.
-The format string may contain any of the conversion specifications
-described in the
-.Xr strftime 3
-manual page, as well as any arbitrary text.
+Операнд, начинающийся со знака «плюс»
+.Pq Sq + ,
+задает строку формата, определяющую вид, в котором должны отображаться дата и время.
+Строка формата может содержать любые спецификаторы преобразования, описанные на справочной странице
+.Xr strftime 3 ,
+а также произвольный текст.
 .Pp
-The following extensions to the regular
-.Xr strftime 3
-syntax are supported:
+Поддерживаются следующие расширения обычного синтаксиса
+.Xr strftime 3 :
 .Bl -tag -width "xxxx"
 .It Cm \&% Ns Ar n Ns Cm N
-Replaced by the
-.Ar n Ns
--digit fractional part of the number of seconds since the Unix Epoch.
-If
+Заменяется на
+.Ar n -значную
+дробную часть количества секунд, прошедших с начала Эпохи Unix.
+Если параметр
 .Ar n
-is omitted or zero, a default value of 9 is used, resulting in a
-number with nanosecond resolution (hence the choice of the letter
+опущен или равен нулю, используется значение по умолчанию 9, что даёт число с разрешением в наносекунды (отсюда и выбор буквы
 .Sq N
-for this conversion).
-Note that the underlying clock may not necessarily support nanosecond
-resolution.
+для этого преобразования).
+Обратите внимание, что системные часы не обязательно поддерживают наносекундное разрешение.
 .It Cm \&%-N
-As above, but automatically choose the precision based on the reported
-resolution of the underlying clock.
-If the
-.Fl r
-option was specified, the default precision of 9 digits is used.
+То же, что и выше, но точность выбирается автоматически на основе заявленного разрешения системных часов.
+Если была указана опция
+.Fl r ,
+используется точность по умолчанию в 9 цифр.
 .El
 .Pp
-A newline
+Символ новой строки
 .Pq Ql \en
-character is always output after the characters specified by
-the format string.
-The format string for the default display is
+всегда выводится после символов, заданных строкой формата.
+Строкой формата по умолчанию является
 .Dq %+ .
 .Pp
-If an operand does not have a leading plus sign, it is interpreted as
-a value for setting the system's notion of the current date and time.
-The canonical representation for setting the date and time is:
+Если операнд не начинается со знака «плюс», он интерпретируется как значение для установки системного времени и даты.
+Каноническое представление для установки даты и времени выглядит следующим образом:
 .Pp
 .Bl -tag -width Ds -compact -offset indent
 .It Ar cc
-Century
-(either 19 or 20)
-prepended to the abbreviated year.
+Век
+(19 или 20),
+добавляемый перед сокращённой записью года.
 .It Ar yy
-Year in abbreviated form
-(e.g., 89 for 1989, 06 for 2006).
+Год в сокращённой форме
+(например, 89 для 1989 года, 06 для 2006 года).
 .It Ar mm
-Numeric month, a number from 1 to 12.
+Порядковый номер месяца, число от 1 до 12.
 .It Ar dd
-Day, a number from 1 to 31.
+День месяца, число от 1 до 31.
 .It Ar HH
-Hour, a number from 0 to 23.
+Часы, число от 0 до 23.
 .It Ar MM
-Minutes, a number from 0 to 59.
+Минуты, число от 0 до 59.
 .It Ar SS
-Seconds, a number from 0 to 60
-(59 plus a potential leap second).
+Секунды, число от 0 до 60
+(59 плюс возможная секунда координации).
 .El
 .Pp
-Everything but the minutes is optional.
+Все параметры, кроме минут, являются необязательными.
 .Pp
+Утилита
 .Nm
-understands the time zone definitions from the IANA Time Zone Database,
+поддерживает определения часовых поясов из базы данных часовых поясов IANA
 .Sy tzdata ,
-located in
+расположенной в каталоге
 .Pa /usr/share/zoneinfo .
-Time changes for Daylight Saving Time, standard time, leap seconds
-and leap years are handled automatically.
+Переход на летнее и стандартное время, секунды координации и високосные годы обрабатываются автоматически.
 .Pp
-There are two ways to specify the time zone:
+Существует два способа указать часовой пояс:
 .Pp
-If the file or symlink
+Если файл или символическая ссылка
 .Pa /etc/localtime
-exists, it is interpreted as a time zone definition file, usually in
-the directory hierarchy
-.Pa /usr/share/zoneinfo ,
-which contains the time zone definitions from
+существует, они интерпретируются как файл определения часового пояса (обычно находящийся в иерархии каталогов
+.Pa /usr/share/zoneinfo ) ,
+содержащий определения часовых поясов из
 .Sy tzdata .
 .Pp
-If the environment variable
-.Ev TZ
-is set, its value is interpreted as the name of a time zone definition
-file, either an absolute path or a relative path to a time zone
-definition in
+Если установлена переменная окружения
+.Ev TZ ,
+её значение интерпретируется как имя файла определения часового пояса — либо в виде абсолютного пути, либо в виде пути относительно каталога часовых поясов в
 .Pa /usr/share/zoneinfo .
-The
+Переменная
 .Ev TZ
-variable overrides
+имеет приоритет над файлом
 .Pa /etc/localtime .
 .Pp
-If the time zone definition file is invalid,
+Если файл определения часового пояса некорректен,
 .Nm
-silently reverts to UTC.
+автоматически и без предупреждения переключается на UTC.
 .Pp
-Previous versions of
+Предыдущие версии
 .Nm
-included the
+включали опции
 .Fl d
-(set daylight saving time flag) and
+(установка флага летнего времени) и
 .Fl t
-(set negative time zone offset) options, but these details are now
-handled automatically by
+(установка отрицательного смещения часового пояса), но теперь эти детали обрабатываются автоматически базой данных
 .Sy tzdata .
-Modern offsets are positive for time zones ahead of UTC and negative
-for time zones behind UTC, but like the obsolete
-.Fl t
-option, the
+Современные смещения являются положительными для часовых поясов, опережающих UTC, и отрицательными для отстающих от UTC.
+Однако, подобно устаревшей опции
+.Fl t ,
+файлы
 .Sy tzdata
-files in the subdirectory
+в подкаталоге
 .Pa /usr/share/zoneinfo/Etc
-still use an older convention where times ahead of UTC are considered
-negative.
-.Sh ENVIRONMENT
-The following environment variable affects the execution of
+всё ещё используют старое соглашение, в котором время, опережающее UTC, считается отрицательным.
+.Sh ОКРУЖЕНИЕ
+Следующая переменная окружения влияет на выполнение
 .Nm :
 .Bl -tag -width Ds
 .It Ev TZ
-The timezone to use when displaying dates.
-The normal format is a pathname relative to
+Часовой пояс, используемый при выводе дат.
+Обычно указывается в виде пути относительно
 .Pa /usr/share/zoneinfo .
-For example, the command
+Например, команда
 .Dq TZ=America/Los_Angeles date
-displays the current time in California.
-The variable can also specify an absolute path.
-See
-.Xr environ 7
-for more information.
+выводит текущее время в Калифорнии.
+Переменная также может содержать абсолютный путь.
+Дополнительную информацию см. на справочной странице
+.Xr environ 7 .
 .El
-.Sh FILES
+.Sh ФАЙЛЫ
 .Bl -tag -width /var/log/messages -compact
 .It Pa /etc/localtime
-Time zone information file for default system time zone.
-May be omitted, in which case the default time zone is UTC.
+Файл информации о часовом поясе системы по умолчанию.
+Может быть опущен, в этом случае часовым поясом по умолчанию является UTC.
 .It Pa /usr/share/zoneinfo
-Directory containing time zone information files.
+Каталог, содержащий файлы информации о часовых поясах.
 .It Pa /var/log/messages
-Record of the user setting the time.
+Запись о пользователях, устанавливавших время.
 .It Pa /var/log/utx.log
-Record of date resets and time changes.
+Запись о сбросах даты и изменениях времени.
 .El
-.Sh EXIT STATUS
-The
+.Sh СТАТУС ВЫХОДА
+Утилита
 .Nm
-utility exits 0 on success, 1 if unable to set the date, and 2
-if able to set the local date, but unable to set it globally.
-.Sh EXAMPLES
-The command
+завершает работу с кодом 0 в случае успеха, 1 — если не удалось установить дату, и 2 — если удалось установить локальную дату, но не удалось установить её глобально.
+.Sh ПРИМЕРЫ
+Команда:
 .Pp
 .Dl "date +%s.%3N"
 .Pp
-will print the time elapsed since the Unix Epoch with millisecond
-precision.
+выведет время, прошедшее с начала Эпохи Unix, с точностью до миллисекунд.
 .Pp
-The command:
+Команда:
 .Pp
 .Dl "date ""+DATE: %Y-%m-%d%nTIME: %H:%M:%S"""
 .Pp
-will display:
+выведет следующее:
 .Bd -literal -offset indent
 DATE: 1987-11-21
 TIME: 13:36:16
 .Ed
 .Pp
-In the Europe/London timezone, the command:
+В часовом поясе Europe/London команда:
 .Pp
 .Dl "date -v1m -v+1y"
 .Pp
-will display:
+выведет:
 .Pp
 .Dl "Sun Jan  4 04:15:24 GMT 1998"
 .Pp
-where it is currently
+при условии, что текущее системное время равно
 .Ql "Mon Aug  4 04:15:24 BST 1997" .
 .Pp
-The command:
+Команда:
 .Pp
 .Dl "date -v1d -v3m -v0y -v-1d"
 .Pp
-will display the last day of February in the year 2000:
+выведет последний день февраля 2000 года:
 .Pp
 .Dl "Tue Feb 29 03:18:00 GMT 2000"
 .Pp
-So will the command:
+Тот же результат будет и при выполнении команды:
 .Pp
 .Dl "date -v3m -v30d -v0y -v-1m"
 .Pp
-because there is no such date as the 30th of February.
+поскольку такой даты, как 30 февраля, не существует.
 .Pp
-The command:
+Команда:
 .Pp
 .Dl "date -v1d -v+1m -v-1d -v-fri"
 .Pp
-will display the last Friday of the month:
+выведет последнюю пятницу месяца:
 .Pp
 .Dl "Fri Aug 29 04:31:11 BST 1997"
 .Pp
-where it is currently
+при условии, что текущее системное время равно
 .Ql "Mon Aug  4 04:31:11 BST 1997" .
 .Pp
-The command:
+Команда:
 .Pp
 .Dl "date 8506131627"
 .Pp
-sets the date to
+устанавливает дату на
 .Ql "June 13, 1985, 4:27 PM" .
 .Pp
 .Dl "date ""+%Y%m%d%H%M.%S"""
 .Pp
-may be used on one machine to print out the date
-suitable for setting on another.
-.Po Use
+можно использовать на одном компьютере для вывода даты в формате, подходящем для установки на другом.
+.Po Использовать формат
 .Ql "+%m%d%H%M%Y.%S"
-with GNU date on
+для утилиты GNU date в операционной системе
 Linux .
 .Pc
 .Pp
-The command:
+Команда:
 .Pp
 .Dl "date 1432"
 .Pp
-sets the time to
+устанавливает время на
 .Ql "2:32 PM" ,
-without modifying the date.
+не изменяя дату.
 .Pp
-The command
+Команда:
 .Pp
 .Dl "TZ=America/Los_Angeles date -Iseconds -r 1533415339"
 .Pp
-will display
+выведет:
 .Pp
 .Dl "2018-08-04T13:42:19-07:00"
 .Pp
-The command:
+Команда:
 .Pp
 .Dl "env LC_ALL=C date -j -f ""%a %b %d %T %Z %Y"" ""`env LC_ALL=C date`"" ""+%s"""
 .Pp
-can be used to parse the output from
+может использоваться для разбора вывода утилиты
 .Nm
-and express it in Epoch time.
+и представления его в виде количества секунд с начала Эпохи Unix.
 .Pp
-Finally the command
+И, наконец, команда:
 .Pp
 .Dl "TZ=America/Los_Angeles date -z Europe/Paris -j 0900"
 .Pp
-will print the time in the
-.Dq Europe/Paris
-timezone when it is 9:00 in the
+выведет время в часовом поясе
+.Dq Europe/Paris ,
+когда в часовом поясе
 .Dq America/Los_Angeles
-timezone.
-.Sh DIAGNOSTICS
-It is invalid to combine the
+будет 9:00.
+.Sh ДИАГНОСТИКА
+Недопустимо сочетать флаг
 .Fl I
-flag with either
+с флагом
 .Fl R
-or an output format
-.Dq ( + Ns ... )
-operand.
-If this occurs,
+или операндом выходного формата
+.Dq ( + Ns ... ) .
+Если это происходит,
 .Nm
-prints:
+выводит сообщение:
 .Ql multiple output formats specified
-and exits with status 1.
-.Sh SEE ALSO
+и завершает работу со статусом 1.
+.Sh СМ. ТАКЖЕ
 .Xr locale 1 ,
 .Xr clock_gettime 2 ,
 .Xr gettimeofday 2 ,
@@ -607,51 +547,52 @@ and exits with status 1.
 .%U https://iana.org/time-zones
 .%T Time Zone Database
 .Re
-.Sh STANDARDS
-The
+.Sh СТАНДАРТЫ
+Ожидается, что утилита
 .Nm
-utility is expected to be compatible with
+будет совместима со стандартом
 .St -p1003.2 .
-With the exception of the
-.Fl u
-option, all options are extensions to the standard.
+За исключением опции
+.Fl u ,
+все опции являются расширениями стандарта.
 .Pp
-The format selected by the
-.Fl I
-flag is compatible with
+Формат, выбираемый флагом
+.Fl I ,
+совместим со стандартом
 .St -iso8601 .
 .Pp
-The
+Спецификатор преобразования
 .Ql \&%N
-conversion specification for nanoseconds is a non-standard extension.
-It is compatible with GNU date's
-.Ql \&%N .
-.Sh HISTORY
-A
+для наносекунд является нестандартным расширением.
+Он совместим со спецификатором
+.Ql \&%N
+утилиты GNU date.
+.Sh ИСТОРИЯ
+Команда
 .Nm
-command appeared in
+появилась в
 .At v1 .
 .Pp
-A number of options were added and then removed again, including the
+Ряд опций был добавлен, а затем снова удален, включая опции
 .Fl d
-(set DST flag) and
+(установка флага летнего времени) и
 .Fl t
-(set negative time zone offset).
-Time zones are now handled by code bundled with
+(установка отрицательного смещения часового пояса).
+Сейчас часовые пояса обрабатываются кодом, поставляемым вместе с базой данных
 .Sy tzdata .
 .Pp
-The
+Флаг
 .Fl I
-flag was added in
+был добавлен в
 .Fx 12.0 .
 .Pp
-The
+Спецификатор преобразования
 .Ql \&%N
-conversion specification was added in
+был добавлен в
 .Fx 14.1 .
-Support for the
+Поддержка вариантов
 .Ql \&% Ns Ar n Ns Cm N
-and
+и
 .Ql \&%-N
-variants was added in
+была добавлена в
 .Fx 15.1 .
