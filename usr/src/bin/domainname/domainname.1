@@ -26,38 +26,36 @@
 .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 .\" SUCH DAMAGE.
 .\"
-.Dd April 22, 2013
+.Dd 22 апреля 2013
 .Dt DOMAINNAME 1
 .Os
-.Sh NAME
+.Sh ИМЯ
 .Nm domainname
-.Nd set or print name of current YP/NIS domain
-.Sh SYNOPSIS
+.Nd вывод или установка имени текущего домена YP/NIS
+.Sh СИНТАКСИС
 .Nm
 .Op Ar ypdomain
-.Sh DESCRIPTION
-The
+.Sh ОПИСАНИЕ
+Утилита
 .Nm
-utility prints the name of the current YP/NIS domain.
-The super-user can
-set the domain name by supplying an argument; this is usually done with the
+выводит имя текущего домена YP/NIS.
+Суперпользователь может установить имя домена, передав аргумент;
+обычно это делается с помощью переменной
 .Va nisdomainname
-variable in the
-.Pa /etc/rc.conf
-file, normally runs at boot
-time.
-.Sh NOTES
-The YP/NIS (formerly ``Yellow Pages'' but renamed for legal reasons)
-domain name does not necessarily have anything to do with the Domain
-Name System domain name, although they are often set equal for administrative
-convenience.
-.Sh SEE ALSO
+в файле
+.Pa /etc/rc.conf ,
+который обычно запускается при загрузке системы.
+.Sh ПРИМЕЧАНИЯ
+Имя домена YP/NIS (ранее «Yellow Pages», но переименованное по юридическим причинам)
+не обязательно должно иметь какое-либо отношение к доменному имени системы доменных имён (DNS),
+хотя для удобства администрирования их часто устанавливают одинаковыми.
+.Sh СМ. ТАКЖЕ
 .Xr getdomainname 3 ,
 .Xr rc.conf 5
-.Sh HISTORY
-The
+.Sh ИСТОРИЯ
+Команда
 .Nm
-command appeared in
-.Fx 1.1 ,
-based on a similar command in
+появилась в
+.Fx 1.1
+на основе аналогичной команды в
 .Tn SunOS .
