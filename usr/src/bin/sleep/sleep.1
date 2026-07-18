@@ -29,62 +29,62 @@
 .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 .\" SUCH DAMAGE.
 .\"
-.Dd March 22, 2024
+.Dd 22 марта 2024
 .Dt SLEEP 1
 .Os
-.Sh NAME
+.Sh ИМЯ
 .Nm sleep
-.Nd suspend execution for an interval of time
-.Sh SYNOPSIS
+.Nd приостановка выполнения на заданный промежуток времени
+.Sh СИНТАКСИС
 .Nm
 .Ar number Ns Op Ar unit
 .Op ...
-.Sh DESCRIPTION
-The
+.Sh ОПИСАНИЕ
+Команда
 .Nm
-command suspends execution for a minimum of
+приостанавливает выполнение как минимум на
 .Ar number
-seconds (the default, or unit
+секунд (по умолчанию, или единица измерения
 .Li s ) ,
-minutes (unit
+минут (единица измерения
 .Li m ) ,
-hours (unit
-.Li h ) ,
-or days (unit
+часов (единица измерения
+.Li h )
+или дней (единица измерения
 .Li d ) .
-Intervals can be written in any form allowed by
+Интервалы могут быть записаны в любой форме, допускаемой функцией
 .Xr strtod 3 .
-If multiple intervals are given, they are added together.
-If the final sum is zero or negative,
+Если указано несколько интервалов, они суммируются.
+Если итоговая сумма равна нулю или отрицательна,
 .Nm
-exits immediately.
+немедленно завершает работу.
 .Pp
-If the
+Если команда
 .Nm
-command receives a signal, it takes the standard action.
-When the
+получает сигнал, она выполняет стандартное действие.
+При получении сигнала
 .Dv SIGINFO
-signal is received, the estimate of the amount of seconds left to
-sleep is printed on the standard output.
-.Sh IMPLEMENTATION NOTES
-The
+на стандартный вывод выводится оценка количества секунд, оставшихся до
+завершения сна.
+.Sh ПРИМЕЧАНИЯ ПО РЕАЛИЗАЦИИ
+Сигнал
 .Dv SIGALRM
-signal is not handled specially by this implementation.
-.Sh EXIT STATUS
-.Ex -std
-.Sh EXAMPLES
-To run a command after half an hour:
+не обрабатывается этой реализацией особым образом.
+.Sh СТАТУС ЗАВЕРШЕНИЯ
+Утилита
+.Nm
+завершает работу с кодом 0 при успешном выполнении и >0 при возникновении ошибки.
+.Sh ПРИМЕРЫ
+Запустить команду через полчаса:
 .Pp
 .Dl (sleep 0.5h; sh command_file >out 2>err)&
 .Pp
-This incantation would wait half an hour before
-running the script
+Это заклинание подождёт полчаса перед запуском скрипта
 .Pa command_file .
-See the
-.Xr at 1
-utility for another way to do this.
+Для поиска другого способа сделать это обратитесь к утилите
+.Xr at 1 .
 .Pp
-To reiteratively run a command:
+Для многократного повторного запуска команды:
 .Pp
 .Bd -literal -offset indent -compact
 while :; do
@@ -100,34 +100,24 @@ while :; do
 done
 .Ed
 .Pp
-The scenario for a script such as this might be: a program currently
-running is taking longer than expected to process a series of
-files, and it would be nice to have
-another program start processing the files created by the first
-program as soon as it is finished (when
+Сценарием для подобного скрипта может быть следующий случай: запущенная в данный момент программа обрабатывает серию файлов дольше, чем ожидалось, и было бы удобно, если бы другая программа начала обрабатывать файлы, созданные первой программой, сразу же после завершения её работы (когда будет создан файл
+.Pa zzz.rawdata ) .
+Скрипт проверяет наличие файла
 .Pa zzz.rawdata
-is created).
-The script checks every five minutes for the file
-.Pa zzz.rawdata ,
-when the file is found, then another portion processing
-is done courteously by sleeping for 70 seconds in between each
-.Xr awk 1
-job.
-.Sh SEE ALSO
+каждые пять минут. Когда файл найден, вежливо выполняется обработка следующей части с паузой в 70 секунд между каждой задачей
+.Xr awk 1 .
+.Sh СМ. ТАКЖЕ
 .Xr nanosleep 2 ,
 .Xr sleep 3
-.Sh STANDARDS
-The
+.Sh СТАНДАРТЫ
+Ожидается, что команда
 .Nm
-command is expected to be
-.St -p1003.2
-compatible.
+совместима со стандартом
+.St -p1003.2 .
 .Pp
-Support for non-integer intervals, units other than seconds, and
-multiple intervals which are added together are non-portable
-extensions first introduced in GNU sh-utils 2.0a (released in 2002).
-.Sh HISTORY
-A
+Поддержка нецелых интервалов, единиц измерения, отличных от секунд, а также нескольких суммируемых интервалов являются непереносимыми расширениями, впервые появившимися в GNU sh-utils 2.0a (выпущенном в 2002 году).
+.Sh ИСТОРИЯ
+Команда
 .Nm
-command appeared in
+появилась в
 .At v4 .
